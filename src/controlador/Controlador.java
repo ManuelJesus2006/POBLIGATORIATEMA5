@@ -1,7 +1,9 @@
 package controlador;
 
+import data.DataProductos;
 import models.*;
 
+import javax.xml.crypto.Data;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -14,7 +16,17 @@ public class Controlador {
 
     //Constructor
     public Controlador() {
+        clientes = new ArrayList<>();
+        trabajadores = new ArrayList<>();
+        admins = new ArrayList<>();
+        catalogo = new ArrayList<>();
+        mock();
+    }
 
+    private void mock() {
+        //Clientes
+        clientes.add(new Cliente(generaIdCliente(), "hola@hola", "3421", "Manolo", "Martos", "Jaén", "avda moris n32", 653423428, clientes.getFirst().getPedidos(), clientes.getFirst().getCarro()));
+        clientes.add(new Cliente(generaIdCliente(), "F@FEO", "1234", "JL", "Madrid", "Madrid", "avda gran vía", 456234244, clientes.getFirst().getPedidos(), clientes.getFirst().getCarro()));
     }
 
     // Getters y Setters
@@ -47,7 +59,7 @@ public class Controlador {
     }
 
     public void setCatalogo(ArrayList<Producto> catalogo) {
-        this.catalogo = catalogo;
+        this.catalogo = DataProductos.getProductosMock();
     }
 
 
@@ -181,6 +193,11 @@ public class Controlador {
     }
 
     private int generaIdTrabajador() {
+
+    }
+
+    public void verCatalogo() {
+
 
     }
 }
