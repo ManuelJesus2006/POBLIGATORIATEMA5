@@ -1,11 +1,10 @@
 package view;
 
 import controlador.Controlador;
-import data.DataProductos;
+import models.Cliente;
 import models.Producto;
 import utils.Utils;
 
-import java.util.Objects;
 import java.util.Scanner;
 
 public class main {
@@ -52,7 +51,7 @@ public class main {
                     verCatalogoSinLogueo(controlador);
                     break;
                 case 2: // Registrase
-                    registraNuevoUsuario(controlador);
+                    registraCliente(controlador);
                     break;
                 case 3: // Iniciar sesión
                     usuarioLogueado = iniciaSesion(controlador);
@@ -68,10 +67,64 @@ public class main {
     }
 
     private static Object iniciaSesion(Controlador controlador) {
+        String op;
+        System.out.print("""
+                ¿Cómo quieres loguearte?
+                1. Cliente
+                2. Trabajador
+                3. Administrador
+                Marque una opción:""");
+        op = S.nextLine();
+
+        switch (op) {
+            case "1": //Cliente
+
+                break;
+            case "2": //Trabajador
+
+                break;
+            case "3": //Administrador
+
+                break;
+            default:
+                System.out.println("Opción incorrecta...");
+                Utils.pulsaContinuar();
+                Utils.limpiarpantalla();
+                break;
+        }
     }
 
-    private static void registraNuevoUsuario(Controlador controlador) {
-        controlador.lo
+    private static void registraCliente(Controlador controlador) {
+        boolean bandera = false;
+
+        System.out.print("Introduce un email: ");
+        String email = S.nextLine();
+        System.out.print("Introduce la clave");
+        String clave = S.nextLine();
+        System.out.print("Introduce tu nombre: ");
+        String nombre = S.nextLine();
+        System.out.print("Introduce la localidad: ");
+        String localidad = S.nextLine();
+        System.out.print("Introduce la provincia: ");
+        String provincia = S.nextLine();
+        System.out.print("Introduce la dirección: ");
+        String direccion = S.nextLine();
+
+        int movil = 0;
+
+        do {
+            System.out.print("Introduce el número de teléfono: ");
+            try {
+                movil = Integer.parseInt(S.nextLine());
+                bandera = true;
+            } catch (NumberFormatException e) {
+                System.out.println("Debes introducer números...");
+                Utils.pulsaContinuar();
+                Utils.limpiarpantalla();
+            }
+        } while (!bandera);
+
+        controlador.getClientes().add(new Cliente(email, clave, nombre, localidad, provincia, direccion, movil));
     }
 
     private static void verCatalogoSinLogueo(Controlador controlador) {

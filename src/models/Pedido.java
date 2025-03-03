@@ -14,8 +14,7 @@ public class Pedido {
     private ArrayList<Producto> productos;
 
     //Constructor
-    public Pedido(int id, LocalDate fechaPedido, LocalDate fechaEntregaEstimada, LocalDate deliveryDAte, int estado, String comentario, ArrayList<Producto> productos) {
-        this.id = id;
+    public Pedido(LocalDate fechaPedido, LocalDate fechaEntregaEstimada, LocalDate deliveryDAte, int estado, String comentario, ArrayList<Producto> productos) {
         this.fechaPedido = fechaPedido;
         this.fechaEntregaEstimada = fechaEntregaEstimada;
         this.deliveryDAte = deliveryDAte;

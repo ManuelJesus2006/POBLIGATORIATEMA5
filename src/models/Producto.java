@@ -10,8 +10,7 @@ public class Producto {
     private int relevancia;
 
     //Constructor
-    public Producto(int id, String marca, String modelo, String descripcion, float precio, int relevancia) {
-        this.id = id;
+    public Producto(String marca, String modelo, String descripcion, float precio, int relevancia) {
         this.marca = marca;
         this.modelo = modelo;
         this.descripcion = descripcion;
@@ -68,8 +67,4 @@ public class Producto {
         this.relevancia = relevancia;
     }
 
-    //Otros metodos
-    private void calculaRelevancia() {
-
-    }
 }
