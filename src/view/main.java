@@ -119,7 +119,7 @@ public class main {
 
         System.out.print("Introduce un email: ");
         String email = S.nextLine();
-        System.out.print("Introduce la clave");
+        System.out.print("Introduce la clave: ");
         String clave = S.nextLine();
         System.out.print("Introduce tu nombre: ");
         String nombre = S.nextLine();
@@ -144,7 +144,9 @@ public class main {
             }
         } while (!bandera);
 
-        controlador.getClientes().add(new Cliente(email, clave, nombre, localidad, provincia, direccion, movil));
+        if (controlador.getClientes().add(new Cliente(email, clave, nombre, localidad, provincia, direccion, movil)))
+            System.out.println("Registrado correctamente...");
+        else System.out.println("Ha ocurrido un error...");;
     }
 
     private static void verCatalogoSinLogueo(Controlador controlador) {
