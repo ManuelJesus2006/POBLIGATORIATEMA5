@@ -9,6 +9,8 @@ public class Trabajador {
     private String pass;
     private String email;
     private int movil;
+    private String token;
+    private boolean isValid;
     private ArrayList<Pedido> pedidosAsignados;
 
     //Constructor
@@ -20,6 +22,22 @@ public class Trabajador {
     }
 
     // Getters y Setters
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public boolean isValid() {
+        return isValid;
+    }
+
+    public void setValid(boolean valid) {
+        isValid = valid;
+    }
+
     public int getId() {
         return id;
     }

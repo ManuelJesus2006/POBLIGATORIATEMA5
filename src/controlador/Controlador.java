@@ -29,6 +29,7 @@ public class Controlador {
         clientes.add(new Cliente(generaIdCliente(), "jl@jl", "1234", "Jl", "Madrid", "Madrid", "avda gran vía", 456234244));
         trabajadores.add(new Trabajador("Carlos", "1111", "adios@adios", 555443322));
         admins.add(new Admin("root", "root", "root@root"));
+        catalogo = DataProductos.getProductosMock();
     }
 
     // Getters y Setters

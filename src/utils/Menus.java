@@ -16,13 +16,17 @@ public class Menus {
         salida += "FERNANSHOP\n";
         salida += "Bienvenido " + admin.getNombre() + ". Tienes " + 0 + " pedidos\n";
                 //(tienda.contadorPedidos() == 1 ? " pedido" : " pedidos") + " por asignar." + "\n";
-        salida += "1.- Asignar un pedido a un trabajador" + "\n";
-        salida += "2.- Modificar el estado de un pedido" + "\n";
-        salida += "3.- Dar de alta un trabajador" + "\n";
-        salida += "4.- Ver todos los pedidos" + "\n";
-        salida += "5.- Ver todos los clientes" + "\n";
-        salida += "6.- Ver todos los trabajadores" + "\n";
-        salida += "7.- Cerrar sesión" + "\n";
+        salida += "1.- Ver todo el catálogo";
+        salida += "2.- Editar un producto\n";
+        salida += "3.- Ver un resumen de todos los Clientes\n";
+        salida += "4.- Ver un resumen de todos los Pedidos\n";
+        salida += "5.- Ver un resumen de todos los Trabajadores\n";
+        salida += "6.- Ver las estadísticas de la aplicación\n";
+        salida += "7.- Cambiar el estado de un pedido\n";
+        salida += "8.- Dar de alta un trabajador\n";
+        salida += "9.- Dar de baja un trabajador\n";
+        salida += "10.- Asignar un pedido a un trabajador\n";
+        salida += "11.- Salir\n";
         salida += "Introduce una opción: ";
         return salida;
     }
@@ -32,12 +36,12 @@ public class Menus {
         String salida = "";
         salida += "FERNANSHOP" + "\n";
         salida += "Bienvenido " + cliente.getNombre() + "\n";
-        salida += "1.- Consultar el catálogo de productos" + "\n";
-        salida += "2.- Realizar un pedido" + "\n";
-        salida += "3.- Ver mis pedidos realizados" + "\n";
-        salida += "4.- Ver mis datos personales" + "\n";
-        salida += "5.- Modificar mis datos personales" + "\n";
-        salida += "6.- Cerrar sesión" + "\n";
+        salida += "1.- Consultar el catálogo de productos\n";
+        salida += "2.- Realizar un pedido\n";
+        salida += "3.- Ver mis pedidos\n";
+        salida += "4.- Ver mis datos personales\n";
+        salida += "5.- Modificar mis datos personales\n";
+        salida += "6.- Salir\n";
         salida += "Introduce una opción: ";
         return salida;
     }
@@ -53,7 +57,7 @@ public class Menus {
         salida += "3.- Consultar el catálogo de productos\n";
         salida += "4.- Modificar un producto\n";
         salida += "5.- Ver el histórico de pedidos terminados\n";
-        salida += "6.- Ver mi perfil" + "\n";
+        salida += "6.- Ver mi perfil\n";
         salida += "7.- Modificar mis datos personales\n";
         salida += "8.- Salir\n";
         salida += "Introduce una opción:";

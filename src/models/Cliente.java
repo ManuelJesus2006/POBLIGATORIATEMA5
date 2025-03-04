@@ -14,6 +14,8 @@ public class Cliente {
     private String provincia;
     private String direccion;
     private int movil;
+    private String token;
+    private boolean isValid;
     private ArrayList<Pedido> pedidos;
     private ArrayList<Producto> carro;
 
@@ -41,6 +43,22 @@ public class Cliente {
 
 
     //Getter y Setter
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public boolean isValid() {
+        return isValid;
+    }
+
+    public void setValid(boolean valid) {
+        isValid = valid;
+    }
+
     public int getId() {
         return id;
     }

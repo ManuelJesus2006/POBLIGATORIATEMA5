@@ -173,9 +173,65 @@ public class main {
 
         for (Admin admin : controlador.getAdmins()) {
             if (user.equals(admin)) {
-                System.out.println(Menus.menuAdministrador(controlador, admin));
+                do {
+                    System.out.println(Menus.menuAdministrador(controlador, admin));
+                    op = S.nextLine();
+                    switch (op) {
+                        case "1": //Ver to el catálogo
+                            Utils.pulsaContinuar();
+                            Utils.limpiarpantalla();
+                            break;
+                        case "2": //Editar un producto
+                            Utils.pulsaContinuar();
+                            Utils.limpiarpantalla();
+                            break;
+                        case "3": //Ver un resumen de todos los Clientes
+                            Utils.pulsaContinuar();
+                            Utils.limpiarpantalla();
+                            break;
+                        case "4": //Ver un resumen de todos los Pedidos
+                            Utils.pulsaContinuar();
+                            Utils.limpiarpantalla();
+                            break;
+                        case "5": // Ver un resumen de todos los Trabajadores
+                            Utils.pulsaContinuar();
+                            Utils.limpiarpantalla();
+                            break;
+                        case "6": //Ver las estadísticas de la aplicación
+                            Utils.pulsaContinuar();
+                            Utils.limpiarpantalla();
+                            break;
+                        case "7": //Cambiar el estado de un pedido
+                            Utils.pulsaContinuar();
+                            Utils.limpiarpantalla();
+                            break;
+                        case "8": //Dar de alta un trabajador
+                            Utils.pulsaContinuar();
+                            Utils.limpiarpantalla();
+                            break;
+                        case "9": //Dar de baja un trabajador
+                            Utils.pulsaContinuar();
+                            Utils.limpiarpantalla();
+                            break;
+                        case "10": //Asignar un pedido a un trabajador
+                            Utils.pulsaContinuar();
+                            Utils.limpiarpantalla();
+                            break;
+                        case "11": //Salir
+                            System.out.println("Saliendo");
+                            Utils.animacionFinSesion();
+                            Utils.pulsaContinuar();
+                            Utils.limpiarpantalla();
+                            break;
+                        default://Opción no existente
+                            System.out.println("Valor no válido");
+                            Utils.pulsaContinuar();
+                            Utils.limpiarpantalla();
+                            break;
+                    }
+                } while (!op.equals("11"));
             }
-        }
+        } // Bucle de admin
 
         for (Trabajador trabajador : controlador.getTrabajadores()) {
             if (user.equals(trabajador)) {
@@ -184,72 +240,30 @@ public class main {
                     op = S.nextLine();
                     switch (op) {
                         case "1": //Consultar los pedidos que tengo asignados
-                            Menus.consultarPedidosAsignados(tienda, trabajadorTemp);
                             Utils.pulsaContinuar();
                             Utils.limpiarpantalla();
                             break;
                         case "2": //Modificar el estado de un pedido
-                            Menus.modificaEstadoPedido(tienda);
                             Utils.pulsaContinuar();
                             Utils.limpiarpantalla();
                             break;
                         case "3": //Consultar el catálogo de productos
-                            System.out.println(tienda.pintaCatalogo());
                             Utils.pulsaContinuar();
                             Utils.limpiarpantalla();
                             break;
-                        case "4": //Modificar un producto del catálogo
-                            Menus.modificaCatalogo(tienda);
+                        case "4": //Modificar un producto
                             Utils.pulsaContinuar();
                             Utils.limpiarpantalla();
                             break;
-                        case "5": // Ver el histórico de pedidos terminados
+                        case "5": //Ver el histórico de pedidos terminados
+                            Utils.pulsaContinuar();
+                            Utils.limpiarpantalla();
                             break;
                         case "6": //Ver mi perfil
-                            System.out.println(trabajadorTemp.pintaDatosTrabajador());
                             Utils.pulsaContinuar();
                             Utils.limpiarpantalla();
                             break;
                         case "7": //Modificar mis datos personales
-                            System.out.print("""
-                                    MODIFICACIÓN DE DATOS:
-                                    Introduce el nuevo nombre del trabajador:\s""");
-                            nombreTeclado = S.nextLine();
-                            System.out.print("Introduce la nueva clave del trabajador: ");
-                            contraTeclado = S.nextLine();
-                            correoTeclado = compruebaCorreo(tienda);
-                            do {
-                                System.out.print("Introduzca su nuevo teléfono (-1 para dejar mismos datos): ");
-                                try {
-                                    telefonoTeclado = Integer.parseInt(S.nextLine());
-                                } catch (NumberFormatException e) {
-                                    System.out.println("Introduzca un valor numérico...");
-                                    Utils.pulsaContinuar();
-                                    Utils.limpiarpantalla();
-                                }
-                            } while (telefonoTeclado == -2);
-                            //Generamos el token después de la modificación de datos
-                            token = tienda.generaToken();
-                            // Le mandamos el correo con el token
-                            Utils.esperePorFavor();
-                            Comunicaciones.enviaCorreoToken(correoTeclado, "¡Hola! Bienvenido a FERNANSHOP " + nombreTeclado +
-                                    ", tu token de verificación de la cuenta es", "TU CÓDIGO DE VERIFICACIÓN DE CUENTA", token, nombreTeclado);
-
-                            trabajadorTemp.modificarDatosTrabajador(nombreTeclado, contraTeclado, correoTeclado, telefonoTeclado, token);
-                            Utils.pulsaContinuar();
-                            Utils.limpiarpantalla();
-
-                            System.out.print("Introduce tu nuevo token para continuar: ");
-                            tokenTeclado = S.nextLine();
-                            if (tienda.compruebaTokenTrabajador(trabajadorTemp, tokenTeclado)) {
-                                System.out.println("Token correcto...");
-                                trabajadorTemp.setValid(true);
-                            } else {
-                                System.out.println("Token incorrecto...");
-                                trabajadorTemp.apagadoInicioCorrecto();
-                                Utils.animacionFinSesion();
-                            }
-
                             Utils.pulsaContinuar();
                             Utils.limpiarpantalla();
                             break;
@@ -267,14 +281,48 @@ public class main {
                     }
                 } while (!op.equals("8"));
             }
-        }
+        } // Bucle de trabajadores
 
-        for (
-                Cliente cliente : controlador.getClientes()) {
+        for (Cliente cliente : controlador.getClientes()) {
             if (user.equals(cliente)) {
-                System.out.println(Menus.menuCliente(controlador, cliente));
+                do {
+                    System.out.println(Menus.menuCliente(controlador, cliente));
+                    op = S.nextLine();
+                    switch (op) {
+                        case "1"://Consultar el catálogo de productos
+                            Utils.pulsaContinuar();
+                            Utils.limpiarpantalla();
+                            break;
+                        case "2"://Realizar un pedido
+                            Utils.pulsaContinuar();
+                            Utils.limpiarpantalla();
+                            break;
+                        case "3"://Ver mis pedidos
+                            Utils.pulsaContinuar();
+                            Utils.limpiarpantalla();
+                            break;
+                        case "4"://Ver mis datos personales
+                            Utils.pulsaContinuar();
+                            Utils.limpiarpantalla();
+                            break;
+                        case "5"://Modificar mis datos personales
+                            Utils.pulsaContinuar();
+                            Utils.limpiarpantalla();
+                            break;
+                        case "6":// Salir
+                            System.out.println("Saliendo");
+                            Utils.animacionFinSesion();
+                            Utils.pulsaContinuar();
+                            Utils.limpiarpantalla();
+                            break;
+                        default://Opción no existente
+                            System.out.println("Valor no válido");
+                            Utils.pulsaContinuar();
+                            Utils.limpiarpantalla();
+                    }
+                } while (!op.equals("7"));
             }
-        }
+        } // Bucle de clientes
 
     }
 }
