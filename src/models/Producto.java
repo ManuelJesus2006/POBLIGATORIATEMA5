@@ -10,7 +10,8 @@ public class Producto {
     private int relevancia;
 
     //Constructor
-    public Producto(String marca, String modelo, String descripcion, float precio, int relevancia) {
+    public Producto(int id, String marca, String modelo, String descripcion, float precio, int relevancia) {
+        this.id = id;
         this.marca = marca;
         this.modelo = modelo;
         this.descripcion = descripcion;

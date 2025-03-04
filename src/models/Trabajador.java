@@ -71,10 +71,10 @@ public class Trabajador {
 
     // Otros metodos
     public boolean login(String email, String pass) {
-
+        return nombre.equals(email) && pass.equals(this.pass);
     }
 
-    public Pedido buscaPedidoAsignadoPendiente(int idPedido) {
+  /*  public Pedido buscaPedidoAsignadoPendiente(int idPedido) {
 
     }
 
@@ -96,5 +96,5 @@ public class Trabajador {
 
     public int numPedidosPendientes() {
 
-    }
+    }*/
 }

@@ -8,8 +8,7 @@ public class Admin {
     private String email;
 
     // Constructor
-    public Admin(int id, String nombre, String clave, String email) {
-        this.id = id;
+    public Admin(String nombre, String clave, String email) {
         this.nombre = nombre;
         this.clave = clave;
         this.email = email;
@@ -50,6 +49,6 @@ public class Admin {
 
     //Otros metodos
     public boolean login(String email, String pass) {
-
+        return nombre.equals(email) && clave.equals(pass);
     }
 }

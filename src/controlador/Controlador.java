@@ -25,8 +25,10 @@ public class Controlador {
 
     private void mock() {
         //Clientes
-        clientes.add(new Cliente(generaIdCliente(), "hola@hola", "3421", "Manolo", "Martos", "Jaén", "avda moris n32", 653423428, clientes.getFirst().getPedidos(), clientes.getFirst().getCarro()));
-        clientes.add(new Cliente(generaIdCliente(), "F@FEO", "1234", "JL", "Madrid", "Madrid", "avda gran vía", 456234244, clientes.getFirst().getPedidos(), clientes.getFirst().getCarro()));
+        clientes.add(new Cliente(generaIdCliente(), "hola@hola", "3421", "Manolo", "Martos", "Jaén", "avda moris n32", 653423428));
+        clientes.add(new Cliente(generaIdCliente(), "jl@jl", "1234", "Jl", "Madrid", "Madrid", "avda gran vía", 456234244));
+        trabajadores.add(new Trabajador("Carlos", "1111", "adios@adios", 555443322));
+        admins.add(new Admin("root", "root", "root@root"));
     }
 
     // Getters y Setters
@@ -65,10 +67,21 @@ public class Controlador {
 
     // Otros metodos
     public Object login(String email, String clave) {
+        for (Admin admin : admins) {
+            if (admin.login(email, clave)) return admin;
+        }
 
+        for (Trabajador trabajador : trabajadores) {
+            if (trabajador.login(email, clave)) return trabajador;
+        }
+
+        for (Cliente cliente : clientes) {
+            if (cliente.login(email, clave)) return cliente;
+        }
+        return null;
     }
 
-    public boolean addProductoCarrito(Cliente cliente, int idProducto) {
+   /* public boolean addProductoCarrito(Cliente cliente, int idProducto) {
 
     }
 
@@ -174,13 +187,13 @@ public class Controlador {
 
     public ArrayList<PedidoClienteDataClass> getPedidosAsignadosYCompletados(int idTrabajador) {
 
-    }
+    }*/
 
     private int generaIdCliente() {
-
+        return (int) (Math.random() * 100000);
     }
 
-    private int generaIdProducto() {
+   /* private int generaIdProducto() {
 
     }
 
@@ -199,5 +212,5 @@ public class Controlador {
     public void verCatalogo() {
 
 
-    }
+    }*/
 }

@@ -1,5 +1,7 @@
 package models;
 
+import controlador.Controlador;
+
 import java.util.ArrayList;
 
 public class Cliente {
@@ -17,6 +19,17 @@ public class Cliente {
 
     //Constructor
     public Cliente(String email, String clave, String nombre, String localidad, String provincia, String direccion, int movil) {
+        this.email = email;
+        this.clave = clave;
+        this.nombre = nombre;
+        this.localidad = localidad;
+        this.provincia = provincia;
+        this.direccion = direccion;
+        this.movil = movil;
+    }
+
+    public Cliente(int id, String email, String clave, String nombre, String localidad, String provincia, String direccion, int movil) {
+        id = 0;
         this.email = email;
         this.clave = clave;
         this.nombre = nombre;
@@ -110,10 +123,10 @@ public class Cliente {
 
     //Otros metodos
     public boolean login(String email, String pass) {
-        return false;
+        return email.equals(this.email) && pass.equals(this.clave);
     }
 
-    public void addProductoCarro(Producto p) {
+ /*   public void addProductoCarro(Producto p) {
 
     }
 
@@ -147,5 +160,5 @@ public class Cliente {
 
     public boolean existeProductoCarro(int idProducto) {
 
-    }
+    }*/
 }

@@ -81,7 +81,7 @@ public class Pedido {
     }
 
     // Otros metodos
-    public boolean cambiaEstado(int nuevoEstado) {
+  /*  public boolean cambiaEstado(int nuevoEstado) {
 
     }
 
@@ -111,5 +111,5 @@ public class Pedido {
 
     public boolean addProducto(Producto producto) {
 
-    }
+    }*/
 }
