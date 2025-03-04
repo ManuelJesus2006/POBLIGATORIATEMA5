@@ -16,7 +16,7 @@ public class Menus {
         salida += "FERNANSHOP\n";
         salida += "Bienvenido " + admin.getNombre() + ". Tienes " + 0 + " pedidos\n";
                 //(tienda.contadorPedidos() == 1 ? " pedido" : " pedidos") + " por asignar." + "\n";
-        salida += "1.- Ver todo el catálogo";
+        salida += "1.- Ver todo el catálogo\n";
         salida += "2.- Editar un producto\n";
         salida += "3.- Ver un resumen de todos los Clientes\n";
         salida += "4.- Ver un resumen de todos los Pedidos\n";
