@@ -8,6 +8,7 @@ import models.Trabajador;
 import utils.Menus;
 import utils.Utils;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class main {
@@ -264,10 +265,12 @@ public class main {
                             Utils.limpiarpantalla();
                             break;
                         case "6": //Ver mi perfil
+                            pintaPerfilTrabajador(trabajador);
                             Utils.pulsaContinuar();
                             Utils.limpiarpantalla();
                             break;
                         case "7": //Modificar mis datos personales
+                            modificaDatosPersonalesTrabajador(controlador, trabajador);
                             Utils.pulsaContinuar();
                             Utils.limpiarpantalla();
                             break;
@@ -332,17 +335,12 @@ public class main {
 
     }
 
+    //Realizar el pedido decidiendo el procedimiento
     private static void realizarPedido(Controlador controlador, Cliente cliente) {
-        Producto producto = seleccionarProducto(controlador, cliente);
-
-    }
-
-    private static Producto seleccionarProducto(Controlador controlador, Cliente cliente) {
-        Producto temp;
         int op;
         System.out.println("""
                 1. Ver todo el catálogo
-                2. Búsqueda por maraca
+                2. Búsqueda por marca
                 3. Búsqueda por modelo
                 4. Búsqueda por descripción
                 5. Búsqueda por término
@@ -351,19 +349,117 @@ public class main {
                 """);
         op = Integer.parseInt(S.nextLine());
         switch (op){
-            case 1:
-                pintarSeleccionCatalogo(controlador, cliente);
+            case 1: //Ver todo el catálogo
+                seleccionPorCatalogo(controlador, cliente);
+                break;
+            case 2: //Búsqueda por marca
+                seleccionPorMarca(controlador, cliente);
                 break;
         }
-        return
     }
 
-    private static void pintarSeleccionCatalogo(Controlador controlador, Cliente cliente){
-        int cont = 1, productoElegido = -1;
-        for (Producto producto : controlador.getCatalogo()){
+    private static void seleccionPorMarca(Controlador controlador, Cliente cliente) {
+        if (!cliente.getCarro().isEmpty()){
+            System.out.println("Hemos detectado los siguientes productos en su carro: ");
+            pintaCarrito(controlador, cliente);
+            boolean error = false;
+            int op = 0;
+            do {
+                error = false;
+                try{
+                    op = menuCarritoLlenoCliente();
+                }catch (NumberFormatException e){
+                    System.out.println("Introduce un valor válido....");
+                    error = true;
+                }
+            } while(error);
+            switch (op){
+                case 1: //Añadir más productos al carrito
+                    eligeProductoMarca(controlador, cliente);
+                    break;
+                case 2: //Vaciar el carro y añadir productos otra vez
+                    //ArrayList vacio para vaciar el carro del cliente
+                    cliente.vaciaCarro();
+                    eligeProductoMarca(controlador, cliente);
+                    break;
+                case 3: //Realizar pedido
+                    if (controlador.confirmaPedidoCliente(cliente.getId())) System.out.println("Pedido realizado con éxito");
+                    else System.out.println("El pedido no se ha podido realizar");
+            }
+        }else eligeProductoMarca(controlador, cliente);
+    }
+
+    private static void eligeProductoMarca(Controlador controlador, Cliente cliente) {
+        int productoElegido = 0;
+        boolean error = false;
+        ArrayList<Producto> productosTemp;
+        System.out.println("Introduce la marca del producto a seleccionar: ");
+        String marcaTeclado = S.nextLine();
+        productosTemp = controlador.buscaProductosByMarca(marcaTeclado);
+        pintaProductosEncontrados(productosTemp);
+        do {
+            System.out.print("Introduzca el número del producto a añadir al carrito (-1 para finalizar selección): ");
+            try{
+                productoElegido = Integer.parseInt(S.nextLine());
+            }catch (NumberFormatException e){
+                System.out.println("Introduce un valor numérico....");
+                error = true;
+            }
+            if (productoElegido != -1 && !error) controlador.addProductoCarrito(cliente, controlador.getCatalogo().get(productoElegido - 1).getId());
+        }while(productoElegido != -1);
+    }
+
+    private static void pintaProductosEncontrados(ArrayList<Producto> productosTemp) {
+        int cont = 0;
+        for (Producto producto : productosTemp){
             System.out.println(cont + ". " + producto.getDescripcion() + " - " + producto.getMarca() + " - " +
                     producto.getModelo() + " - " + producto.getPrecio() + "€");
+            cont++;
         }
+    }
+
+    private static void seleccionPorCatalogo(Controlador controlador, Cliente cliente){
+        if (!cliente.getCarro().isEmpty()){
+            System.out.println("Hemos detectado los siguientes productos en su carro: ");
+            pintaCarrito(controlador, cliente);
+            boolean error = false;
+            int op = 0;
+            do {
+                error = false;
+                try{
+                    op = menuCarritoLlenoCliente();
+                }catch (NumberFormatException e){
+                    System.out.println("Introduce un valor válido....");
+                    error = true;
+                }
+            } while(error);
+            switch (op){
+                case 1: //Añadir más productos al carrito
+                    eligeProductoCatalogo(controlador, cliente);
+                    break;
+                case 2: //Vaciar el carro y añadir productos otra vez
+                    //ArrayList vacio para vaciar el carro del cliente
+                    cliente.vaciaCarro();
+                    eligeProductoCatalogo(controlador, cliente);
+                    break;
+                case 3: //Realizar pedido
+                    if (controlador.confirmaPedidoCliente(cliente.getId())) System.out.println("Pedido realizado con éxito");
+                    else System.out.println("El pedido no se ha podido realizar");
+            }
+        }else eligeProductoCatalogo(controlador, cliente);
+
+        System.out.println("Has salido de la selección de productos, estos son los productos a comprar: ");
+        pintaCarrito(controlador, cliente);
+        System.out.println("¿Desea continuar con la compra?(S/N)");
+        if (S.nextLine().equals("S")){
+            if (controlador.confirmaPedidoCliente(cliente.getId())) System.out.println("Pedido realizado con éxito");
+            else System.out.println("El pedido no se ha podido realizar");
+        }else System.out.println("Ha cancelado la compra, sus productos elegidos siguen en el carro");
+    }
+
+    private static void eligeProductoCatalogo(Controlador controlador, Cliente cliente) {
+        int productoElegido = -1;
+        pintaResumenCatalogo(controlador);
         do {
             System.out.print("Introduzca el número del producto a añadir al carrito (-1 para finalizar selección): ");
             try{
@@ -373,12 +469,26 @@ public class main {
             }
             if (productoElegido != -1) controlador.addProductoCarrito(cliente, controlador.getCatalogo().get(productoElegido - 1).getId());
         }while(productoElegido != -1);
-        System.out.println("Has salido de la selección de productos, estos son los productos a comprar: ");
-        pintaCarrito(controlador, cliente);
-        System.out.println("¿Desea continuar con la compra?(S/N)");
-        if (S.nextLine().equals("S")){
-            controlador.confirmaPedidoCliente(cliente.getId());
+    }
+
+    private static void pintaResumenCatalogo(Controlador controlador) {
+        int cont = 1;
+        for (Producto producto : controlador.getCatalogo()){
+            System.out.println(cont + ". " + producto.getDescripcion() + " - " + producto.getMarca() + " - " +
+                    producto.getModelo() + " - " + producto.getPrecio() + "€");
+            cont++;
         }
+    }
+
+    private static int menuCarritoLlenoCliente() {
+        System.out.print("""
+                    ¿Que desea hacer?
+                    1. Añadir más productos al carro
+                    2. Vaciar el carro y añadir productos otra vez
+                    3. Realizar pedido
+                    Introduce opción:
+                    """);
+        return Integer.parseInt(S.nextLine());
     }
 
     private static void pintaCarrito(Controlador controlador, Cliente cliente) {
@@ -393,5 +503,62 @@ public class main {
     //Funciones generales
     private static void editarProducto() {
 
+    }
+
+    private static void modificaDatosPersonalesTrabajador(Controlador controlador, Trabajador trabajador) {
+        int telefonoTeclado = -2;
+
+        System.out.print("""
+                MODIFICACIÓN DE DATOS:
+                Introduce el nuevo nombre del trabajador:\s""");
+        String nombreTeclado = S.nextLine();
+        System.out.print("Introduce la nueva clave del trabajador: ");
+        String contraTeclado = S.nextLine();
+        String correoTeclado = compruebaCorreo(controlador);
+        do {
+            System.out.print("Introduzca su nuevo teléfono (-1 para dejar mismos datos): ");
+            try {
+                telefonoTeclado = Integer.parseInt(S.nextLine());
+            } catch (NumberFormatException e) {
+                System.out.println("Introduzca un valor numérico...");
+                Utils.pulsaContinuar();
+                Utils.limpiarpantalla();
+            }
+        } while (telefonoTeclado == -2);
+
+        trabajador.setNombre(nombreTeclado);
+        trabajador.setPass(contraTeclado);
+        trabajador.setEmail(correoTeclado);
+        if (telefonoTeclado != 1) trabajador.setMovil(telefonoTeclado);
+
+        System.out.println("Tus datos han sido modificados...");
+    }
+
+    private static String compruebaCorreo(Controlador controlador) {
+        boolean correoDistinto = false;
+        String correoTeclado;
+        do {  //Bucle que comprobará que el correo nuevo no se repita con el de otra persona
+            System.out.print("Introduzca el correo electrónico:");
+            correoTeclado = S.nextLine();
+            if (!controlador.compruebaCorreos(correoTeclado)) {
+                correoDistinto = true;
+                if (!correoTeclado.contains("@") || (!correoTeclado.contains(".com") && !correoTeclado.contains(".es"))) {
+                    System.out.println("El correo esta mal introducido...");
+                    correoDistinto = false;
+                    Utils.pulsaContinuar();
+                    Utils.limpiarpantalla();
+                }
+            } else {
+                System.out.println("Este correo ya está en uso, introduzca uno nuevo...");
+                Utils.pulsaContinuar();
+                Utils.limpiarpantalla();
+            }
+        } while (!correoDistinto);
+        return correoTeclado;
+    }
+
+    private static void pintaPerfilTrabajador(Trabajador trabajador) {
+        System.out.println("******* VER PERFIL *******");
+        System.out.println(trabajador);
     }
 }

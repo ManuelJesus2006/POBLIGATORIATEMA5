@@ -86,6 +86,10 @@ public class Trabajador {
         this.pedidosAsignados = pedidosAsignados;
     }
 
+    @Override
+    public String toString() {
+        return "Nombre: " + nombre + "\nEmail: " + email + "\nTeléfono móvil: " + movil + '\n';
+    }
 
     // Otros metodos
     public boolean login(String email, String pass) {

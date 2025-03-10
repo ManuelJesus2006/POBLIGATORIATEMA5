@@ -4,6 +4,7 @@ import data.DataProductos;
 import models.*;
 
 import javax.xml.crypto.Data;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -90,8 +91,13 @@ public class Controlador {
 
     }
 
+    //Método para confirmar cualquier pedido de cliente
     public boolean confirmaPedidoCliente(int id) {
-        
+        Cliente temp = buscaClienteById(id);
+        if (temp == null) return false;
+        temp.getPedidos().add(new Pedido(LocalDate.now(), null, null, 0,
+                null, temp.getCarro()));
+        return true;
     }
 
     public Trabajador buscaTrabajadorCandidatoParaAsignar() {
@@ -103,11 +109,18 @@ public class Controlador {
     }
 
     public Cliente buscaClienteById(int idCliente) {
-
+        for (Cliente cliente : clientes){
+            if (cliente.getId() == idCliente) return cliente;
+        }
+        return null;
     }
 
     public ArrayList<Producto> buscaProductosByMarca(String marca) {
-
+        ArrayList<Producto> productosEncontrados = new ArrayList<>();
+        for (Producto producto : catalogo){
+            if (producto.getMarca().contains(marca)) productosEncontrados.add(producto);
+        }
+        return productosEncontrados;
     }
 
     public ArrayList<Producto> buscaProductosByModelo(String modelo) {
@@ -214,5 +227,21 @@ public class Controlador {
 
     public void verCatalogo() {
 
+    }
+
+    public boolean compruebaCorreos(String correoTeclado) {
+        for (Admin admin : admins) {
+            if (admin.getEmail().equals(correoTeclado)) return true;
+        }
+
+        for (Trabajador trabajador : trabajadores) {
+            if (trabajador.getEmail().equals(correoTeclado)) return true;
+        }
+
+        for (Cliente cliente : clientes) {
+            if (cliente.getEmail().equals(correoTeclado)) return true;
+        }
+
+        return false;
     }
 }

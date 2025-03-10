@@ -144,7 +144,7 @@ public class Cliente {
         return email.equals(this.email) && pass.equals(this.clave);
     }
 
- /*   public void addProductoCarro(Producto p) {
+    public void addProductoCarro(Producto p) {
 
     }
 
@@ -157,7 +157,7 @@ public class Cliente {
     }
 
     public void vaciaCarro() {
-
+        carro.clear();
     }
 
     public void addPedido() {
@@ -178,5 +178,5 @@ public class Cliente {
 
     public boolean existeProductoCarro(int idProducto) {
 
-    }*/
+    }
 }
