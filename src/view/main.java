@@ -8,7 +8,6 @@ import models.Trabajador;
 import utils.Menus;
 import utils.Utils;
 
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class main {
@@ -145,34 +144,52 @@ public class main {
             }
         } while (!bandera);
 
-        if (controlador.creaCliente(email, clave, nombre, localidad, provincia, direccion, movil)) System.out.println("Registrado correctamente...");
+        if (controlador.getClientes().add(new Cliente(email, clave, nombre, localidad, provincia, direccion, movil)))
+            System.out.println("Registrado correctamente...");
         else System.out.println("Ha ocurrido un error...");;
     }
 
+    private static void verCatalogoSinLogueo(Controlador controlador) {
+        int cont = 0;
+        for (Producto producto : controlador.getCatalogo()) {
+            System.out.println("======================================");
+            if (producto.getRelevancia() > 9) System.out.println("************ Promo especial **********");
+            System.out.println("- ID: " + producto.getId());
+            System.out.println("- Marca: " + producto.getMarca() + " - Modelo: " + producto.getModelo());
+            System.out.println("- Descripción: " + producto.getDescripcion());
+            System.out.println("- Precio: " + producto.getPrecio());
+            cont++;
+            if (cont == 5) {
+                Utils.pulsaContinuar();
+                cont = 0;
+            }
+        }
+        Utils.pulsaContinuar();
+        Utils.limpiarpantalla();
+    }
+
     private static void menuUsuario(Controlador controlador, Object user) {
-        String op, emailTeclado, contraTeclado, nombreTeclado, claveTeclado, direccionTeclado, localidadTeclado,
+        String op, correoTeclado, contraTeclado, nombreTeclado, claveTeclado, direccionTeclado, localidadTeclado,
                 provinciaTeclado, tokenTeclado, token;
+        int telefonoTeclado = -2;
 
         for (Admin admin : controlador.getAdmins()) {
             if (user.equals(admin)) {
-                Utils.limpiarpantalla();
                 do {
                     System.out.println(Menus.menuAdministrador(controlador, admin));
                     op = S.nextLine();
                     switch (op) {
                         case "1": //Ver to el catálogo
-
                             Utils.pulsaContinuar();
                             Utils.limpiarpantalla();
+                            verCatalogoSinLogueo(controlador);
                             break;
                         case "2": //Editar un producto
                             Utils.pulsaContinuar();
                             Utils.limpiarpantalla();
+                            editarProducto();
                             break;
                         case "3": //Ver un resumen de todos los Clientes
-                            for (Cliente cliente : controlador.getClientes()) {
-                                System.out.println("ID: " + cliente.getId() + "; Nombre: " + cliente.getNombre());
-                            }
                             Utils.pulsaContinuar();
                             Utils.limpiarpantalla();
                             break;
@@ -181,9 +198,6 @@ public class main {
                             Utils.limpiarpantalla();
                             break;
                         case "5": // Ver un resumen de todos los Trabajadores
-                            for (Trabajador trabajador : controlador.getTrabajadores()) {
-                                System.out.println("ID: " + trabajador.getId() + "; Nombre: " + trabajador.getNombre());
-                            }
                             Utils.pulsaContinuar();
                             Utils.limpiarpantalla();
                             break;
@@ -196,19 +210,10 @@ public class main {
                             Utils.limpiarpantalla();
                             break;
                         case "8": //Dar de alta un trabajador
-                            if (darDeAltaTrabajador(controlador)) System.out.println("Trabajador dado de alta correctamente...");
-                            else System.out.println("Ha ocurrido un error...");;
                             Utils.pulsaContinuar();
                             Utils.limpiarpantalla();
                             break;
                         case "9": //Dar de baja un trabajador
-                            Trabajador temp = seleccionaTrabajador(controlador);
-
-                            if (temp == null) System.out.println("No se ha encontrado ningún trabajador");
-                            else {
-                                controlador.getTrabajadores().remove(temp);
-                                System.out.println("Se ha dado de baja con éxito...");
-                            }
                             Utils.pulsaContinuar();
                             Utils.limpiarpantalla();
                             break;
@@ -234,7 +239,6 @@ public class main {
 
         for (Trabajador trabajador : controlador.getTrabajadores()) {
             if (user.equals(trabajador)) {
-                Utils.limpiarpantalla();
                 do {
                     System.out.println(Menus.menuTrabajador(controlador, trabajador));
                     op = S.nextLine();
@@ -285,7 +289,6 @@ public class main {
 
         for (Cliente cliente : controlador.getClientes()) {
             if (user.equals(cliente)) {
-                Utils.limpiarpantalla();
                 do {
                     System.out.println(Menus.menuCliente(controlador, cliente));
                     op = S.nextLine();
@@ -293,10 +296,12 @@ public class main {
                         case "1"://Consultar el catálogo de productos
                             Utils.pulsaContinuar();
                             Utils.limpiarpantalla();
+                            verCatalogoSinLogueo(controlador);
                             break;
                         case "2"://Realizar un pedido
                             Utils.pulsaContinuar();
                             Utils.limpiarpantalla();
+                            realizarPedido(controlador, cliente);
                             break;
                         case "3"://Ver mis pedidos
                             Utils.pulsaContinuar();
@@ -324,72 +329,69 @@ public class main {
                 } while (!op.equals("7"));
             }
         } // Bucle de clientes
+
     }
 
-    private static Trabajador seleccionaTrabajador(Controlador controlador) {
-        System.out.print("""
-                ¿Cómo quiere seleccionar el trabajador?
-                1.- Por ID del trabajador
-                2.- En un menú de selección
-                Introduce una opción:""");
-        String op = S.nextLine();
+    private static void realizarPedido(Controlador controlador, Cliente cliente) {
+        Producto producto = seleccionarProducto(controlador, cliente);
 
-        switch (op) { // Por ID del trabajador
-            case "1":
-                System.out.print("Introduce el ID del trabajador: ");
-                int idModificar = Integer.parseInt(S.nextLine());
-                return controlador.buscaTrabajadorByID(idModificar);
-            case "2": // En un menú de selección
-                ArrayList<Trabajador> discos = controlador.getTrabajadores();
-                for (Trabajador trabajador : controlador.getTrabajadores()) {
-                    System.out.println((discos.indexOf(trabajador) + 1) + ". - ID: " + trabajador.getId() + "; Nombre: " + trabajador.getNombre());
-                }
-                System.out.print("Introduce el trabajador que quieres seleccionar: ");
-                return discos.get(Integer.parseInt(S.nextLine()) - 1);
+    }
+
+    private static Producto seleccionarProducto(Controlador controlador, Cliente cliente) {
+        Producto temp;
+        int op;
+        System.out.println("""
+                1. Ver todo el catálogo
+                2. Búsqueda por maraca
+                3. Búsqueda por modelo
+                4. Búsqueda por descripción
+                5. Búsqueda por término
+                6. Búsqueda por precio
+                7. Salir
+                """);
+        op = Integer.parseInt(S.nextLine());
+        switch (op){
+            case 1:
+                pintarSeleccionCatalogo(controlador, cliente);
+                break;
         }
-        return null;
+        return
     }
 
-    public static boolean darDeAltaTrabajador(Controlador controlador) {
-        String claveTeclado, emailTeclado, nombreTeclado;
-        int telefonoTeclado = -2;
-
-        System.out.print("Introduce un nombre: ");
-        nombreTeclado = S.nextLine();
-        System.out.print("Introduce un email: ");
-        emailTeclado = S.nextLine();
-        System.out.print("Introduce una clave: ");
-        claveTeclado = S.nextLine();
-
+    private static void pintarSeleccionCatalogo(Controlador controlador, Cliente cliente){
+        int cont = 1, productoElegido = -1;
+        for (Producto producto : controlador.getCatalogo()){
+            System.out.println(cont + ". " + producto.getDescripcion() + " - " + producto.getMarca() + " - " +
+                    producto.getModelo() + " - " + producto.getPrecio() + "€");
+        }
         do {
-            System.out.print("Introduce un número de teléfono: ");
-            try {
-                telefonoTeclado = Integer.parseInt(S.nextLine());
-            } catch (NumberFormatException e) {
-                System.out.println("Debes introducir un número...");
+            System.out.print("Introduzca el número del producto a añadir al carrito (-1 para finalizar selección): ");
+            try{
+                productoElegido = Integer.parseInt(S.nextLine());
+            }catch (NumberFormatException e){
+                System.out.println("Introduce un valor numérico....");
             }
-        } while (telefonoTeclado == -2);
-
-        return (controlador.nuevoTrabajador(emailTeclado, claveTeclado, nombreTeclado, telefonoTeclado));
+            if (productoElegido != -1) controlador.addProductoCarrito(cliente, controlador.getCatalogo().get(productoElegido - 1).getId());
+        }while(productoElegido != -1);
+        System.out.println("Has salido de la selección de productos, estos son los productos a comprar: ");
+        pintaCarrito(controlador, cliente);
+        System.out.println("¿Desea continuar con la compra?(S/N)");
+        if (S.nextLine().equals("S")){
+            controlador.confirmaPedidoCliente(cliente.getId());
+        }
     }
 
-
-    private static void verCatalogoSinLogueo(Controlador controlador) {
-        int cont = 0;
-        for (Producto producto : controlador.getCatalogo()) {
-            System.out.println("======================================");
-            if (producto.getRelevancia() > 9) System.out.println("************ Promo especial **********");
-            System.out.println("- ID: " + producto.getId());
-            System.out.println("- Marca: " + producto.getMarca() + " - Modelo: " + producto.getModelo());
-            System.out.println("- Descripción: " + producto.getDescripcion());
-            System.out.println("- Precio: " + producto.getPrecio());
+    private static void pintaCarrito(Controlador controlador, Cliente cliente) {
+        int cont = 1;
+        for (Producto producto : cliente.getCarro()){
+            System.out.println(cont + ". " + producto.getDescripcion() + " - " + producto.getMarca() + " - " +
+                    producto.getModelo() + " - " + producto.getPrecio() + "€");
             cont++;
-            if (cont == 5) {
-                Utils.pulsaContinuar();
-                cont = 0;
-            }
         }
-        Utils.pulsaContinuar();
-        Utils.limpiarpantalla();
+    }
+
+    //Funciones generales
+    private static void editarProducto() {
+
     }
 }

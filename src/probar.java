@@ -1,4 +1,4 @@
-import static view.mainPractica.S;
+import static view.main.S;
 
 public class probar {
     public static void main(String[] args) {

@@ -14,8 +14,7 @@ public class Trabajador {
     private ArrayList<Pedido> pedidosAsignados;
 
     //Constructor
-    public Trabajador(int id, String nombre, String pass, String email, int movil) {
-        this.id = id;
+    public Trabajador(String nombre, String pass, String email, int movil) {
         this.nombre = nombre;
         this.pass = pass;
         this.email = email;

@@ -116,7 +116,7 @@ public class Pedido {
     //Metodo que pinta los datos del pedido
    public String pintaPedidoCorreo() {
         String salida = "";
-        /*salida += "\n\n";
+       /*  salida += "\n\n";
         salida += "==========\tPedido " + id + "\t===========<br>";
         salida += "Estado: " + estado + "<br>";
         salida += "Fecha del pedido: " + fechaPedido + "<br>";

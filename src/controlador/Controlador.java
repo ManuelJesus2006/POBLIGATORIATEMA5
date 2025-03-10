@@ -26,13 +26,10 @@ public class Controlador {
     private void mock() {
         //Clientes
         clientes.add(new Cliente(generaIdCliente(), "hola@hola", "3421", "Manolo", "Martos", "Jaén", "avda moris n32", 653423428));
-        clientes.add(new Cliente( generaIdCliente(), "jl@jl", "1234", "Jl", "Madrid", "Madrid", "avda gran vía", 456234244));
-        trabajadores.add(new Trabajador(generaIdTrabajador(), "Carlos", "1111", "adios@adios", 555443322));
-        trabajadores.add(new Trabajador(generaIdTrabajador(), "Alex", "2222", "2222@adios", 22222));
-        admins.add(new Admin(generaIdAdmin(), "root", "root", "root@root"));
+        clientes.add(new Cliente(generaIdCliente(), "jl@jl", "1234", "Jl", "Madrid", "Madrid", "avda gran vía", 456234244));
+        trabajadores.add(new Trabajador("Carlos", "1111", "adios@adios", 555443322));
+        admins.add(new Admin("root", "root", "root@root"));
         catalogo = DataProductos.getProductosMock();
-
-
     }
 
     // Getters y Setters
@@ -65,7 +62,7 @@ public class Controlador {
     }
 
     public void setCatalogo(ArrayList<Producto> catalogo) {
-        this.catalogo = DataProductos.getProductosMock();
+        this.catalogo = catalogo;
     }
 
 
@@ -85,7 +82,7 @@ public class Controlador {
         return null;
     }
 
-   /* public boolean addProductoCarrito(Cliente cliente, int idProducto) {
+    public boolean addProductoCarrito(Cliente cliente, int idProducto) {
 
     }
 
@@ -94,7 +91,7 @@ public class Controlador {
     }
 
     public boolean confirmaPedidoCliente(int id) {
-
+        
     }
 
     public Trabajador buscaTrabajadorCandidatoParaAsignar() {
@@ -147,16 +144,14 @@ public class Controlador {
 
     public boolean cambiaEstadoPedido(int idPedido, int nuevoEstado) {
 
-    }*/
+    }
 
     public boolean nuevoTrabajador(String email, String clave, String nombre, int movil) {
-        return (trabajadores.add(new Trabajador(generaIdTrabajador(), nombre, clave, email, movil)));
+
     }
 
-    public boolean creaCliente(String email, String clave, String nombre, String localidad, String provincia, String direccion, int movil) {
-        return (clientes.add(new Cliente(generaIdCliente(), email, clave, nombre, localidad, provincia, direccion, movil)));
-    }
-/*
+
+
     public Trabajador buscaTrabajadorAsignadoAPedido(int idPedido) {
 
     }
@@ -175,17 +170,12 @@ public class Controlador {
 
     public ArrayList<PedidoClienteDataClass> getPedidosAsignadosTrabajador(int idTrabajador) {
 
-    }*/
-
-    public Trabajador buscaTrabajadorByID(int idTrabajador) {
-        for (Trabajador trabajador : trabajadores) {
-            if (trabajador.getId() == idTrabajador) return trabajador;
-        }
-
-        return null;
     }
 
-    /*
+    public Trabajador buscaTrabajadorByID(int idTrabajador) {
+
+    }
+
     public Admin buscaAdminById(int idAdmin) {
 
     }
@@ -200,30 +190,29 @@ public class Controlador {
 
     public ArrayList<PedidoClienteDataClass> getPedidosAsignadosYCompletados(int idTrabajador) {
 
-    }*/
+    }
 
     private int generaIdCliente() {
         return (int) (Math.random() * 100000);
     }
 
-/*   private int generaIdProducto() {
+    private int generaIdProducto() {
 
     }
 
     private int generaIdPedido() {
 
-    }*/
+    }
 
     private int generaIdAdmin() {
-        return (int) (Math.random() * 100000) + 200000;
+
     }
 
     private int generaIdTrabajador() {
-        return (int) (Math.random() * 100000) + 100000;
+
     }
 
-   /*public void verCatalogo() {
+    public void verCatalogo() {
 
-
-    }*/
+    }
 }

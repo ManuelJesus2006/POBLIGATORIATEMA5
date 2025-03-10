@@ -8,8 +8,7 @@ public class Admin {
     private String email;
 
     // Constructor
-    public Admin(int id, String nombre, String clave, String email) {
-        this.id = id;
+    public Admin(String nombre, String clave, String email) {
         this.nombre = nombre;
         this.clave = clave;
         this.email = email;
