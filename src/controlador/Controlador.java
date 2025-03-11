@@ -118,17 +118,25 @@ public class Controlador {
     public ArrayList<Producto> buscaProductosByMarca(String marca) {
         ArrayList<Producto> productosEncontrados = new ArrayList<>();
         for (Producto producto : catalogo){
-            if (producto.getMarca().contains(marca)) productosEncontrados.add(producto);
+            if (producto.getMarca().toLowerCase().contains(marca.toLowerCase())) productosEncontrados.add(producto);
         }
         return productosEncontrados;
     }
 
     public ArrayList<Producto> buscaProductosByModelo(String modelo) {
-
+        ArrayList<Producto> productosEncontrados = new ArrayList<>();
+        for (Producto producto : catalogo){
+            if (producto.getModelo().toLowerCase().contains(modelo.toLowerCase())) productosEncontrados.add(producto);
+        }
+        return productosEncontrados;
     }
 
     public ArrayList<Producto> buscaProductosByDescripcion(String descripcion) {
-
+        ArrayList<Producto> productosEncontrados = new ArrayList<>();
+        for (Producto producto : catalogo){
+            if (producto.getDescripcion().toLowerCase().contains(descripcion.toLowerCase())) productosEncontrados.add(producto);
+        }
+        return productosEncontrados;
     }
 
     public ArrayList<Producto> buscaProductosByTermino(String termino) {
