@@ -37,7 +37,7 @@ public class Menus {
         String salida = "";
         salida += "FERNANSHOP" + "\n";
         salida += "Bienvenido " + cliente.getNombre() + "\n";
-        salida += "Actualmente tiene " + /*cliente.getCarro().size() +*/ " productos en su carro\n";
+        salida += "Actualmente tiene " + cliente.getCarro().size() + " productos en su carro\n";
         salida += "1.- Consultar el catálogo de productos\n";
         salida += "2.- Realizar un pedido\n";
         salida += "3.- Ver mis pedidos\n";

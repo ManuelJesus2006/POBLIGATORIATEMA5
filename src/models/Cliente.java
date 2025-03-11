@@ -29,6 +29,8 @@ public class Cliente {
         this.provincia = provincia;
         this.direccion = direccion;
         this.movil = movil;
+        pedidos = new ArrayList<>();
+        carro = new ArrayList<>();
     }
 
 
