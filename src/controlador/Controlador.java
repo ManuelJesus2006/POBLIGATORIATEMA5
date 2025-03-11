@@ -87,13 +87,18 @@ public class Controlador {
     }
 
     public boolean addProductoCarrito(Cliente cliente, int idProducto) {
-        // TODO para probar
-        return false;
-    }/*
+        Producto temp = buscaProductoById(idProducto);
+        if (temp == null) return false;
+        cliente.getCarro().add(temp);
+        return true;
+    }
 
     public Producto buscaProductoById(int id) {
-
-    }*/
+        for (Producto producto : catalogo){
+            if (producto.getId() == id) return producto;
+        }
+        return null;
+    }
 
     // Metod para confirmar cualquier pedido de cliente
     public boolean confirmaPedidoCliente(int id) {
@@ -161,8 +166,11 @@ public class Controlador {
 
     // Metodo que busca productos por su precio, devolvemos un Array
     public ArrayList<Producto> buscaProductosByPrecio(float precioMin, float precioMax) {
-        // TODO para probar
-        return null;
+        ArrayList<Producto> productosEncontrados = new ArrayList<>();
+        for (Producto producto : catalogo){
+            if (producto.getPrecio() >= precioMin && producto.getPrecio() <= precioMax) productosEncontrados.add(producto);
+        }
+        return productosEncontrados;
     }
 
 

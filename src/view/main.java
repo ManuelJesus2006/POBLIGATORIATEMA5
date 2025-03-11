@@ -339,7 +339,7 @@ public class main {
                 """);
         op = Integer.parseInt(S.nextLine());
         switch (op){
-            case 1: //Ver to el catálogo
+            case 1: //Ver todo el catálogo
                 seleccionPorCatalogo(controlador, cliente);
                 break;
             case 2: //Búsqueda por marca
@@ -555,7 +555,7 @@ public class main {
         System.out.println("Has salido de la selección de productos, estos son los productos a comprar: ");
         pintaCarrito(controlador, cliente);
         System.out.println("¿Desea continuar con la compra?(S/N)");
-        if (S.nextLine().equals("S")){
+        if (S.nextLine().equalsIgnoreCase("S")){
             if (controlador.confirmaPedidoCliente(cliente.getId())) System.out.println("Pedido realizado con éxito");
             else System.out.println("El pedido no se ha podido realizar");
         }else System.out.println("Ha cancelado la compra, sus productos elegidos siguen en el carro");
@@ -665,7 +665,7 @@ public class main {
     }
 
     private static void eligeProductoCatalogo(Controlador controlador, Cliente cliente) {
-        int productoElegido = -1;
+        int productoElegido = 0;
         boolean error = false;
         pintaResumenCatalogo(controlador);
         do {
@@ -676,11 +676,11 @@ public class main {
                 System.out.println("Introduce un valor numérico....");
                 error = true;
             }
-            if (productoElegido >= 1 && productoElegido < controlador.getCatalogo().size()) {
+            if (productoElegido >= 1 && productoElegido <= controlador.getCatalogo().size()) {
                 if (controlador.addProductoCarrito(cliente, controlador.getCatalogo().get(productoElegido - 1).getId()))
                     System.out.println("Producto agregado a la cesta");
             }else if (productoElegido != -1) System.out.print("Dicha opción no existe: ");
-        }while(error || productoElegido == -1);
+        }while(error || productoElegido != -1);
 
     }
 
