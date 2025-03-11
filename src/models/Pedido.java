@@ -8,16 +8,14 @@ public class Pedido {
     private int id;
     private LocalDate fechaPedido;
     private LocalDate fechaEntregaEstimada;
-    private LocalDate deliveryDAte;
     private int estado;
     private String comentario;
     private ArrayList<Producto> productos;
 
     //Constructor
-    public Pedido(LocalDate fechaPedido, LocalDate fechaEntregaEstimada, LocalDate deliveryDAte, int estado, String comentario, ArrayList<Producto> productos) {
+    public Pedido(LocalDate fechaPedido, LocalDate fechaEntregaEstimada, int estado, String comentario, ArrayList<Producto> productos) {
         this.fechaPedido = fechaPedido;
         this.fechaEntregaEstimada = fechaEntregaEstimada;
-        this.deliveryDAte = deliveryDAte;
         this.estado = estado;
         this.comentario = comentario;
         this.productos = productos;
@@ -46,14 +44,6 @@ public class Pedido {
 
     public void setFechaEntregaEstimada(LocalDate fechaEntregaEstimada) {
         this.fechaEntregaEstimada = fechaEntregaEstimada;
-    }
-
-    public LocalDate getDeliveryDAte() {
-        return deliveryDAte;
-    }
-
-    public void setDeliveryDAte(LocalDate deliveryDAte) {
-        this.deliveryDAte = deliveryDAte;
     }
 
     public int getEstado() {

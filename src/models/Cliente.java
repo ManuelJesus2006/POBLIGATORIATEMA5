@@ -20,18 +20,8 @@ public class Cliente {
     private ArrayList<Producto> carro;
 
     //Constructor
-    public Cliente(String email, String clave, String nombre, String localidad, String provincia, String direccion, int movil) {
-        this.email = email;
-        this.clave = clave;
-        this.nombre = nombre;
-        this.localidad = localidad;
-        this.provincia = provincia;
-        this.direccion = direccion;
-        this.movil = movil;
-    }
-
     public Cliente(int id, String email, String clave, String nombre, String localidad, String provincia, String direccion, int movil) {
-        id = 0;
+        this.id = id;
         this.email = email;
         this.clave = clave;
         this.nombre = nombre;
@@ -144,7 +134,7 @@ public class Cliente {
         return email.equals(this.email) && pass.equals(this.clave);
     }
 
-    public void addProductoCarro(Producto p) {
+   /* public void addProductoCarro(Producto p) {
 
     }
 
@@ -154,13 +144,13 @@ public class Cliente {
 
     public int numProductosCarro() {
 
-    }
+    }*/
 
     public void vaciaCarro() {
         carro.clear();
     }
 
-    public void addPedido() {
+  /*  public void addPedido() {
 
     }
 
@@ -178,5 +168,5 @@ public class Cliente {
 
     public boolean existeProductoCarro(int idProducto) {
 
-    }
+    }*/
 }

@@ -59,13 +59,14 @@ public class main {
                     break;
                 case 3: // Iniciar sesión
                     usuarioLogueado = iniciaSesion(controlador);
+                    if (usuarioLogueado == null) System.out.println("No se ha encontrado ningún usuario...");
                     break;
                 default: // Op incorrecta
                     System.out.println("Opción incorrecta...");
-                    Utils.pulsaContinuar();
-                    Utils.limpiarpantalla();
                     break;
             }
+            Utils.pulsaContinuar();
+            Utils.limpiarpantalla();
         } while (usuarioLogueado == null);
         return usuarioLogueado;
     }
@@ -118,8 +119,7 @@ public class main {
     private static void registraCliente(Controlador controlador) {
         boolean bandera = false;
 
-        System.out.print("Introduce un email: ");
-        String email = S.nextLine();
+        String email = compruebaCorreo(controlador);
         System.out.print("Introduce la clave: ");
         String clave = S.nextLine();
         System.out.print("Introduce tu nombre: ");
@@ -145,8 +145,7 @@ public class main {
             }
         } while (!bandera);
 
-        if (controlador.getClientes().add(new Cliente(email, clave, nombre, localidad, provincia, direccion, movil)))
-            System.out.println("Registrado correctamente...");
+        if (controlador.nuevoCliente(email, clave, nombre, localidad, provincia, direccion, movil)) System.out.println("Registrado correctamente...");
         else System.out.println("Ha ocurrido un error...");;
     }
 
@@ -165,14 +164,10 @@ public class main {
                 cont = 0;
             }
         }
-        Utils.pulsaContinuar();
-        Utils.limpiarpantalla();
     }
 
     private static void menuUsuario(Controlador controlador, Object user) {
-        String op, correoTeclado, contraTeclado, nombreTeclado, claveTeclado, direccionTeclado, localidadTeclado,
-                provinciaTeclado, tokenTeclado, token;
-        int telefonoTeclado = -2;
+        String op;
 
         for (Admin admin : controlador.getAdmins()) {
             if (user.equals(admin)) {
@@ -181,59 +176,46 @@ public class main {
                     op = S.nextLine();
                     switch (op) {
                         case "1": //Ver to el catálogo
-                            Utils.pulsaContinuar();
-                            Utils.limpiarpantalla();
                             verCatalogo(controlador);
                             break;
                         case "2": //Editar un producto
-                            Utils.pulsaContinuar();
-                            Utils.limpiarpantalla();
-                            editarProducto();
+                            modificaProducto(controlador);
                             break;
                         case "3": //Ver un resumen de todos los Clientes
-                            Utils.pulsaContinuar();
-                            Utils.limpiarpantalla();
+
                             break;
                         case "4": //Ver un resumen de todos los Pedidos
-                            Utils.pulsaContinuar();
-                            Utils.limpiarpantalla();
+
                             break;
                         case "5": // Ver un resumen de todos los Trabajadores
-                            Utils.pulsaContinuar();
-                            Utils.limpiarpantalla();
+
                             break;
                         case "6": //Ver las estadísticas de la aplicación
-                            Utils.pulsaContinuar();
-                            Utils.limpiarpantalla();
+                            estadisticasApp(controlador);
                             break;
                         case "7": //Cambiar el estado de un pedido
-                            Utils.pulsaContinuar();
-                            Utils.limpiarpantalla();
+
                             break;
                         case "8": //Dar de alta un trabajador
-                            Utils.pulsaContinuar();
-                            Utils.limpiarpantalla();
+                            altaTrabajador(controlador);
                             break;
                         case "9": //Dar de baja un trabajador
-                            Utils.pulsaContinuar();
-                            Utils.limpiarpantalla();
+
                             break;
                         case "10": //Asignar un pedido a un trabajador
-                            Utils.pulsaContinuar();
-                            Utils.limpiarpantalla();
+
                             break;
                         case "11": //Salir
                             System.out.println("Saliendo");
                             Utils.animacionFinSesion();
-                            Utils.pulsaContinuar();
-                            Utils.limpiarpantalla();
                             break;
                         default://Opción no existente
                             System.out.println("Valor no válido");
-                            Utils.pulsaContinuar();
-                            Utils.limpiarpantalla();
+
                             break;
                     }
+                    Utils.pulsaContinuar();
+                    Utils.limpiarpantalla();
                 } while (!op.equals("11"));
             }
         } // Bucle de admin
@@ -245,8 +227,6 @@ public class main {
                     op = S.nextLine();
                     switch (op) {
                         case "1": //Consultar los pedidos que tengo asignados
-                            Utils.pulsaContinuar();
-                            Utils.limpiarpantalla();
                             break;
                         case "2": //Modificar el estado de un pedido
                             modificaPedido(controlador);
@@ -258,31 +238,23 @@ public class main {
                             modificaProducto(controlador);
                             break;
                         case "5": //Ver el histórico de pedidos terminados
-                            Utils.pulsaContinuar();
-                            Utils.limpiarpantalla();
                             break;
                         case "6": //Ver mi perfil
                             pintaPerfilTrabajador(trabajador);
-                            Utils.pulsaContinuar();
-                            Utils.limpiarpantalla();
                             break;
                         case "7": //Modificar mis datos personales
                             modificaDatosPersonalesTrabajador(controlador, trabajador);
-                            Utils.pulsaContinuar();
-                            Utils.limpiarpantalla();
                             break;
                         case "8": //Salir
                             System.out.println("Saliendo");
                             Utils.animacionFinSesion();
-                            Utils.pulsaContinuar();
-                            Utils.limpiarpantalla();
                             break;
                         default://Opción no existente
                             System.out.println("Valor no válido");
-                            Utils.pulsaContinuar();
-                            Utils.limpiarpantalla();
                             break;
                     }
+                    Utils.pulsaContinuar();
+                    Utils.limpiarpantalla();
                 } while (!op.equals("8"));
             }
         } // Bucle de trabajadores
@@ -294,42 +266,63 @@ public class main {
                     op = S.nextLine();
                     switch (op) {
                         case "1"://Consultar el catálogo de productos
-                            Utils.pulsaContinuar();
-                            Utils.limpiarpantalla();
                             verCatalogo(controlador);
                             break;
                         case "2"://Realizar un pedido
                             realizarPedido(controlador, cliente);
-                            Utils.pulsaContinuar();
-                            Utils.limpiarpantalla();
                             break;
                         case "3"://Ver mis pedidos
-                            Utils.pulsaContinuar();
-                            Utils.limpiarpantalla();
                             break;
                         case "4"://Ver mis datos personales
-                            Utils.pulsaContinuar();
-                            Utils.limpiarpantalla();
                             break;
                         case "5"://Modificar mis datos personales
-                            Utils.pulsaContinuar();
-                            Utils.limpiarpantalla();
                             break;
                         case "6":// Salir
                             System.out.println("Saliendo");
                             Utils.animacionFinSesion();
-                            Utils.pulsaContinuar();
-                            Utils.limpiarpantalla();
                             break;
                         default://Opción no existente
                             System.out.println("Valor no válido");
-                            Utils.pulsaContinuar();
-                            Utils.limpiarpantalla();
+                            break;
                     }
+                    Utils.pulsaContinuar();
+                    Utils.limpiarpantalla();
                 } while (!op.equals("7"));
             }
         } // Bucle de clientes
 
+    }
+
+    // Funcion que muestra el numero de clientes, trabajadores, pedidos, pedidos pendientes, pedidos completados o cancelados
+    // y pedidos sin asignar
+    private static void estadisticasApp(Controlador controlador) {
+        // TODO cuando haya pedidos cambiarlo a printf
+        System.out.println("""
+                Bienvenido Administrador. Tenemos %d pedidos sin asignar. Debe asignarlos a un trabajador
+                ===================================================
+                            Estadisticas de la APP
+                Número de clientes: %d
+                Número de pedidos: %d
+                Número de pedidos pendientes: %d
+                Número de pedidos completados o cancelados: %d
+                Número de pedidos sin asignar: %d
+                ===================================================
+                """);
+    }
+
+    // Funcion que pide los datos para crear un nuevo trabajador
+    private static void altaTrabajador(Controlador controlador) {
+
+        System.out.print("Introduce el nombre del nuevo trabajador: ");
+        String nombreTeclado = S.nextLine();
+        System.out.print("Introduce la clave del nuevo trabajador: ");
+        String pass = S.nextLine();
+        String email = compruebaCorreo(controlador);
+        System.out.print("Introduce el móvil del trabajador: ");
+        int movil = Integer.parseInt(S.nextLine());
+
+        if (controlador.nuevoTrabajador(email, pass, nombreTeclado, movil)) System.out.println("Trabajador dado de alta correctamente...");
+        else System.out.println("Ha ocurrido un error...");
     }
 
     //Realizar el pedido decidiendo el procedimiento
@@ -346,7 +339,7 @@ public class main {
                 """);
         op = Integer.parseInt(S.nextLine());
         switch (op){
-            case 1: //Ver todo el catálogo
+            case 1: //Ver to el catálogo
                 seleccionPorCatalogo(controlador, cliente);
                 break;
             case 2: //Búsqueda por marca
@@ -720,11 +713,7 @@ public class main {
         }
     }
 
-    //Funciones generales
-    private static void editarProducto() {
-
-    }
-
+    // Funcion que modifica los datos de un trabajador
     private static void modificaDatosPersonalesTrabajador(Controlador controlador, Trabajador trabajador) {
         int telefonoTeclado = -2;
 
@@ -754,6 +743,7 @@ public class main {
         System.out.println("Tus datos han sido modificados...");
     }
 
+    // Funcion que crea un correo con sus validaciones
     private static String compruebaCorreo(Controlador controlador) {
         boolean correoDistinto = false;
         String correoTeclado;
@@ -777,15 +767,17 @@ public class main {
         return correoTeclado;
     }
 
+    // Funcion que pinta el perfil de un trabajador
     private static void pintaPerfilTrabajador(Trabajador trabajador) {
         System.out.println("******* VER PERFIL *******");
         System.out.println(trabajador);
     }
 
+    // Funcion que modifica el estado de un pedido o añade un comentario al pedido
     private static void modificaPedido(Controlador controlador) {
         String op;
 
-        System.out.print("""
+        System.out.println("""
                 Marque una opción:
                 1. Modifica el estado
                 2. Añade un comentario""");
@@ -813,7 +805,7 @@ public class main {
         }
     }
 
-    private static void modificaProducto(Controlador controlador) {
+    public static void modificaProducto(Controlador controlador) {
 
     }
 }
