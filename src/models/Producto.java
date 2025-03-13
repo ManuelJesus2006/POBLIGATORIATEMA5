@@ -68,4 +68,14 @@ public class Producto {
         this.relevancia = relevancia;
     }
 
+    // Otros metodos
+    @Override
+    public String toString() {
+        return "Marca: " + marca + '\'' +
+                ", modelo='" + modelo + '\'' +
+                ", descripcion='" + descripcion + '\'' +
+                ", precio=" + precio +
+                ", relevancia=" + relevancia +
+                '}';
+    }
 }

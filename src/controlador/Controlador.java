@@ -93,6 +93,7 @@ public class Controlador {
         return true;
     }
 
+    // Metodo que busca un producto por ID
     public Producto buscaProductoById(int id) {
         for (Producto producto : catalogo){
             if (producto.getId() == id) return producto;
@@ -100,7 +101,7 @@ public class Controlador {
         return null;
     }
 
-    // Metod para confirmar cualquier pedido de cliente
+    // Metodo para confirmar cualquier pedido de cliente
     public boolean confirmaPedidoCliente(int id) {
         Cliente temp = buscaClienteById(id);
         if (temp == null) return false;
@@ -226,15 +227,17 @@ public class Controlador {
 
     public ArrayList<PedidoClienteDataClass> getPedidosAsignadosTrabajador(int idTrabajador) {
 
+    }*/
+
+    // Metodo que busca un trabajador por su id, y lo devuelve
+    public Trabajador buscaTrabajadorById(int idTrabajador) {
+        for (Trabajador t : trabajadores) {
+            if (t.getId() == idTrabajador) return t;
+        }
+
+        return null;
     }
-
-    public Trabajador buscaTrabajadorByID(int idTrabajador) {
-
-    }
-
-    public Admin buscaAdminById(int idAdmin) {
-
-    }
+/*
 
     public Pedido buscaPedidoAsignadoTrabajador(int idTrabajador, int idPedido) {
 
@@ -248,7 +251,7 @@ public class Controlador {
 
     }*/
 
-    // Metodo que genera una id aleatoria para el cliente entre el 0 y 100000
+    // Metodo que genera una id aleatoria para el cliente entre el 0 y 99999
     private int generaIdCliente() {
         return (int) (Math.random() * 100000);
     }
@@ -290,4 +293,32 @@ public class Controlador {
         return false;
     }
 
+    public boolean compruebaTokenTrabajador(Trabajador trabajador, String tokenTeclado) {
+        for (Trabajador t : trabajadores) {
+            if (t.getToken().equals(trabajador.getToken())) {
+                trabajador.setValid(true);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Metodo que genera un Token aleatorio
+    public String generaToken(Cliente cliente) {
+        if (cliente == null) return "";
+        String token = "";
+        token = "JM-" + (int) (Math.random() * 99999999);
+        cliente.setToken(token);
+        return token;
+    }
+
+    // Metodo que comprueba el Token de un cliente
+    // TODO comprobar
+    public boolean compruebaTokenCliente(Cliente cliente, String tokenTeclado) {
+        if (cliente.getToken().equals(tokenTeclado)) {
+            cliente.setValid(true);
+            return true;
+        } else cliente.setValid(false);
+        return false;
+    }
 }
