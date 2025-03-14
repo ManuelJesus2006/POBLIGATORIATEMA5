@@ -132,6 +132,16 @@ public class Cliente {
     }
 
     //Otros metodos
+    @Override
+    public String toString() {
+        return "Nombre: " + nombre + '\n' +
+                "Email: " + email + '\n' +
+                "Localidad: " + localidad + '\n' +
+                "Provincia: " + provincia + '\n' +
+                "Dirección: " + direccion + '\n' +
+                "Número de Teléfono: " + movil + '\n';
+    }
+
     public boolean login(String email, String pass) {
         return email.equals(this.email) && pass.equals(this.clave);
     }

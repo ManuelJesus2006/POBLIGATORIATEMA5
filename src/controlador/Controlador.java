@@ -291,44 +291,47 @@ public class Controlador {
         return false;
     }
 
-    // Metodo que comprueba el token de un Trabajador
-    public boolean compruebaTokenTrabajador(Trabajador trabajador, String tokenTeclado) {
+    // Metodo que genera un Token aleatorio
+    public String generaToken(Object user) {
+        String token = "JM-" + (int) (Math.random() * 99999999);
+
         for (Trabajador t : trabajadores) {
-            if (t.getToken().equals(tokenTeclado)) {
-                trabajador.setValid(true);
-                return true;
+            if (user == t) {
+                t.setToken(token);
+                t.setValid(false);
             }
         }
-        return false;
-    }
 
-    // Metodo que genera un Token aleatorio
-    public String generaTokenCliente(Cliente cliente) {
-        if (cliente == null) return "";
-        String token = "";
-        token = "JM-" + (int) (Math.random() * 99999999);
-        cliente.setToken(token);
-        cliente.setValid(false);
+        for (Cliente c : clientes) {
+            if (user == c) {
+                c.setToken(token);
+                c.setValid(false);
+            }
+        }
         return token;
     }
 
-    // Metodo que genera un Token aleatorio
-    public String generaTokenTrabajador(Trabajador trabajador) {
-        if (trabajador == null) return "";
-        String token = "";
-        token = "JM-" + (int) (Math.random() * 99999999);
-        trabajador.setToken(token);
-        trabajador.setValid(false);
-        return token;
-    }
+    // Metodo que comprueba el token de un Trabajador y de los clientes
+    public boolean compruebaToken(Object user, String tokenTeclado) {
+        // Miramos si el usuario pasado coincide con algun trabajador
+        for (Trabajador t : trabajadores) {
+            if (user == t) {
+                if (t.getToken().equals(tokenTeclado)) {
+                    t.setValid(true);
+                    return true;
+                } else t.setValid(false);
+            }
+        }
+        // Miramos si el usuario pasado coincide con algun cliente
+        for (Cliente c : clientes) {
+            if (user == c) {
+                if (c.getToken().equals(tokenTeclado)) {
+                    c.setValid(true);
+                    return true;
+                } else c.setValid(false);
+            }
+        }
 
-    // Metodo que comprueba el Token de un cliente
-    // TODO comprobar
-    public boolean compruebaTokenCliente(Cliente cliente, String tokenTeclado) {
-        if (cliente.getToken().equals(tokenTeclado)) {
-            cliente.setValid(true);
-            return true;
-        } else cliente.setValid(false);
         return false;
     }
 }

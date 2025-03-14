@@ -152,7 +152,7 @@ public class main {
                 if (c.getEmail().equals(email)) cliente = c;
             }
 
-            String token = controlador.generaTokenCliente(cliente);
+            String token = controlador.generaToken(cliente);
 
             System.out.println("Registrado correctamente...");
             Comunicaciones.enviaCorreoToken(email, "¡Hola! Bienvenido a FERNANSHOP " + nombre + ", " +
@@ -222,12 +222,10 @@ public class main {
 
                             break;
                         case "11": //Salir
-                            System.out.println("Saliendo");
                             Utils.animacionFinSesion();
                             break;
                         default://Opción no existente
-                            System.out.println("Valor no válido");
-
+                            System.out.println("Opción incorrecta...");
                             break;
                     }
                     Utils.pulsaContinuar();
@@ -238,9 +236,7 @@ public class main {
 
         for (Trabajador trabajador : controlador.getTrabajadores()) {
             if (user.equals(trabajador)) {
-
-                compruebaTokenTrabajador(controlador, trabajador);
-
+                compruebaToken(controlador, trabajador);
                 if (trabajador.isValid()) {
                     do {
                         System.out.println(Menus.menuTrabajador(controlador, trabajador));
@@ -266,35 +262,23 @@ public class main {
                                 modificaDatosPersonalesTrabajador(controlador, trabajador);
                                 break;
                             case "8": //Salir
-                                System.out.println("Saliendo");
                                 Utils.animacionFinSesion();
                                 break;
                             default://Opción no existente
-                                System.out.println("Valor no válido");
+                                System.out.println("Opción incorrecta...");
                                 break;
                         }
                         Utils.pulsaContinuar();
                         Utils.limpiarpantalla();
                     } while (trabajador.isValid() && !op.equals("8"));
                 }
-
-
             }
         } // Bucle de trabajadores
 
         for (Cliente cliente : controlador.getClientes()) {
             if (user.equals(cliente)) {
 
-                //Metodo de que comprueba el token del Cliente
-                if (!cliente.isValid()) {
-                    System.out.print("Introduce tu token para registrarte: ");
-                    String tokenTeclado = S.nextLine();
-                    if (controlador.compruebaTokenCliente(cliente, tokenTeclado))
-                        System.out.println("Token correcto...");
-                    else System.out.println("Token incorrecto...");
-                    Utils.pulsaContinuar();
-                    Utils.limpiarpantalla();
-                }
+                compruebaToken(controlador, cliente);
 
                 if (cliente.isValid()) {
                     do {
@@ -310,15 +294,16 @@ public class main {
                             case "3"://Ver mis pedidos
                                 break;
                             case "4"://Ver mis datos personales
+                                pintaPerfilCliente(cliente);
                                 break;
                             case "5"://Modificar mis datos personales
+                                modificaDatosPersonalesCliente(controlador, cliente);
                                 break;
                             case "6":// Salir
-                                System.out.println("Saliendo");
                                 Utils.animacionFinSesion();
                                 break;
                             default://Opción no existente
-                                System.out.println("Valor no válido");
+                                System.out.println("Opción incorrecta...");
                                 break;
                         }
                         Utils.pulsaContinuar();
@@ -331,16 +316,84 @@ public class main {
 
     }
 
-    private static void compruebaTokenTrabajador(Controlador controlador, Trabajador trabajador) {
-        //Metodo de que comprueba el token del Trabajador
-        if (!trabajador.isValid()) {
-            System.out.print("Introduce tu token para registrarte: ");
-            String tokenTeclado = S.nextLine();
-            if (controlador.compruebaTokenTrabajador(trabajador, tokenTeclado))
-                System.out.println("Token correcto...");
-            else System.out.println("Token incorrecto...");
-            Utils.pulsaContinuar();
-            Utils.limpiarpantalla();
+    private static void modificaDatosPersonalesCliente(Controlador controlador, Cliente cliente) {
+        int telefonoTeclado = -2;
+
+        System.out.print("""
+                MODIFICACIÓN DE DATOS:
+                Introduce el nuevo nombre del cliente:\s""");
+        String nombreTeclado = S.nextLine();
+        System.out.print("Introduce la nueva clave del cliente: ");
+        String contraTeclado = S.nextLine();
+        String correoTeclado = compruebaCorreo(controlador);
+        System.out.print("Introduzca la nueva localidad (Introduzca 'no' para dejar mismos datos): ");
+        String localidadTeclado = S.nextLine();
+        System.out.print("Introduzca la nueva provincia (Introduzca 'no' para dejar mismos datos): ");
+        String provinciaTeclado = S.nextLine();
+        System.out.print("Introduzca la nueva dirección (Introduzca 'no' para dejar mismos datos): ");
+        String direccionTeclado = S.nextLine();
+        do {
+            System.out.print("Introduzca su nuevo teléfono (-1 para dejar mismos datos): ");
+            try {
+                telefonoTeclado = Integer.parseInt(S.nextLine());
+            } catch (NumberFormatException e) {
+                System.out.println("Introduzca un valor numérico...");
+                Utils.pulsaContinuar();
+                Utils.limpiarpantalla();
+            }
+        } while (telefonoTeclado == -2);
+
+        cliente.setNombre(nombreTeclado);
+        cliente.setClave(contraTeclado);
+        cliente.setEmail(correoTeclado);
+        if (!localidadTeclado.equalsIgnoreCase("no")) cliente.setLocalidad(localidadTeclado);
+        if (!provinciaTeclado.equalsIgnoreCase("no")) cliente.setLocalidad(provinciaTeclado);
+        if (!direccionTeclado.equalsIgnoreCase("no")) cliente.setLocalidad(direccionTeclado);
+        if (telefonoTeclado != -1) cliente.setMovil(telefonoTeclado);
+
+        //Generamos el token después de la modificación de datos
+        String token = controlador.generaToken(cliente);
+        // Le mandamos el correo con el token
+        Comunicaciones.enviaCorreoToken(cliente.getEmail(), "¡Hola! Bienvenido a FERNANSHOP " + cliente.getNombre() + ", " +
+                "tu token de verificación de la cuenta es", "TU CÓDIGO DE VERIFICACIÓN DE CUENTA", token, cliente.getNombre());
+
+        System.out.println("Tus datos han sido modificados...");
+        Utils.pulsaContinuar();
+        Utils.limpiarpantalla();
+        // Hacemos que introduzca el token nuevo ya que ha cambiado sus datos personales
+        compruebaToken(controlador, cliente);
+    }
+
+    private static void pintaPerfilCliente(Cliente cliente) {
+        System.out.println("************** VER PERFIL **************");
+        System.out.println(cliente);
+    }
+
+    //Metodo de que comprueba el token de un usuario
+    private static void compruebaToken(Controlador controlador, Object user) {
+        //Trabajadores
+        for (Trabajador trabajador : controlador.getTrabajadores()) {
+            if (user == trabajador) {
+                if (!trabajador.isValid()) {
+                    System.out.print("Introduce tu token para registrarte: ");
+                    String tokenTeclado = S.nextLine();
+                    if (controlador.compruebaToken(trabajador, tokenTeclado))
+                        System.out.println("Token correcto...");
+                    else System.out.println("Token incorrecto...");
+                }
+            }
+        }
+        //Clientes
+        for (Cliente cliente : controlador.getClientes()) {
+            if (user == cliente) {
+                if (!cliente.isValid()) {
+                    System.out.print("Introduce tu token para registrarte: ");
+                    String tokenTeclado = S.nextLine();
+                    if (controlador.compruebaToken(cliente, tokenTeclado))
+                        System.out.println("Token correcto...");
+                    else System.out.println("Token incorrecto...");
+                }
+            }
         }
     }
 
@@ -456,7 +509,7 @@ public class main {
             for (Trabajador t : controlador.getTrabajadores()) {
                 if (t.getEmail().equals(email)) {
                     //Generamos el token después de la modificación de datos
-                    String token = controlador.generaTokenTrabajador(t);
+                    String token = controlador.generaToken(t);
                     // Le mandamos el correo con el token
                     Comunicaciones.enviaCorreoToken(t.getEmail(), "¡Hola! Bienvenido a FERNANSHOP " + t.getNombre()
                             + ", " + "tu token de verificación de la cuenta es", "TU CÓDIGO DE VERIFICACIÓN DE CUENTA", token, t.getNombre());
@@ -585,7 +638,6 @@ public class main {
             else System.out.println("El pedido no se ha podido realizar");
         } else System.out.println("Ha cancelado la compra, sus productos elegidos siguen en el carro");
     }
-
 
     private static void seleccionaPorModelo(Controlador controlador, Cliente cliente) {
         if (!cliente.getCarro().isEmpty()) {
@@ -887,7 +939,7 @@ public class main {
         if (telefonoTeclado != -1) trabajador.setMovil(telefonoTeclado);
 
         //Generamos el token después de la modificación de datos
-        String token = controlador.generaTokenTrabajador(trabajador);
+        String token = controlador.generaToken(trabajador);
         // Le mandamos el correo con el token
         Comunicaciones.enviaCorreoToken(trabajador.getEmail(), "¡Hola! Bienvenido a FERNANSHOP " + trabajador.getNombre() + ", " +
                 "tu token de verificación de la cuenta es", "TU CÓDIGO DE VERIFICACIÓN DE CUENTA", token, trabajador.getNombre());
@@ -896,7 +948,7 @@ public class main {
         Utils.pulsaContinuar();
         Utils.limpiarpantalla();
         // Hacemos que introduzca el token nuevo ya que ha cambiado sus datos personales
-        compruebaTokenTrabajador(controlador, trabajador);
+        compruebaToken(controlador, trabajador);
     }
 
     // Funcion que crea un correo con sus validaciones
@@ -925,7 +977,7 @@ public class main {
 
     // Funcion que pinta el perfil de un trabajador
     private static void pintaPerfilTrabajador(Trabajador trabajador) {
-        System.out.println("******* VER PERFIL *******");
+        System.out.println("************** VER PERFIL **************");
         System.out.println(trabajador);
     }
 
