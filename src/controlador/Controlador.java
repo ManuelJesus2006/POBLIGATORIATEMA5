@@ -3,10 +3,8 @@ package controlador;
 import data.DataProductos;
 import models.*;
 
-import javax.xml.crypto.Data;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class Controlador {
     // Atributos
@@ -26,9 +24,9 @@ public class Controlador {
 
     private void mock() {
         //Clientes
-        clientes.add(new Cliente(generaIdCliente(), "hola@hola", "3421", "Manolo", "Martos", "Jaén", "avda moris n32", 653423428));
-        clientes.add(new Cliente(generaIdCliente(), "jl@jl", "1234", "Jl", "Madrid", "Madrid", "avda gran vía", 456234244));
-        trabajadores.add(new Trabajador(generaIdTrabajador(), "Carlos", "1111", "adios@adios", 555443322));
+        //clientes.add(new Cliente(generaIdCliente(), "hola@hola", "3421", "Manolo", "Martos", "Jaén", "avda moris n32", 653423428));
+        //clientes.add(new Cliente(generaIdCliente(), "jl@jl", "1234", "Jl", "Madrid", "Madrid", "avda gran vía", 456234244));
+        //trabajadores.add(new Trabajador(generaIdTrabajador(), "Carlos", "1111", "adios@adios", 555443322));
         admins.add(new Admin(generaIdAdmin(), "root", "root", "root@root"));
         catalogo = DataProductos.getProductosMock();
     }
@@ -293,9 +291,10 @@ public class Controlador {
         return false;
     }
 
+    // Metodo que comprueba el token de un Trabajador
     public boolean compruebaTokenTrabajador(Trabajador trabajador, String tokenTeclado) {
         for (Trabajador t : trabajadores) {
-            if (t.getToken().equals(trabajador.getToken())) {
+            if (t.getToken().equals(tokenTeclado)) {
                 trabajador.setValid(true);
                 return true;
             }
@@ -304,11 +303,22 @@ public class Controlador {
     }
 
     // Metodo que genera un Token aleatorio
-    public String generaToken(Cliente cliente) {
+    public String generaTokenCliente(Cliente cliente) {
         if (cliente == null) return "";
         String token = "";
         token = "JM-" + (int) (Math.random() * 99999999);
         cliente.setToken(token);
+        cliente.setValid(false);
+        return token;
+    }
+
+    // Metodo que genera un Token aleatorio
+    public String generaTokenTrabajador(Trabajador trabajador) {
+        if (trabajador == null) return "";
+        String token = "";
+        token = "JM-" + (int) (Math.random() * 99999999);
+        trabajador.setToken(token);
+        trabajador.setValid(false);
         return token;
     }
 
