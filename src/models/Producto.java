@@ -71,11 +71,7 @@ public class Producto {
     // Otros metodos
     @Override
     public String toString() {
-        return "Marca: " + marca + '\'' +
-                ", modelo='" + modelo + '\'' +
-                ", descripcion='" + descripcion + '\'' +
-                ", precio=" + precio +
-                ", relevancia=" + relevancia +
-                '}';
+        return marca + modelo + "(" + precio + ")";
     }
 }
+

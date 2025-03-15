@@ -122,4 +122,25 @@ public class Pedido {
 
         return salida;
     }
+
+    @Override
+    public String toString() {
+       String resultado = "";
+        resultado += "====== PEDIDO " + id + "======\n";
+        resultado += "Fecha de pedido: " + fechaPedido + "\n";
+        resultado += "Fecha de entrega: " + fechaEntregaEstimada + "\n";
+        resultado += "Estado " + devuelveEstado(estado) + "\n";
+        resultado += "Productos " + productos + "\n";
+        return resultado;
+    }
+
+    private String devuelveEstado(int estado) {
+       switch (estado){
+           case 1: return "En preparación";
+           case 2: return "Enviado";
+           case 3: return "Entregado";
+           case 4: return "Cancelado";
+           default: return "Creado";
+       }
+    }
 }

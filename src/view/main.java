@@ -1,10 +1,7 @@
 package view;
 
 import controlador.Controlador;
-import models.Admin;
-import models.Cliente;
-import models.Producto;
-import models.Trabajador;
+import models.*;
 import utils.Comunicaciones;
 import utils.Menus;
 import utils.Utils;
@@ -292,6 +289,7 @@ public class main {
                                 realizarPedido(controlador, cliente);
                                 break;
                             case "3"://Ver mis pedidos
+                                verMisPedidos(controlador, cliente);
                                 break;
                             case "4"://Ver mis datos personales
                                 pintaPerfilCliente(cliente);
@@ -314,6 +312,12 @@ public class main {
             }
         } // Bucle de clientes
 
+    }
+
+    private static void verMisPedidos(Controlador controlador, Cliente cliente) {
+        for (Pedido p : cliente.getPedidos()) {
+            System.out.println(p);
+        }
     }
 
     private static void modificaDatosPersonalesCliente(Controlador controlador, Cliente cliente) {
