@@ -495,7 +495,7 @@ public class main {
                 Número de pedidos completados o cancelados: %d
                 Número de pedidos sin asignar: %d
                 ===================================================
-                """);
+                """);// , controlador.numClientes(), controlador.getTodosPedidos(), controlador.numPedidosTotales(), );
     }
 
     // Funcion que pide los datos para crear un nuevo trabajador
@@ -593,7 +593,7 @@ public class main {
         System.out.println("Has salido de la selección de productos, estos son los productos a comprar: ");
         pintaCarrito(controlador, cliente);
         System.out.println("¿Desea continuar con la compra?(S/N)");
-        if (S.nextLine().equals("S")) {
+        if (S.nextLine().equalsIgnoreCase("S")) {
             if (controlador.confirmaPedidoCliente(cliente.getId())) System.out.println("Pedido realizado con éxito");
             else System.out.println("El pedido no se ha podido realizar");
         } else System.out.println("Ha cancelado la compra, sus productos elegidos siguen en el carro");
@@ -637,7 +637,7 @@ public class main {
         System.out.println("Has salido de la selección de productos, estos son los productos a comprar: ");
         pintaCarrito(controlador, cliente);
         System.out.println("¿Desea continuar con la compra?(S/N)");
-        if (S.nextLine().equals("S")) {
+        if (S.nextLine().equalsIgnoreCase("S")) {
             if (controlador.confirmaPedidoCliente(cliente.getId())) System.out.println("Pedido realizado con éxito");
             else System.out.println("El pedido no se ha podido realizar");
         } else System.out.println("Ha cancelado la compra, sus productos elegidos siguen en el carro");
@@ -717,7 +717,7 @@ public class main {
         System.out.println("Has salido de la selección de productos, estos son los productos a comprar: ");
         pintaCarrito(controlador, cliente);
         System.out.println("¿Desea continuar con la compra?(S/N)");
-        if (S.nextLine().equals("S")) {
+        if (S.nextLine().equalsIgnoreCase("S")) {
             if (controlador.confirmaPedidoCliente(cliente.getId())) System.out.println("Pedido realizado con éxito");
             else System.out.println("El pedido no se ha podido realizar");
         } else System.out.println("Ha cancelado la compra, sus productos elegidos siguen en el carro");

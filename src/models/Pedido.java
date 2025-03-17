@@ -13,7 +13,8 @@ public class Pedido {
     private ArrayList<Producto> productos;
 
     //Constructor
-    public Pedido(LocalDate fechaPedido, LocalDate fechaEntregaEstimada, int estado, String comentario, ArrayList<Producto> productos) {
+    public Pedido(int id, LocalDate fechaPedido, LocalDate fechaEntregaEstimada, int estado, String comentario, ArrayList<Producto> productos) {
+        this.id = id;
         this.fechaPedido = fechaPedido;
         this.fechaEntregaEstimada = fechaEntregaEstimada;
         this.estado = estado;
@@ -126,7 +127,7 @@ public class Pedido {
     @Override
     public String toString() {
        String resultado = "";
-        resultado += "====== PEDIDO " + id + "======\n";
+        resultado += "====== PEDIDO " + id + " ======\n";
         resultado += "Fecha de pedido: " + fechaPedido + "\n";
         resultado += "Fecha de entrega: " + fechaEntregaEstimada + "\n";
         resultado += "Estado " + devuelveEstado(estado) + "\n";
