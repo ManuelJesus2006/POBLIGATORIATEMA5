@@ -41,6 +41,8 @@ public class Utils {
         System.out.println();
     }
 
+    public static final int IVA = 21;
+
     public static void esperePorFavor(){
         System.out.println("ESPERE POR FAVOR...");
     }

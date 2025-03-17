@@ -289,7 +289,7 @@ public class main {
                                 realizarPedido(controlador, cliente);
                                 break;
                             case "3"://Ver mis pedidos
-                                verMisPedidos(controlador, cliente);
+                                verMisPedidos(cliente);
                                 break;
                             case "4"://Ver mis datos personales
                                 pintaPerfilCliente(cliente);
@@ -314,7 +314,8 @@ public class main {
 
     }
 
-    private static void verMisPedidos(Controlador controlador, Cliente cliente) {
+    //Función que pinta todos los pedidos realizados por un cliente concreto
+    private static void verMisPedidos(Cliente cliente) {
         for (Pedido p : cliente.getPedidos()) {
             System.out.println(p);
         }
@@ -495,7 +496,7 @@ public class main {
                 Número de pedidos completados o cancelados: %d
                 Número de pedidos sin asignar: %d
                 ===================================================
-                """);// , controlador.numClientes(), controlador.getTodosPedidos(), controlador.numPedidosTotales(), );
+                """);
     }
 
     // Funcion que pide los datos para crear un nuevo trabajador
@@ -559,8 +560,9 @@ public class main {
         }
     }
 
+    //Busca por precio máximo y mínimo y luego aparecen los resultados de la busqueda, que es donde el cliente decide el producto
     private static void seleccionaPorPrecio(Controlador controlador, Cliente cliente) {
-        if (!cliente.getCarro().isEmpty()) {
+        if (!cliente.getCarro().isEmpty()) { //Si el carro ya tiene productos añadidos
             System.out.println("Hemos detectado los siguientes productos en su carro: ");
             pintaCarrito(controlador, cliente);
             boolean error = false;
@@ -584,17 +586,15 @@ public class main {
                     eligeProductoPrecio(controlador, cliente);
                     break;
                 case 3: //Realizar pedido
-                    if (controlador.confirmaPedidoCliente(cliente.getId()))
-                        System.out.println("Pedido realizado con éxito");
+                    if (controlador.confirmaPedidoCliente(cliente.getId())) System.out.println("Pedido realizado con éxito, el total del pedido es de " + cliente.getPedidos().getLast().calculaTotalPedidoConIVA(Utils.IVA) + "euros");
                     else System.out.println("El pedido no se ha podido realizar");
             }
         } else eligeProductoPrecio(controlador, cliente);
-
         System.out.println("Has salido de la selección de productos, estos son los productos a comprar: ");
         pintaCarrito(controlador, cliente);
         System.out.println("¿Desea continuar con la compra?(S/N)");
         if (S.nextLine().equalsIgnoreCase("S")) {
-            if (controlador.confirmaPedidoCliente(cliente.getId())) System.out.println("Pedido realizado con éxito");
+            if (controlador.confirmaPedidoCliente(cliente.getId())) System.out.println("Pedido realizado con éxito, el total del pedido es de " + cliente.getPedidos().getLast().calculaTotalPedidoConIVA(Utils.IVA) + "euros");
             else System.out.println("El pedido no se ha podido realizar");
         } else System.out.println("Ha cancelado la compra, sus productos elegidos siguen en el carro");
     }
@@ -628,8 +628,7 @@ public class main {
                     eligeProductoDescripcion(controlador, cliente);
                     break;
                 case 3: //Realizar pedido
-                    if (controlador.confirmaPedidoCliente(cliente.getId()))
-                        System.out.println("Pedido realizado con éxito");
+                    if (controlador.confirmaPedidoCliente(cliente.getId())) System.out.println("Pedido realizado con éxito, el total del pedido es de " + cliente.getPedidos().getLast().calculaTotalPedidoConIVA(Utils.IVA) + "euros");
                     else System.out.println("El pedido no se ha podido realizar");
             }
         } else eligeProductoMarca(controlador, cliente);
@@ -638,7 +637,7 @@ public class main {
         pintaCarrito(controlador, cliente);
         System.out.println("¿Desea continuar con la compra?(S/N)");
         if (S.nextLine().equalsIgnoreCase("S")) {
-            if (controlador.confirmaPedidoCliente(cliente.getId())) System.out.println("Pedido realizado con éxito");
+            if (controlador.confirmaPedidoCliente(cliente.getId())) System.out.println("Pedido realizado con éxito, el total del pedido es de " + cliente.getPedidos().getLast().calculaTotalPedidoConIVA(Utils.IVA) + "euros");
             else System.out.println("El pedido no se ha podido realizar");
         } else System.out.println("Ha cancelado la compra, sus productos elegidos siguen en el carro");
     }
@@ -668,8 +667,7 @@ public class main {
                     eligeProductoModelo(controlador, cliente);
                     break;
                 case 3: //Realizar pedido
-                    if (controlador.confirmaPedidoCliente(cliente.getId()))
-                        System.out.println("Pedido realizado con éxito");
+                    if (controlador.confirmaPedidoCliente(cliente.getId())) System.out.println("Pedido realizado con éxito, el total del pedido es de " + cliente.getPedidos().getLast().calculaTotalPedidoConIVA(Utils.IVA) + "euros");
                     else System.out.println("El pedido no se ha podido realizar");
             }
         } else eligeProductoMarca(controlador, cliente);
@@ -677,8 +675,8 @@ public class main {
         System.out.println("Has salido de la selección de productos, estos son los productos a comprar: ");
         pintaCarrito(controlador, cliente);
         System.out.println("¿Desea continuar con la compra?(S/N)");
-        if (S.nextLine().equals("S")) {
-            if (controlador.confirmaPedidoCliente(cliente.getId())) System.out.println("Pedido realizado con éxito");
+        if (S.nextLine().equalsIgnoreCase("S")) {
+            if (controlador.confirmaPedidoCliente(cliente.getId())) System.out.println("Pedido realizado con éxito, el total del pedido es de " + cliente.getPedidos().getLast().calculaTotalPedidoConIVA(Utils.IVA) + "euros");
             else System.out.println("El pedido no se ha podido realizar");
         } else System.out.println("Ha cancelado la compra, sus productos elegidos siguen en el carro");
     }
@@ -708,8 +706,7 @@ public class main {
                     eligeProductoMarca(controlador, cliente);
                     break;
                 case 3: //Realizar pedido
-                    if (controlador.confirmaPedidoCliente(cliente.getId()))
-                        System.out.println("Pedido realizado con éxito");
+                    if (controlador.confirmaPedidoCliente(cliente.getId())) System.out.println("Pedido realizado con éxito, el total del pedido es de " + cliente.getPedidos().getLast().calculaTotalPedidoConIVA(Utils.IVA) + "euros");
                     else System.out.println("El pedido no se ha podido realizar");
             }
         } else eligeProductoMarca(controlador, cliente);
@@ -718,7 +715,7 @@ public class main {
         pintaCarrito(controlador, cliente);
         System.out.println("¿Desea continuar con la compra?(S/N)");
         if (S.nextLine().equalsIgnoreCase("S")) {
-            if (controlador.confirmaPedidoCliente(cliente.getId())) System.out.println("Pedido realizado con éxito");
+            if (controlador.confirmaPedidoCliente(cliente.getId())) System.out.println("Pedido realizado con éxito, el total del pedido es de " + cliente.getPedidos().getLast().calculaTotalPedidoConIVA(Utils.IVA) + "euros");
             else System.out.println("El pedido no se ha podido realizar");
         } else System.out.println("Ha cancelado la compra, sus productos elegidos siguen en el carro");
     }
@@ -748,8 +745,7 @@ public class main {
                     eligeProductoCatalogo(controlador, cliente);
                     break;
                 case 3: //Realizar pedido
-                    if (controlador.confirmaPedidoCliente(cliente.getId()))
-                        System.out.println("Pedido realizado con éxito");
+                    if (controlador.confirmaPedidoCliente(cliente.getId())) System.out.println("Pedido realizado con éxito, el total del pedido es de " + cliente.getPedidos().getLast().calculaTotalPedidoConIVA(Utils.IVA) + "euros");
                     else System.out.println("El pedido no se ha podido realizar");
             }
         } else eligeProductoCatalogo(controlador, cliente);
@@ -758,7 +754,7 @@ public class main {
         pintaCarrito(controlador, cliente);
         System.out.println("¿Desea continuar con la compra?(S/N)");
         if (S.nextLine().equalsIgnoreCase("S")) {
-            if (controlador.confirmaPedidoCliente(cliente.getId())) System.out.println("Pedido realizado con éxito");
+            if (controlador.confirmaPedidoCliente(cliente.getId())) System.out.println("Pedido realizado con éxito, el total del pedido es de " + cliente.getPedidos().getLast().calculaTotalPedidoConIVA(Utils.IVA) + "euros");
             else System.out.println("El pedido no se ha podido realizar");
         } else System.out.println("Ha cancelado la compra, sus productos elegidos siguen en el carro");
     }

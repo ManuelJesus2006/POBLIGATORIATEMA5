@@ -1,5 +1,7 @@
 package models;
 
+import utils.Utils;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -13,8 +15,7 @@ public class Pedido {
     private ArrayList<Producto> productos;
 
     //Constructor
-    public Pedido(int id, LocalDate fechaPedido, LocalDate fechaEntregaEstimada, int estado, String comentario, ArrayList<Producto> productos) {
-        this.id = id;
+    public Pedido(LocalDate fechaPedido, LocalDate fechaEntregaEstimada, int estado, String comentario, ArrayList<Producto> productos) {
         this.fechaPedido = fechaPedido;
         this.fechaEntregaEstimada = fechaEntregaEstimada;
         this.estado = estado;
@@ -78,21 +79,28 @@ public class Pedido {
 
     public boolean cambiaFechaEntrega(LocalDate nuevaFecha) {
 
-    }
+    }*/
 
+    //Deveuelve el precio sin IVA de un pedido concreto
     public float calculaTotalPedidoSinIVA() {
-
+        float sumatorio = 0;
+        for (Producto p : productos){
+            sumatorio += p.getPrecio();
+        }
+        return sumatorio;
     }
 
+    //Devuelve el IVA del pedido concreto
     public float calculaIVAPedido(int IVA) {
-
+        return calculaTotalPedidoSinIVA() * (float)IVA/100;
     }
 
+    //Devuelve el precio con el IVA añadido
     public float calculaTotalPedidoConIVA(int IVA) {
-
+        return calculaTotalPedidoSinIVA()+calculaIVAPedido(Utils.IVA);
     }
 
-    public int numArticulos() {
+    /*public int numArticulos() {
 
     }
 
@@ -127,7 +135,7 @@ public class Pedido {
     @Override
     public String toString() {
        String resultado = "";
-        resultado += "====== PEDIDO " + id + " ======\n";
+        resultado += "====== PEDIDO " + id + "======\n";
         resultado += "Fecha de pedido: " + fechaPedido + "\n";
         resultado += "Fecha de entrega: " + fechaEntregaEstimada + "\n";
         resultado += "Estado " + devuelveEstado(estado) + "\n";
