@@ -321,6 +321,7 @@ public class main {
         }
     }
 
+    // Función que modifica los datos personales de un Cliente
     private static void modificaDatosPersonalesCliente(Controlador controlador, Cliente cliente) {
         int telefonoTeclado = -2;
 
@@ -496,7 +497,7 @@ public class main {
                 Número de pedidos completados o cancelados: %d
                 Número de pedidos sin asignar: %d
                 ===================================================
-                """);
+                """);//, controlador.getClientes(), controlador.getTodosPedidos());
     }
 
     // Funcion que pide los datos para crear un nuevo trabajador

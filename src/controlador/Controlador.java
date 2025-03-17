@@ -103,7 +103,7 @@ public class Controlador {
     public boolean confirmaPedidoCliente(int id) {
         Cliente temp = buscaClienteById(id);
         if (temp == null) return false;
-        temp.getPedidos().add(new Pedido(LocalDate.now(), null, 0, null, temp.getCarro()));
+        temp.getPedidos().add(new Pedido(generaIdPedido(), LocalDate.now(), null, 0, null, temp.getCarro()));
         return true;
     }
 
@@ -177,13 +177,20 @@ public class Controlador {
 
     public boolean editarProducto(Producto p) {
 
+    }*/
+
+    // Metodo que devuelve todos los pedidos que haya
+    public ArrayList<Pedido> getTodosPedidos() {
+        ArrayList<Pedido> pedidos = new ArrayList<>();
+
+        for (Cliente c : clientes) {
+            if (!c.getPedidos().isEmpty()) pedidos.addAll(c.getPedidos());
+        }
+
+        return pedidos;
     }
 
-    public  ArrayList<Pedido> getTodosPedidos() {
-
-    }
-
-    public int numPedidosTotales() {
+    /*public int numPedidosTotales() {
 
     }
 
@@ -251,7 +258,22 @@ public class Controlador {
 
     // Metodo que genera una id aleatoria para el cliente entre el 0 y 99999
     private int generaIdCliente() {
-        return (int) (Math.random() * 100000);
+        boolean repetido = false;
+        int id;
+        do {
+            // Generamos la id
+            id = (int) (Math.random() * 2);
+            // Hacemos un bucle de clientes para comprobar sus id
+            for (Cliente c : clientes) {
+                if (c.getId() == id) {
+                    // Si la id se repite salimos del bucle for
+                    repetido = true;
+                    break;
+                }
+            }
+        } while (repetido);
+
+        return id;
     }
 
     // Metodo que genera una id aleatoria para el producto entre el 500000 y 599999
@@ -261,17 +283,59 @@ public class Controlador {
 
     // Metodo que genera una id aleatoria para el pedido entre el 600000 y 699999
     private int generaIdPedido() {
-        return (int) (Math.random() * 100000) + 600000;
+        boolean repetido = false;
+        int id;
+        do {
+            // Generamos la id
+            id = (int) (Math.random() * 100000) + 600000;
+            // Hacemos un bucle de clientes para comprobar sus pedidos
+            for (Cliente c : clientes) {
+                // Bucle que comprueba los pedidos de cada cliente y si la id coincide
+                for (int i = 0; i < c.getPedidos().size(); i++) {
+                    if (c.getPedidos().get(i).getId() == id) {
+                        repetido = true;
+                        break;
+                    }
+                }
+            }
+        } while (repetido);
+        return id;
     }
 
     // Metodo que genera una id aleatoria para el admin entre el 200000 y 299999
     private int generaIdAdmin() {
-        return (int) (Math.random() * 100000) + 200000;
+        boolean repetido = false;
+        int id;
+        do {
+            // Generamos la id
+            id = (int) (Math.random() * 100000) + 200000;
+            for (Admin a : admins) {
+                if (a.getId() == id) {
+                    repetido = true;
+                    break;
+                }
+            }
+        } while (repetido);
+        return id;
     }
 
     // Metodo que genera una id aleatoria para el admin entre el 100000 y 199999
     private int generaIdTrabajador() {
-        return (int) (Math.random() * 100000) + 100000;
+        boolean repetido = false;
+        int id;
+        do {
+            // Generamos la id
+            id = (int) (Math.random() * 100000) + 100000;
+            // Hacemos un bucle de clientes para comprobar sus id
+            for (Trabajador t : trabajadores) {
+                if (t.getId() == id) {
+                    // Si la id se repite salimos del bucle for
+                    repetido = true;
+                    break;
+                }
+            }
+        } while (repetido);
+        return id;
     }
 
     // Metodo que le pasan un correo, y comprueba si coincide con el correo de un admin, trabajador o cliente
