@@ -172,9 +172,19 @@ public class Controlador {
         return productosEncontrados;
     }
 
-    /*public boolean editarProducto(Producto p) {
-
-    }*/
+    // Metodo que edita un producto y si lo ha hecho bien retorna true
+    public boolean editarProducto(Producto p) {
+        for (Producto producto : catalogo) {
+            if (producto.getId() == p.getId()) {
+                producto.setMarca(p.getMarca());
+                producto.setModelo(p.getModelo());
+                producto.setDescripcion(p.getDescripcion());
+                producto.setPrecio(p.getPrecio());
+                return true;
+            }
+        }
+        return false;
+    }
 
     // Metodo que devuelve todos los pedidos que haya
     public ArrayList<Pedido> getTodosPedidos() {

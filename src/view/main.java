@@ -283,7 +283,7 @@ public class main {
                         op = S.nextLine();
                         switch (op) {
                             case "1"://Consultar el catálogo de productos
-                                verCatalogo(controlador);
+                                consultaCatalogo(controlador);
                                 break;
                             case "2"://Realizar un pedido
                                 realizarPedido(controlador, cliente);
@@ -311,6 +311,47 @@ public class main {
 
             }
         } // Bucle de clientes
+
+    }
+
+    private static void consultaCatalogo(Controlador controlador) {
+        String op;
+        do {
+            System.out.print("""
+                1. Ver todo el catálogo
+                2. Búsqueda por marca
+                3. Búsqueda por modelo
+                4. Búsqueda por descripción
+                5. Búsqueda por término
+                6. Búsqueda por precio
+                7. Salir
+                Introduce la opción que deseas:""");
+            op = S.nextLine();
+
+            switch (op) {
+                case "1": //Ver to el catálogo
+                    verCatalogo(controlador);
+                    break;
+                case "2": //Búsqueda por marca
+                    break;
+                case "3": //Búsqueda por modelo
+                    break;
+                case "4": //Búsqueda por descripción
+                    break;
+                case "5": //Búsqueda por término
+                    break;
+                case "6": //Búsqueda por precio
+                    break;
+                case "7": //Salir
+                    System.out.println("Saliendo...");
+                    break;
+                default:
+                    System.out.println("Opción incorrecta...");
+                    break;
+            }
+            Utils.pulsaContinuar();
+            Utils.limpiarpantalla();
+        } while (!op.equals("7"));
 
     }
 
@@ -497,7 +538,7 @@ public class main {
                 Número de pedidos completados o cancelados: %d
                 Número de pedidos sin asignar: %d
                 ===================================================
-                """);//, controlador.getClientes(), controlador.getTodosPedidos());
+                """);//, controlador.pedidosSinTrabajador(), controlador.getClientes());
     }
 
     // Funcion que pide los datos para crear un nuevo trabajador
@@ -1055,11 +1096,17 @@ public class main {
             } while (!bandera);
 
             if (!marcaTeclado.equalsIgnoreCase("no")) producto.setMarca(marcaTeclado);
+            else marcaTeclado = producto.getMarca();
             if (!modeloTeclado.equalsIgnoreCase("no")) producto.setModelo(modeloTeclado);
+            else modeloTeclado = producto.getModelo();
             if (!descripcionTeclado.equalsIgnoreCase("no")) producto.setDescripcion(descripcionTeclado);
+            else descripcionTeclado = producto.getDescripcion();
             if (precioTeclado != -1) producto.setPrecio(precioTeclado);
+            else precioTeclado = producto.getPrecio();
 
-            System.out.println("Producto modificado con éxito...");
+            if (controlador.editarProducto(new Producto(producto.getId(), marcaTeclado, modeloTeclado, descripcionTeclado,
+                    precioTeclado, producto.getRelevancia())))System.out.println("Producto modificado con éxito...");
+            else System.out.println("Ha ocurrido un error...");
         }
     }
 }
