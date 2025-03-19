@@ -87,37 +87,58 @@ public class Trabajador {
         this.pedidosAsignados = pedidosAsignados;
     }
 
+    // Otros metodos
     @Override
     public String toString() {
         return "Nombre: " + nombre + "\nEmail: " + email + "\nTeléfono móvil: " + movil + '\n';
     }
 
-    // Otros metodos
+    // Metodo que devuelve si un trabajador se ha logueado bien
     public boolean login(String email, String pass) {
         return nombre.equals(email) && pass.equals(this.pass);
     }
 
-  /*  public Pedido buscaPedidoAsignadoPendiente(int idPedido) {
-
+    // Metodo que busca en los pedidos los pedidos pendientes
+    public Pedido buscaPedidoAsignadoPendiente(int idPedido) {
+        for (Pedido p : pedidosAsignados) {
+            if (p.getId() == idPedido && (p.getEstado() == 3 || p.getEstado() == 4)) return p;
+        }
+        return null;
     }
 
+    // Metodo que busca en los pedidos los pedidos completados
     public Pedido buscaPedidoAsignadoCompletado(int idPedido) {
-
+        for (Pedido p : pedidosAsignados) {
+            if (p.getId() == idPedido && (p.getEstado() == 3 || p.getEstado() == 4)) return p;
+        }
+        return null;
     }
 
+    // Metodo que asigna un pedido a un trabajador
     public boolean asignaPedido(Pedido p) {
-
+        return pedidosAsignados.add(p);
     }
 
+    // Metodo que comprueba que el pedido este Entregado o Cancelado
     public ArrayList<Pedido> getPendidosPendientes() {
-
+        ArrayList<Pedido> pedidosPendientes = new ArrayList<>();
+        for (Pedido p : pedidosAsignados) {
+            if (p.getEstado() == 3 || p.getEstado() == 4) pedidosPendientes.add(p);
+        }
+        return pedidosPendientes;
     }
 
+    // Metodo que comprueba que el pedido no este Entregado ni Cancelado
     public ArrayList<Pedido> getPedidosCompletados() {
-
+        ArrayList<Pedido> pedidosCompletados = new ArrayList<>();
+        for (Pedido p : pedidosAsignados) {
+            if (p.getEstado() != 3 && p.getEstado() != 4) pedidosCompletados.add(p);
+        }
+        return pedidosCompletados;
     }
 
+    // Metodo que comprueba el numero de pedidos pendientes
     public int numPedidosPendientes() {
-
-    }*/
+        return getPendidosPendientes().size();
+    }
 }

@@ -146,39 +146,64 @@ public class Cliente {
         return email.equals(this.email) && pass.equals(this.clave);
     }
 
-   /* public void addProductoCarro(Producto p) {
-
+    // Metodo que añade un producto en el carrito
+    public void addProductoCarro(Producto p) {
+        carro.add(p);
     }
 
+    // Metodo que quita un producto en el carro
     public boolean quitaProducto(int idProducto) {
-
+        for (Producto p : carro) {
+            if (p.getId() == idProducto) return carro.remove(p);
+        }
+        return false;
     }
 
+    // Metodo que comprueba la longitud de un producto
     public int numProductosCarro() {
+        return carro.size();
+    }
 
-    }*/
-
+    // Metodo que vacia un carro
     public void vaciaCarro() {
         carro.clear();
     }
 
-  /*  public void addPedido() {
-
+    // Metodo que añade un pedido
+    public void addPedido(Pedido p) {
+        pedidos.add(p);
     }
 
+    // Metodo que suma el precio de los productos sin IVA
     public float precioCarroSinIva(int IVA) {
+        float precio = 0;
 
+        for (Producto p : carro) {
+            precio += p.getPrecio();
+        }
+        return precio;
     }
 
+    // Suma de los productos con su respectivo IVA
     public float precioIVACarro(int IVA) {
+        float precio = 0;
 
+        for (Producto p : carro) {
+            precio += p.getPrecio() * (IVA / 100f);
+        }
+        return precio;
     }
 
+    // Metodo que suma el precio del carro sin IVA
     public float precioCarroConIVA(int IVA) {
-
+        return precioCarroSinIva(IVA) + precioIVACarro(IVA);
     }
 
+    // Metodo que comprueba si existe un producto en el carrito
     public boolean existeProductoCarro(int idProducto) {
-
-    }*/
+        for (Producto p : carro) {
+            if (p.getId() == idProducto) return true;
+        }
+        return false;
+    }
 }

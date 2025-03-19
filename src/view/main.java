@@ -529,7 +529,7 @@ public class main {
     //Realizar el pedido decidiendo el procedimiento
     private static void realizarPedido(Controlador controlador, Cliente cliente) {
         int op;
-        System.out.println("""
+        System.out.print("""
                 1. Ver todo el catálogo
                 2. Búsqueda por marca
                 3. Búsqueda por modelo
@@ -537,7 +537,7 @@ public class main {
                 5. Búsqueda por término
                 6. Búsqueda por precio
                 7. Salir
-                """);
+                Introduce la opción que deseas:""");
         op = Integer.parseInt(S.nextLine());
         switch (op) {
             case 1: //Ver to el catálogo
@@ -557,6 +557,9 @@ public class main {
                 break;
             case 6: //Busqueda por descripción
                 seleccionaPorPrecio(controlador, cliente);
+                break;
+            default:
+                System.out.println("Opción incorrecta...");
                 break;
         }
     }

@@ -74,13 +74,21 @@ public class Pedido {
     }
 
     // Otros metodos
-  /*  public boolean cambiaEstado(int nuevoEstado) {
 
+    // Funcion que cambia el estado de un pedido
+    public boolean cambiaEstado(int nuevoEstado) {
+        return switch (nuevoEstado) {
+            case 1, 2, 3, 4 -> true;
+            default -> false;
+        };
     }
 
+    // Funcion que comprueba si se puede realizar el cambio de una fecha
     public boolean cambiaFechaEntrega(LocalDate nuevaFecha) {
-
-    }*/
+        if (nuevaFecha.isBefore(fechaPedido)) return false;
+        fechaPedido = nuevaFecha;
+        return true;
+    }
 
     //Deveuelve el precio sin IVA de un pedido concreto
     public float calculaTotalPedidoSinIVA() {
@@ -93,25 +101,31 @@ public class Pedido {
 
     //Devuelve el IVA del pedido concreto
     public float calculaIVAPedido(int IVA) {
-        return calculaTotalPedidoSinIVA() * (float)IVA/100;
+        return calculaTotalPedidoSinIVA() * (float) (IVA / 100);
     }
 
     //Devuelve el precio con el IVA añadido
     public float calculaTotalPedidoConIVA(int IVA) {
-        return calculaTotalPedidoSinIVA()+calculaIVAPedido(Utils.IVA);
+        return calculaTotalPedidoSinIVA() + calculaIVAPedido(IVA);
     }
 
-    /*public int numArticulos() {
-
+    // Metodo que demuestra el numero de articulos que hay un pedido
+    public int numArticulos() {
+        return productos.size();
     }
 
+    // Metodo que busca un producto y devuelve un producto si lo encuentra
     public Producto buscaProducto(int idProducto) {
-
+        for (Producto p : productos) {
+            if (p.getId() == idProducto) return p;
+        }
+        return null;
     }
 
+    // Metodo que añade un producto en productos
     public boolean addProducto(Producto producto) {
-
-    }*/
+        return productos.add(producto);
+    }
 
     //Metodo que pinta los datos del pedido
    public String pintaPedidoCorreo() {
@@ -144,13 +158,17 @@ public class Pedido {
         return resultado;
     }
 
+    // Funcion que devuelve el estado de un Pedido
     private String devuelveEstado(int estado) {
-       switch (estado){
-           case 1: return "En preparación";
-           case 2: return "Enviado";
-           case 3: return "Entregado";
-           case 4: return "Cancelado";
-           default: return "Creado";
-       }
+        if (cambiaEstado(estado)) {
+            return switch (estado) {
+                case 1 -> "En preparación";
+                case 2 -> "Enviado";
+                case 3 -> "Entregado";
+                case 4 -> "Cancelado";
+                default -> "Creado";
+            };
+        }
+        return "";
     }
 }
