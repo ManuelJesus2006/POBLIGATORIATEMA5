@@ -286,7 +286,7 @@ public class main {
                                 consultaCatalogo(controlador);
                                 break;
                             case "2"://Realizar un pedido
-                                realizarPedido(controlador, cliente);
+                                realizaPedidoMenu(controlador, cliente);
                                 break;
                             case "3"://Ver mis pedidos
                                 verMisPedidos(cliente);
@@ -314,6 +314,116 @@ public class main {
 
     }
 
+    // Submenu para realizar un pedido
+    private static void realizaPedidoMenu(Controlador controlador, Cliente cliente) {
+        String op;
+
+        do {
+            System.out.printf("""
+                Actualmente tiene %d productos en su carro.
+                1. Inserta un producto en el carro
+                2. Ver el carro
+                3. Eliminar un producto del carro
+                4. Confirmar el pedido
+                5. Cancelar el pedido
+                6. Salir
+                Introduce una opción:""", cliente.numProductosCarro());
+            op = S.nextLine();
+
+            switch (op) {
+                case "1": //Inserta un producto en el carro
+                    insertaProducto(controlador, cliente);
+                    break;
+                case "2": //Ver el carro
+                    verCarroCliente(cliente);
+                    break;
+                case "3": //Eliminar un producto del carro
+                    eliminaProducto(controlador, cliente);
+                    break;
+                case "4": //Confirmar el pedido
+                    confirmaPedido(controlador, cliente);
+                    break;
+                case "5": //Cancelar el pedido
+                    cancelaPedido(controlador, cliente);
+                    break;
+                case "6": //Salir
+                    System.out.println("Saliendo...");
+                    break;
+                default:
+                    System.out.println("Opción incorrecta...");
+                    break;
+            }
+            Utils.pulsaContinuar();
+            Utils.limpiarpantalla();
+        } while (!op.equals("6"));
+
+    }
+
+    // Funcion que cancela un pedido del cliente
+    private static void cancelaPedido(Controlador controlador, Cliente cliente) {
+        System.out.println("¿Deseas cancelar el pedido? (S/N)");
+        String cancelaPedido = S.nextLine();
+
+        if (cancelaPedido.equalsIgnoreCase("s"))
+            if (controlador.cancelaPedidoCliente(cliente.getId())) System.out.println("El pedido se ha realizado con éxito...");
+    }
+
+    // Funcion que confirma un pedido del cliente
+    private static void confirmaPedido(Controlador controlador, Cliente cliente) {
+        System.out.println("¿Deseas confirmar el pedido? (S/N)");
+        String confirmaPedido = S.nextLine();
+
+        if (confirmaPedido.equalsIgnoreCase("s")) {
+            if (controlador.confirmaPedidoCliente(cliente.getId())) System.out.println("El pedido se ha realizado con éxito...");
+        } else System.out.println("La confirmación del pedido se ha cancelado...");
+    }
+
+    // Funcion que elimina un producto del carrito
+    private static void eliminaProducto(Controlador controlador, Cliente cliente) {
+        int id = -1;
+        boolean continuar = false;
+        do {
+            System.out.print("Introduce la ID del producto: ");
+            try {
+                id = Integer.parseInt(S.nextLine());
+                continuar = true;
+            } catch (NumberFormatException e) {
+                System.out.println("Debes introducir un número...");
+            }
+        } while (!continuar);
+
+        Producto temp = controlador.buscaProductoById(id);
+        
+        if (cliente.quitaProducto(temp.getId())) System.out.println("El producto se ha eliminado del carrito...");
+        else System.out.println("Ha ocurrido un error al añadir el producto al carrito...");
+    }
+
+    // Funcion que ve el carro de un cliente
+    private static void verCarroCliente(Cliente cliente) {
+        pintaProductos(cliente.getCarro());
+    }
+
+    // Funcion que inserta un producto en el carro
+    private static void insertaProducto(Controlador controlador, Cliente cliente) {
+        int id = -1;
+        boolean continuar = false;
+        do {
+            System.out.print("Introduce la ID del producto: ");
+            try {
+                id = Integer.parseInt(S.nextLine());
+                continuar = true;
+            } catch (NumberFormatException e) {
+                System.out.println("Debes introducir un número...");
+            }
+        } while (!continuar);
+
+        Producto temp = controlador.buscaProductoById(id);
+
+        if (temp == null) System.out.println("No se ha encontrado ningún producto...");
+        else if (controlador.addProductoCarrito(cliente, id)) System.out.println("El producto se ha añadido al carrito correctamente...");
+    }
+
+    // Funcion que simula un submenu para buscar productos en el catalogo
     private static void consultaCatalogo(Controlador controlador) {
         String op;
         do {
@@ -333,14 +443,19 @@ public class main {
                     verCatalogo(controlador);
                     break;
                 case "2": //Búsqueda por marca
+                    buscaProductosByMarca(controlador);
                     break;
                 case "3": //Búsqueda por modelo
+                    buscaProductosByModelo(controlador);
                     break;
                 case "4": //Búsqueda por descripción
+                    buscaProductosByDescripcion(controlador);
                     break;
                 case "5": //Búsqueda por término
+                    buscaProductosByTermino(controlador);
                     break;
                 case "6": //Búsqueda por precio
+                    buscaProductosByPrecio(controlador);
                     break;
                 case "7": //Salir
                     System.out.println("Saliendo...");
@@ -353,6 +468,92 @@ public class main {
             Utils.limpiarpantalla();
         } while (!op.equals("7"));
 
+    }
+
+    // Funcion que busca los productos por precio
+    private static void buscaProductosByPrecio(Controlador controlador) {
+        float precioMin = Integer.MAX_VALUE, precioMax = Integer.MIN_VALUE;
+        boolean continuar = false;
+
+        do {
+            System.out.print("Introduce el precio mínimo: ");
+            try {
+                precioMin = Float.parseFloat(S.nextLine());
+                continuar = true;
+            } catch (NumberFormatException e) {
+                System.out.println("Debes introducir un número...");
+                Utils.pulsaContinuar();
+                Utils.limpiarpantalla();
+            }
+        } while (!continuar);
+
+        continuar = false;
+
+        do {
+            System.out.print("Introduce el precio máximo: ");
+            try {
+                precioMax = Float.parseFloat(S.nextLine());
+                continuar = true;
+            } catch (NumberFormatException e) {
+                System.out.println("Debes introducir un número...");
+                Utils.pulsaContinuar();
+                Utils.limpiarpantalla();
+            }
+        } while (!continuar);
+
+        pintaProductos(controlador.buscaProductosByPrecio(precioMin, precioMax));
+    }
+
+    // Funcion que busca los productos por un termino
+    private static void buscaProductosByTermino(Controlador controlador) {
+        System.out.print("Introduce la descripción: ");
+        String terminoTeclado = S.nextLine();
+
+        pintaProductos(controlador.buscaProductosByTermino(terminoTeclado));
+    }
+
+    // Funcion que busca los productos por su descripcion
+    private static void buscaProductosByDescripcion(Controlador controlador) {
+        System.out.print("Introduce la descripción: ");
+        String descripcionTeclado = S.nextLine();
+
+        pintaProductos(controlador.buscaProductosByDescripcion(descripcionTeclado));
+    }
+
+    // Funcion que busca los productos por su modelo
+    private static void buscaProductosByModelo(Controlador controlador) {
+        System.out.print("Introduce el nombre del modelo: ");
+        String modeloTeclado = S.nextLine();
+
+        pintaProductos(controlador.buscaProductosByModelo(modeloTeclado));
+    }
+
+    // Funcion que busca los productos por su marca
+    private static void buscaProductosByMarca(Controlador controlador) {
+        System.out.print("Introduce el nombre de la marca: ");
+        String marcaTeclado = S.nextLine();
+
+        pintaProductos(controlador.buscaProductosByMarca(marcaTeclado));
+    }
+
+    // Funcion que pinta un producto de los productos
+    private static void pintaProductos(ArrayList<Producto> productos) {
+        int cont = 0;
+        for (Producto producto : productos) {
+            System.out.println();
+            System.out.println("============================================================================\n");
+            if (producto.getRelevancia() > 9) System.out.println("************ Promo especial ************");
+            System.out.println("- ID: " + producto.getId());
+            System.out.println("- Marca: " + producto.getMarca() + " - Modelo: " + producto.getModelo());
+            System.out.println("- Descripción: " + producto.getDescripcion());
+            System.out.println("- Precio: " + producto.getPrecio());
+            cont++;
+            System.out.println("\n============================================================================\n");
+            if (cont == 5) {
+                Utils.pulsaContinuar();
+                cont = 0;
+            }
+        }
     }
 
     //Función que pinta todos los pedidos realizados por un cliente concreto
@@ -565,395 +766,6 @@ public class main {
             }
 
         } else System.out.println("Ha ocurrido un error...");
-    }
-
-    //Realizar el pedido decidiendo el procedimiento
-    private static void realizarPedido(Controlador controlador, Cliente cliente) {
-        int op;
-        System.out.print("""
-                1. Ver todo el catálogo
-                2. Búsqueda por marca
-                3. Búsqueda por modelo
-                4. Búsqueda por descripción
-                5. Búsqueda por término
-                6. Búsqueda por precio
-                7. Salir
-                Introduce la opción que deseas:""");
-        op = Integer.parseInt(S.nextLine());
-        switch (op) {
-            case 1: //Ver to el catálogo
-                seleccionPorCatalogo(controlador, cliente);
-                break;
-            case 2: //Búsqueda por marca
-                seleccionPorMarca(controlador, cliente);
-                break;
-            case 3: //Búsqueda por modelo
-                seleccionaPorModelo(controlador, cliente);
-                break;
-            case 4: //Busqueda por descripción
-                seleccionaPorDescripcion(controlador, cliente);
-                break;
-            case 5: //Busqueda por descripción
-                seleccionaPorTermino(controlador, cliente);
-                break;
-            case 6: //Busqueda por descripción
-                seleccionaPorPrecio(controlador, cliente);
-                break;
-            default:
-                System.out.println("Opción incorrecta...");
-                break;
-        }
-    }
-
-    //Busca por precio máximo y mínimo y luego aparecen los resultados de la busqueda, que es donde el cliente decide el producto
-    private static void seleccionaPorPrecio(Controlador controlador, Cliente cliente) {
-        if (!cliente.getCarro().isEmpty()) { //Si el carro ya tiene productos añadidos
-            System.out.println("Hemos detectado los siguientes productos en su carro: ");
-            pintaCarrito(controlador, cliente);
-            boolean error = false;
-            int op = 0;
-            do {
-                error = false;
-                try {
-                    op = menuCarritoLlenoCliente();
-                } catch (NumberFormatException e) {
-                    System.out.println("Introduce un valor válido....");
-                    error = true;
-                }
-            } while (error);
-            switch (op) {
-                case 1: //Añadir más productos al carrito
-                    eligeProductoPrecio(controlador, cliente);
-                    break;
-                case 2: //Vaciar el carro y añadir productos otra vez
-                    //ArrayList vacio para vaciar el carro del cliente
-                    cliente.vaciaCarro();
-                    eligeProductoPrecio(controlador, cliente);
-                    break;
-                case 3: //Realizar pedido
-                    if (controlador.confirmaPedidoCliente(cliente.getId())) System.out.println("Pedido realizado con éxito, el total del pedido es de " + cliente.getPedidos().getLast().calculaTotalPedidoConIVA(Utils.IVA) + "euros");
-                    else System.out.println("El pedido no se ha podido realizar");
-            }
-        } else eligeProductoPrecio(controlador, cliente);
-        System.out.println("Has salido de la selección de productos, estos son los productos a comprar: ");
-        pintaCarrito(controlador, cliente);
-        System.out.println("¿Desea continuar con la compra?(S/N)");
-        if (S.nextLine().equalsIgnoreCase("S")) {
-            if (controlador.confirmaPedidoCliente(cliente.getId())) System.out.println("Pedido realizado con éxito, el total del pedido es de " + cliente.getPedidos().getLast().calculaTotalPedidoConIVA(Utils.IVA) + "euros");
-            else System.out.println("El pedido no se ha podido realizar");
-        } else System.out.println("Ha cancelado la compra, sus productos elegidos siguen en el carro");
-    }
-
-    private static void seleccionaPorTermino(Controlador controlador, Cliente cliente) {
-
-    }
-
-    private static void seleccionaPorDescripcion(Controlador controlador, Cliente cliente) {
-        if (!cliente.getCarro().isEmpty()) {
-            System.out.println("Hemos detectado los siguientes productos en su carro: ");
-            pintaCarrito(controlador, cliente);
-            boolean error = false;
-            int op = 0;
-            do {
-                error = false;
-                try {
-                    op = menuCarritoLlenoCliente();
-                } catch (NumberFormatException e) {
-                    System.out.println("Introduce un valor válido....");
-                    error = true;
-                }
-            } while (error);
-            switch (op) {
-                case 1: //Añadir más productos al carrito
-                    eligeProductoDescripcion(controlador, cliente);
-                    break;
-                case 2: //Vaciar el carro y añadir productos otra vez
-                    //ArrayList vacio para vaciar el carro del cliente
-                    cliente.vaciaCarro();
-                    eligeProductoDescripcion(controlador, cliente);
-                    break;
-                case 3: //Realizar pedido
-                    if (controlador.confirmaPedidoCliente(cliente.getId())) System.out.println("Pedido realizado con éxito, el total del pedido es de " + cliente.getPedidos().getLast().calculaTotalPedidoConIVA(Utils.IVA) + "euros");
-                    else System.out.println("El pedido no se ha podido realizar");
-            }
-        } else eligeProductoMarca(controlador, cliente);
-
-        System.out.println("Has salido de la selección de productos, estos son los productos a comprar: ");
-        pintaCarrito(controlador, cliente);
-        System.out.println("¿Desea continuar con la compra?(S/N)");
-        if (S.nextLine().equalsIgnoreCase("S")) {
-            if (controlador.confirmaPedidoCliente(cliente.getId())) System.out.println("Pedido realizado con éxito, el total del pedido es de " + cliente.getPedidos().getLast().calculaTotalPedidoConIVA(Utils.IVA) + "euros");
-            else System.out.println("El pedido no se ha podido realizar");
-        } else System.out.println("Ha cancelado la compra, sus productos elegidos siguen en el carro");
-    }
-
-    private static void seleccionaPorModelo(Controlador controlador, Cliente cliente) {
-        if (!cliente.getCarro().isEmpty()) {
-            System.out.println("Hemos detectado los siguientes productos en su carro: ");
-            pintaCarrito(controlador, cliente);
-            boolean error = false;
-            int op = 0;
-            do {
-                error = false;
-                try {
-                    op = menuCarritoLlenoCliente();
-                } catch (NumberFormatException e) {
-                    System.out.println("Introduce un valor válido....");
-                    error = true;
-                }
-            } while (error);
-            switch (op) {
-                case 1: //Añadir más productos al carrito
-                    eligeProductoModelo(controlador, cliente);
-                    break;
-                case 2: //Vaciar el carro y añadir productos otra vez
-                    //ArrayList vacio para vaciar el carro del cliente
-                    cliente.vaciaCarro();
-                    eligeProductoModelo(controlador, cliente);
-                    break;
-                case 3: //Realizar pedido
-                    if (controlador.confirmaPedidoCliente(cliente.getId())) System.out.println("Pedido realizado con éxito, el total del pedido es de " + cliente.getPedidos().getLast().calculaTotalPedidoConIVA(Utils.IVA) + "euros");
-                    else System.out.println("El pedido no se ha podido realizar");
-            }
-        } else eligeProductoMarca(controlador, cliente);
-
-        System.out.println("Has salido de la selección de productos, estos son los productos a comprar: ");
-        pintaCarrito(controlador, cliente);
-        System.out.println("¿Desea continuar con la compra?(S/N)");
-        if (S.nextLine().equalsIgnoreCase("S")) {
-            if (controlador.confirmaPedidoCliente(cliente.getId())) System.out.println("Pedido realizado con éxito, el total del pedido es de " + cliente.getPedidos().getLast().calculaTotalPedidoConIVA(Utils.IVA) + "euros");
-            else System.out.println("El pedido no se ha podido realizar");
-        } else System.out.println("Ha cancelado la compra, sus productos elegidos siguen en el carro");
-    }
-
-    private static void seleccionPorMarca(Controlador controlador, Cliente cliente) {
-        if (!cliente.getCarro().isEmpty()) {
-            System.out.println("Hemos detectado los siguientes productos en su carro: ");
-            pintaCarrito(controlador, cliente);
-            boolean error = false;
-            int op = 0;
-            do {
-                error = false;
-                try {
-                    op = menuCarritoLlenoCliente();
-                } catch (NumberFormatException e) {
-                    System.out.println("Introduce un valor válido....");
-                    error = true;
-                }
-            } while (error);
-            switch (op) {
-                case 1: //Añadir más productos al carrito
-                    eligeProductoMarca(controlador, cliente);
-                    break;
-                case 2: //Vaciar el carro y añadir productos otra vez
-                    //ArrayList vacio para vaciar el carro del cliente
-                    cliente.vaciaCarro();
-                    eligeProductoMarca(controlador, cliente);
-                    break;
-                case 3: //Realizar pedido
-                    if (controlador.confirmaPedidoCliente(cliente.getId())) System.out.println("Pedido realizado con éxito, el total del pedido es de " + cliente.getPedidos().getLast().calculaTotalPedidoConIVA(Utils.IVA) + "euros");
-                    else System.out.println("El pedido no se ha podido realizar");
-            }
-        } else eligeProductoMarca(controlador, cliente);
-
-        System.out.println("Has salido de la selección de productos, estos son los productos a comprar: ");
-        pintaCarrito(controlador, cliente);
-        System.out.println("¿Desea continuar con la compra?(S/N)");
-        if (S.nextLine().equalsIgnoreCase("S")) {
-            if (controlador.confirmaPedidoCliente(cliente.getId())) System.out.println("Pedido realizado con éxito, el total del pedido es de " + cliente.getPedidos().getLast().calculaTotalPedidoConIVA(Utils.IVA) + "euros");
-            else System.out.println("El pedido no se ha podido realizar");
-        } else System.out.println("Ha cancelado la compra, sus productos elegidos siguen en el carro");
-    }
-
-    private static void seleccionPorCatalogo(Controlador controlador, Cliente cliente) {
-        if (!cliente.getCarro().isEmpty()) {
-            System.out.println("Hemos detectado los siguientes productos en su carro: ");
-            pintaCarrito(controlador, cliente);
-            boolean error = false;
-            int op = 0;
-            do {
-                error = false;
-                try {
-                    op = menuCarritoLlenoCliente();
-                } catch (NumberFormatException e) {
-                    System.out.println("Introduce un valor válido....");
-                    error = true;
-                }
-            } while (error);
-            switch (op) {
-                case 1: //Añadir más productos al carrito
-                    eligeProductoCatalogo(controlador, cliente);
-                    break;
-                case 2: //Vaciar el carro y añadir productos otra vez
-                    //ArrayList vacio para vaciar el carro del cliente
-                    cliente.vaciaCarro();
-                    eligeProductoCatalogo(controlador, cliente);
-                    break;
-                case 3: //Realizar pedido
-                    if (controlador.confirmaPedidoCliente(cliente.getId())) System.out.println("Pedido realizado con éxito, el total del pedido es de " + cliente.getPedidos().getLast().calculaTotalPedidoConIVA(Utils.IVA) + "euros");
-                    else System.out.println("El pedido no se ha podido realizar");
-            }
-        } else eligeProductoCatalogo(controlador, cliente);
-
-        System.out.println("Has salido de la selección de productos, estos son los productos a comprar: ");
-        pintaCarrito(controlador, cliente);
-        System.out.println("¿Desea continuar con la compra?(S/N)");
-        if (S.nextLine().equalsIgnoreCase("S")) {
-            if (controlador.confirmaPedidoCliente(cliente.getId())) System.out.println("Pedido realizado con éxito, el total del pedido es de " + cliente.getPedidos().getLast().calculaTotalPedidoConIVA(Utils.IVA) + "euros");
-            else System.out.println("El pedido no se ha podido realizar");
-        } else System.out.println("Ha cancelado la compra, sus productos elegidos siguen en el carro");
-    }
-
-    private static void eligeProductoPrecio(Controlador controlador, Cliente cliente) {
-        int productoElegido = 0;
-        boolean error = false;
-        ArrayList<Producto> productosTemp;
-        System.out.println("Introduce el precio mínimo del producto a seleccionar: ");
-        float precioMin = Float.parseFloat(S.nextLine());
-        System.out.println("Introduce el precio máximo del producto a seleccionar: ");
-        float precioMax = Float.parseFloat(S.nextLine());
-        productosTemp = controlador.buscaProductosByPrecio(precioMin, precioMax);
-        pintaProductosEncontrados(productosTemp);
-        do {
-            System.out.print("Introduzca el número del producto a añadir al carrito (-1 para finalizar selección): ");
-            try {
-                productoElegido = Integer.parseInt(S.nextLine());
-            } catch (NumberFormatException e) {
-                System.out.println("Introduce un valor numérico....");
-                error = true;
-            }
-            if (productoElegido >= 1 && productoElegido < productosTemp.size()) {
-                if (controlador.addProductoCarrito(cliente, productosTemp.get(productoElegido - 1).getId()))
-                    System.out.println("Producto agregado a la cesta");
-            } else if (productoElegido != -1) System.out.print("Dicha opción no existe: ");
-        } while (error || productoElegido == -1);
-    }
-
-    private static void eligeProductoDescripcion(Controlador controlador, Cliente cliente) {
-        int productoElegido = 0;
-        boolean error = false;
-        ArrayList<Producto> productosTemp;
-        System.out.println("Introduce la marca del producto a seleccionar: ");
-        String descripcionTeclado = S.nextLine();
-        productosTemp = controlador.buscaProductosByDescripcion(descripcionTeclado);
-        pintaProductosEncontrados(productosTemp);
-        do {
-            System.out.print("Introduzca el número del producto a añadir al carrito (-1 para finalizar selección): ");
-            try {
-                productoElegido = Integer.parseInt(S.nextLine());
-            } catch (NumberFormatException e) {
-                System.out.println("Introduce un valor numérico....");
-                error = true;
-            }
-            if (productoElegido >= 1 && productoElegido < productosTemp.size()) {
-                if (controlador.addProductoCarrito(cliente, productosTemp.get(productoElegido - 1).getId()))
-                    System.out.println("Producto agregado a la cesta");
-            } else if (productoElegido != -1) System.out.print("Dicha opción no existe: ");
-        } while (error || productoElegido == -1);
-    }
-
-    private static void eligeProductoModelo(Controlador controlador, Cliente cliente) {
-        int productoElegido = 0;
-        boolean error = false;
-        ArrayList<Producto> productosTemp;
-        System.out.println("Introduce la marca del producto a seleccionar: ");
-        String marcaTeclado = S.nextLine();
-        productosTemp = controlador.buscaProductosByModelo(marcaTeclado);
-        pintaProductosEncontrados(productosTemp);
-        do {
-            System.out.print("Introduzca el número del producto a añadir al carrito (-1 para finalizar selección): ");
-            try {
-                productoElegido = Integer.parseInt(S.nextLine());
-            } catch (NumberFormatException e) {
-                System.out.println("Introduce un valor numérico....");
-                error = true;
-            }
-            if (productoElegido >= 1 && productoElegido < productosTemp.size()) {
-                if (controlador.addProductoCarrito(cliente, productosTemp.get(productoElegido - 1).getId()))
-                    System.out.println("Producto agregado a la cesta");
-            } else if (productoElegido != -1) System.out.print("Dicha opción no existe: ");
-        } while (error || productoElegido == -1);
-    }
-
-    private static void eligeProductoMarca(Controlador controlador, Cliente cliente) {
-        int productoElegido = 0;
-        boolean error = false;
-        ArrayList<Producto> productosTemp;
-        System.out.println("Introduce la marca del producto a seleccionar: ");
-        String marcaTeclado = S.nextLine();
-        productosTemp = controlador.buscaProductosByMarca(marcaTeclado);
-        pintaProductosEncontrados(productosTemp);
-        do {
-            System.out.print("Introduzca el número del producto a añadir al carrito (-1 para finalizar selección): ");
-            try {
-                productoElegido = Integer.parseInt(S.nextLine());
-            } catch (NumberFormatException e) {
-                System.out.println("Introduce un valor numérico....");
-                error = true;
-            }
-            if (productoElegido >= 1 && productoElegido < productosTemp.size()) {
-                if (controlador.addProductoCarrito(cliente, productosTemp.get(productoElegido - 1).getId()))
-                    System.out.println("Producto agregado a la cesta");
-            } else if (productoElegido != -1) System.out.print("Dicha opción no existe: ");
-        } while (error || productoElegido == -1);
-    }
-
-    private static void pintaProductosEncontrados(ArrayList<Producto> productosTemp) {
-        int cont = 0;
-        for (Producto producto : productosTemp) {
-            System.out.println(cont + ". " + producto.getDescripcion() + " - " + producto.getMarca() + " - " +
-                    producto.getModelo() + " - " + producto.getPrecio() + "€");
-            cont++;
-        }
-    }
-
-    private static void eligeProductoCatalogo(Controlador controlador, Cliente cliente) {
-        int productoElegido = 0;
-        boolean error = false;
-        pintaResumenCatalogo(controlador);
-        do {
-            System.out.print("Introduzca el número del producto a añadir al carrito (-1 para finalizar selección): ");
-            try {
-                productoElegido = Integer.parseInt(S.nextLine());
-            } catch (NumberFormatException e) {
-                System.out.println("Introduce un valor numérico....");
-                error = true;
-            }
-            if (productoElegido >= 1 && productoElegido <= controlador.getCatalogo().size()) {
-                if (controlador.addProductoCarrito(cliente, controlador.getCatalogo().get(productoElegido - 1).getId()))
-                    System.out.println("Producto agregado a la cesta");
-            } else if (productoElegido != -1) System.out.print("Dicha opción no existe: ");
-        } while (error || productoElegido != -1);
-
-    }
-
-    private static void pintaResumenCatalogo(Controlador controlador) {
-        int cont = 1;
-        for (Producto producto : controlador.getCatalogo()) {
-            System.out.println(cont + ". " + producto.getDescripcion() + " - " + producto.getMarca() + " - " +
-                    producto.getModelo() + " - " + producto.getPrecio() + "€");
-            cont++;
-        }
-    }
-
-    private static int menuCarritoLlenoCliente() {
-        System.out.print("""
-                ¿Que desea hacer?
-                1. Añadir más productos al carro
-                2. Vaciar el carro y añadir productos otra vez
-                3. Realizar pedido
-                Introduce opción:
-                """);
-        return Integer.parseInt(S.nextLine());
-    }
-
-    private static void pintaCarrito(Controlador controlador, Cliente cliente) {
-        int cont = 1;
-        for (Producto producto : cliente.getCarro()) {
-            System.out.println(cont + ". " + producto.getDescripcion() + " - " + producto.getMarca() + " - " +
-                    producto.getModelo() + " - " + producto.getPrecio() + "€");
-            cont++;
-        }
     }
 
     // Funcion que modifica los datos de un trabajador

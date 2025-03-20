@@ -119,20 +119,20 @@ public class Trabajador {
         return pedidosAsignados.add(p);
     }
 
-    // Metodo que comprueba que el pedido este Entregado o Cancelado
+    // Metodo que comprueba que el pedido este En preparacion o Enviado
     public ArrayList<Pedido> getPendidosPendientes() {
         ArrayList<Pedido> pedidosPendientes = new ArrayList<>();
         for (Pedido p : pedidosAsignados) {
-            if (p.getEstado() == 3 || p.getEstado() == 4) pedidosPendientes.add(p);
+            if (p.getEstado() == 1 || p.getEstado() == 2) pedidosPendientes.add(p);
         }
         return pedidosPendientes;
     }
 
-    // Metodo que comprueba que el pedido no este Entregado ni Cancelado
+    // Metodo que comprueba que el pedido este Entregado o Cancelado
     public ArrayList<Pedido> getPedidosCompletados() {
         ArrayList<Pedido> pedidosCompletados = new ArrayList<>();
         for (Pedido p : pedidosAsignados) {
-            if (p.getEstado() != 3 && p.getEstado() != 4) pedidosCompletados.add(p);
+            if (p.getEstado() == 3 || p.getEstado() == 4) pedidosCompletados.add(p);
         }
         return pedidosCompletados;
     }

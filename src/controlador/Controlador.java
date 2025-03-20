@@ -87,7 +87,8 @@ public class Controlador {
     public boolean addProductoCarrito(Cliente cliente, int idProducto) {
         Producto temp = buscaProductoById(idProducto);
         if (temp == null) return false;
-        return cliente.getCarro().add(temp);
+        cliente.addProductoCarro(temp);
+        return true;
     }
 
     // Metodo que busca un producto por ID
@@ -99,10 +100,15 @@ public class Controlador {
     }
 
     // Metodo para confirmar cualquier pedido de cliente
-    public boolean confirmaPedidoCliente(int id) {
-        Cliente temp = buscaClienteById(id);
-        if (temp == null) return false;
-        temp.getPedidos().add(new Pedido(generaIdPedido(), LocalDate.now(), null, 0, null, temp.getCarro()));
+    public boolean confirmaPedidoCliente(int idCliente) {
+        Cliente temp = buscaClienteById(idCliente);
+
+        if (temp.getCarro().isEmpty()) return false;
+
+        Pedido pedidoTemp = new Pedido(generaIdPedido(), LocalDate.now(), LocalDate.now().plusDays(5),
+                "Pedido creado", temp.getCarro());
+        temp.addPedido(pedidoTemp);
+        temp.vaciaCarro();
         return true;
     }
 
@@ -158,9 +164,16 @@ public class Controlador {
         return productosEncontrados;
     }
 
-    /*public ArrayList<Producto> buscaProductosByTermino(String termino) {
+    // Metodo que busca productos por su termino, devolvemos un Array
+    public ArrayList<Producto> buscaProductosByTermino(String termino) {
+        ArrayList<Producto> productos = new ArrayList<>();
 
-    }*/
+        productos.addAll(buscaProductosByMarca(termino));
+        productos.addAll(buscaProductosByModelo(termino));
+        productos.addAll(buscaProductosByDescripcion(termino));
+
+        return productos;
+    }
 
     // Metodo que busca productos por su precio, devolvemos un Array
     public ArrayList<Producto> buscaProductosByPrecio(float precioMin, float precioMax) {
@@ -489,5 +502,15 @@ public class Controlador {
         }
 
         return false;
+    }
+
+    // Metodo que cancela un pedido de un cliente
+    public boolean cancelaPedidoCliente(int idCliente) {
+        Cliente temp = buscaClienteById(idCliente);
+
+        if (temp.numProductosCarro() == 0) return false;
+
+        temp.vaciaCarro();
+        return true;
     }
 }
