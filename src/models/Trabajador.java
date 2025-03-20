@@ -120,7 +120,7 @@ public class Trabajador {
     }
 
     // Metodo que comprueba que el pedido este En preparacion o Enviado
-    public ArrayList<Pedido> getPendidosPendientes() {
+    public ArrayList<Pedido> getPedidosPendientes() {
         ArrayList<Pedido> pedidosPendientes = new ArrayList<>();
         for (Pedido p : pedidosAsignados) {
             if (p.getEstado() == 1 || p.getEstado() == 2) pedidosPendientes.add(p);
@@ -139,6 +139,6 @@ public class Trabajador {
 
     // Metodo que comprueba el numero de pedidos pendientes
     public int numPedidosPendientes() {
-        return getPendidosPendientes().size();
+        return getPedidosPendientes().size();
     }
 }

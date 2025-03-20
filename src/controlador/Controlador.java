@@ -24,7 +24,7 @@ public class Controlador {
 
     private void mock() {
         //Clientes
-        clientes.add(new Cliente(generaIdCliente(), "hola@hola", "3421", "Manolo", "Martos", "Jaén", "avda moris n32", 653423428));
+        //clientes.add(new Cliente(generaIdCliente(), "hola@hola", "3421", "Manolo", "Martos", "Jaén", "avda moris n32", 653423428));
         //clientes.add(new Cliente(generaIdCliente(), "jl@jl", "1234", "Jl", "Madrid", "Madrid", "avda gran vía", 456234244));
         //trabajadores.add(new Trabajador(generaIdTrabajador(), "Carlos", "1111", "adios@adios", 555443322));
         admins.add(new Admin(generaIdAdmin(), "root", "root", "root@root"));
@@ -109,16 +109,36 @@ public class Controlador {
                 "Pedido creado", temp.getCarro());
         temp.addPedido(pedidoTemp);
         temp.vaciaCarro();
+
+        Trabajador trabajadorTemp = buscaTrabajadorCandidatoParaAsignar();
+
+        if (trabajadorTemp != null) return asignaPedido(pedidoTemp.getId(), trabajadorTemp.getId());
         return true;
     }
 
-    /*public Trabajador buscaTrabajadorCandidatoParaAsignar() {
+    // Metodo que busca un trabajador candidato para asignar un pedido
+    public Trabajador buscaTrabajadorCandidatoParaAsignar() {
+        int numPedidosMinimo = Integer.MAX_VALUE;
+        Trabajador candidato = null;
 
+        for (Trabajador t : trabajadores) {
+            if (t.numPedidosPendientes() < numPedidosMinimo) {
+                numPedidosMinimo = t.numPedidosPendientes();
+                candidato = t;
+            }
+        }
+
+        if (trabajadores.size() > 1) if (hayEmpateTrabajadoresCandidatos(candidato)) return null;
+        return candidato;
     }
 
+    // Metodo que mira si hay empate en los pedidos pendientes de los trabajadores
     public boolean hayEmpateTrabajadoresCandidatos(Trabajador candidato) {
-
-    }*/
+        for (Trabajador t : trabajadores) {
+            if (t.getPedidosPendientes().size() == candidato.getPedidosPendientes().size()) return true;
+        }
+        return false;
+    }
 
     // Metodo que busca un cliente por su id, y lo devuelve
     public Cliente buscaClienteById(int idCliente) {
@@ -246,22 +266,24 @@ public class Controlador {
         return clientes.add(new Cliente(generaIdCliente(), email, clave, nombre, localidad, provincia, direccion, movil));
     }
 
-    /*public Trabajador buscaTrabajadorAsignadoAPedido(int idPedido) {
+    // Metodo que busca un trabajador en un pedido asignado
+    public Trabajador buscaTrabajadorAsignadoAPedido(int idPedido) {
+        for (Trabajador t : trabajadores) {
+            for (Pedido p : t.getPedidosAsignados()) {
+                if (p.getId() == idPedido) return t;
+            }
+        }
 
-    }*/
+        return null;
+    }
 
     // Metodo que devuelve los pedidos que no tienen el trabajador
     public ArrayList<Pedido> pedidosSinTrabajador() {
         ArrayList<Pedido> pedidos = new ArrayList<>();
-        // Bucle que mira todos los pedidos
-        for (Pedido pA : getTodosPedidos()) {
-            // Bucle que mira todos los trabajadores
-            for (Trabajador t : trabajadores) {
-                // Bucle que mira todos los pedidos asignados trabajadores
-                for (Pedido pT : t.getPedidosAsignados()) {
-                    if (t.getPedidosAsignados().contains(pA)) pedidos.add(pA);
-                }
-            }
+
+        for (Pedido p : getTodosPedidos()) {
+            Trabajador trabajador = buscaTrabajadorAsignadoAPedido(p.getId());
+            if (trabajador != null && trabajador.getPedidosAsignados().contains(p)) pedidos.add(p);
         }
         return pedidos;
     }
@@ -272,13 +294,39 @@ public class Controlador {
         return pedidosSinTrabajador().size();
     }
 
-    /*public boolean asignaPedido(int idPedido, int idTrabajador) {
+    // Metodo que asigna un pedido a un trabajador
+    public boolean asignaPedido(int idPedido, int idTrabajador) {
+        Pedido pedidoTemp = buscaPedidoById(idPedido);
+        Trabajador trabajadorTemp = buscaTrabajadorById(idTrabajador);
 
+        if (pedidoTemp == null) return false;
+        if (trabajadorTemp == null) return false;
+
+        return trabajadorTemp.asignaPedido(pedidoTemp);
     }
 
     public ArrayList<PedidoClienteDataClass> getPedidosAsignadosTrabajador(int idTrabajador) {
+        ArrayList<PedidoClienteDataClass> pedidosAsignadosT = new ArrayList<>();
 
-    }*/
+        Trabajador temp = buscaTrabajadorById(idTrabajador);
+
+        //Bucle que mira los pedidos completados de los trabajadores
+        for (Pedido pT : temp.getPedidosAsignados()) {
+            // Bucle del cliente
+            for (Cliente c : clientes) {
+                // Bucle que mira los pedidos de los clientes
+                for (Pedido pA : c.getPedidos()) {
+                    if (pA.getId() == pT.getId()) {
+                        pedidosAsignadosT.add(new PedidoClienteDataClass(c.getId(), c.getEmail(), c.getNombre(), c.getLocalidad(),
+                                c.getProvincia(), c.getDireccion(), c.getMovil(), pA.getId(), pA.getFechaPedido(), pA.getFechaEntregaEstimada(),
+                                pA.getEstado(), pA.getComentario(), pA.getProductos()));
+                    }
+                }
+            }
+        }
+
+        return pedidosAsignadosT;
+    }
 
     // Metodo que busca un trabajador por su id, y lo devuelve
     public Trabajador buscaTrabajadorById(int idTrabajador) {
@@ -334,32 +382,10 @@ public class Controlador {
 
         Trabajador temp = buscaTrabajadorById(idTrabajador);
 
-        // Mira los pedidos del trabajador, los pedidos completados
-        for (Pedido p : temp.getPedidosCompletados()) {
-            // Mira los clientes y sus pedidos
-            for (Cliente c : clientes) {
-                for (Pedido pC : c.getPedidos()) {
-                    if (p.getId() == pC.getId()) pedidos.add(new PedidoClienteDataClass(c.getId(), c.getEmail(), c.getNombre(), c.getLocalidad(),
-                            c.getProvincia(), c.getDireccion(), c.getMovil(), pC.getId(), pC.getFechaPedido(), pC.getFechaEntregaEstimada(),
-                            pC.getEstado(), pC.getComentario(), pC.getProductos()));
-                }
-            }
-        }
-
-        // Mira los pedidos del trabajador, los pedidos asignados
-        for (Pedido p : temp.getPedidosAsignados()) {
-            // Mira los clientes y sus pedidos
-            for (Cliente c : clientes) {
-                for (Pedido pC : c.getPedidos()) {
-                    if (p.getId() == pC.getId()) pedidos.add(new PedidoClienteDataClass(c.getId(), c.getEmail(), c.getNombre(), c.getLocalidad(),
-                            c.getProvincia(), c.getDireccion(), c.getMovil(), pC.getId(), pC.getFechaPedido(), pC.getFechaEntregaEstimada(),
-                            pC.getEstado(), pC.getComentario(), pC.getProductos()));
-                }
-            }
-        }
+       pedidos.addAll(getPedidosAsignadosTrabajador(temp.getId()));
+       pedidos.addAll(getPedidosCompletadosTrabajador(temp.getId()));
         return pedidos;
     }
-
 
     // Metodo que genera una id aleatoria para el cliente entre el 0 y 99999
     private int generaIdCliente() {

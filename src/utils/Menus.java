@@ -52,8 +52,8 @@ public class Menus {
     public static String menuTrabajador(Controlador controlador, Trabajador trabajador) {
         String salida = "";
         salida += "FERNANSHOP" + "\n";
-        salida += "Bienvenido " + trabajador.getNombre() + ". Tienes \n"; //+ trabajador.numPedidosAsignados() +
-            //    (trabajador.numPedidosAsignados() == 1 ? " pedido" : " pedidos") + " que gestionar\n";
+        salida += "Bienvenido " + trabajador.getNombre() + ". Tienes " + trabajador.numPedidosPendientes() +
+                (trabajador.numPedidosPendientes() == 1 ? " pedido" : " pedidos") + " que gestionar\n";
         salida += "1.- Consultar los pedidos que tengo asignados\n";
         salida += "2.- Modificar el estado de un pedido\n";
         salida += "3.- Consultar el catálogo de productos\n";
