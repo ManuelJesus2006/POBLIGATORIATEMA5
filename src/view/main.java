@@ -207,7 +207,7 @@ public class main {
                             estadisticasApp(controlador);
                             break;
                         case "7": //Cambiar el estado de un pedido
-
+                            modificaPedido(controlador, admin);
                             break;
                         case "8": //Dar de alta un trabajador
                             altaTrabajador(controlador);
@@ -330,13 +330,13 @@ public class main {
     // Funcion que muestra los pedidos que se han realizado
     private static void resumenPedidosAdmin(Controlador controlador) {
         if (controlador.getTodosPedidos().isEmpty()) System.out.println("No se han realizado pedidos...");
-        else pintaPedidos(controlador);
+        else pintaPedidosData(controlador);
     }
 
-    // Funcion que pinta los pedidos que hay
-    private static void pintaPedidos(Controlador controlador) {
+    // Funcion que pinta los pedidos de la DataClass que hay
+    private static void pintaPedidosData(Controlador controlador) {
         int cont = 1;
-        for (Trabajador t : controlador.getTrabajadores())  {
+        for (Trabajador t : controlador.getTrabajadores()) {
             for (PedidoClienteDataClass p : controlador.getPedidosAsignadosYCompletados(t.getId())) {
                 System.out.println(cont + ".- " + p);
                 cont++;
@@ -401,24 +401,65 @@ public class main {
 
     // Funcion que cancela un pedido del cliente
     private static void cancelaPedido(Controlador controlador, Cliente cliente) {
-        System.out.println("¿Deseas cancelar el pedido? (S/N)");
-        String cancelaPedido = S.nextLine();
+        ArrayList<Pedido> pedidosRealizados = cliente.getPedidos();
 
-        if (cancelaPedido.equalsIgnoreCase("s"))
-            if (controlador.cancelaPedidoCliente(cliente.getId()))
-                System.out.println("El pedido se ha realizado con éxito...");
+        if (pedidosRealizados.isEmpty()) System.out.println("No se han realizado pedidos...");
+        else {
+            Pedido temp = seleccionaPedidoCliente(controlador, cliente);
+
+            if (temp != null) {
+                System.out.println("¿Deseas cancelar el pedido? (S/N)");
+                String cancelaPedido = S.nextLine();
+
+                if (cancelaPedido.equalsIgnoreCase("s"))
+                    if (controlador.cancelaPedidoCliente(cliente.getId(), temp.getId())) System.out.println("El pedido se ha cancelado con éxito...");
+            }
+        }
+    }
+
+    // Funcion que selecciona un pedido en el cliente
+    private static Pedido seleccionaPedidoCliente(Controlador controlador, Cliente cliente) {
+        ArrayList<Pedido> pedidos = cliente.getPedidos();
+
+        if (pedidos == null) return null;
+        if (pedidos.isEmpty()) return null;
+
+        System.out.println("""
+                    |--------------------------------------------------|
+                    |               PEDIDOS REALIZADOS                 |
+                    |--------------------------------------------------|""");
+        pintaPedidosSinData(controlador, pedidos);
+
+        System.out.print("Introduce el pedido: ");
+        String pedidoSeleccionado = S.nextLine();
+
+        Pedido pedidoElegido = null;
+        try {
+            pedidoElegido = pedidos.get(Integer.parseInt(pedidoSeleccionado) - 1);
+        } catch (IndexOutOfBoundsException | NumberFormatException e) {
+            System.out.println("Error al elegir pedido...");
+        }
+
+        if (pedidoElegido == null) return null;
+
+        Pedido pedidoTemp = controlador.buscaPedidoById(pedidoElegido.getId());
+
+        if (pedidoTemp == null) return null;
+        return pedidoTemp;
     }
 
     // Funcion que confirma un pedido del cliente
     private static void confirmaPedido(Controlador controlador, Cliente cliente) {
         if (cliente.numProductosCarro() == 0) System.out.println("No tienes productos en el carro...");
-        System.out.println("¿Deseas confirmar el pedido? (S/N)");
-        String confirmaPedido = S.nextLine();
+        else {
+            System.out.println("¿Deseas confirmar el pedido? (S/N)");
+            String confirmaPedido = S.nextLine();
 
-        if (confirmaPedido.equalsIgnoreCase("s")) {
-            if (controlador.confirmaPedidoCliente(cliente.getId()))
-                System.out.println("El pedido se ha realizado con éxito...");
-        } else System.out.println("La confirmación del pedido se ha cancelado...");
+            if (confirmaPedido.equalsIgnoreCase("s")) {
+                if (controlador.confirmaPedidoCliente(cliente.getId()))
+                    System.out.println("El pedido se ha realizado con éxito...");
+            } else System.out.println("La confirmación del pedido se ha cancelado...");
+        }
     }
 
     // Funcion que elimina un producto del carrito
@@ -432,13 +473,18 @@ public class main {
                 continuar = true;
             } catch (NumberFormatException e) {
                 System.out.println("Debes introducir un número...");
+                Utils.pulsaContinuar();
+                Utils.limpiarpantalla();
             }
         } while (!continuar);
 
         Producto temp = controlador.buscaProductoById(id);
 
-        if (cliente.quitaProducto(temp.getId())) System.out.println("El producto se ha eliminado del carrito...");
-        else System.out.println("Ha ocurrido un error al añadir el producto al carrito...");
+        if (temp == null) System.out.println("No se ha encontrado ningún producto...");
+        else {
+            if (cliente.quitaProducto(temp.getId())) System.out.println("El producto se ha eliminado del carrito...");
+            else System.out.println("Ha ocurrido un error al añadir el producto al carrito...");
+        }
     }
 
     // Funcion que ve el carro de un cliente
@@ -458,6 +504,8 @@ public class main {
                 continuar = true;
             } catch (NumberFormatException e) {
                 System.out.println("Debes introducir un número...");
+                Utils.pulsaContinuar();
+                Utils.limpiarpantalla();
             }
         } while (!continuar);
 
@@ -885,7 +933,11 @@ public class main {
     }
 
     // Funcion que modifica el estado de un pedido o añade un comentario al pedido
-    private static void modificaPedido(Controlador controlador, Trabajador trabajador) {
+    private static void modificaPedido(Controlador controlador, Object usuario) {
+        Trabajador trabajador = buscaTrabajador(controlador, usuario);
+        Admin admin = buscaAdmin(controlador, usuario);
+
+
         String op;
 
         System.out.print("""
@@ -896,10 +948,10 @@ public class main {
 
         switch (op) {
             case "1": // Modifica el estado
-                modificaEstadoPedido(controlador, trabajador);
+                modificaEstadoPedido(controlador, trabajador, admin);
                 break;
             case "2": //Añade un comentario
-                aniadeComentarioPedido(controlador, trabajador);
+                aniadeComentarioPedido(controlador, trabajador, admin);
                 break;
             default:
                 System.out.println("Opción incorrecta...");
@@ -907,24 +959,46 @@ public class main {
         }
     }
 
+    // Funcion que busca al admin
+    private static Admin buscaAdmin(Controlador controlador, Object usuario) {
+        for (Admin a : controlador.getAdmins()) {
+            if (usuario.equals(a)) return a;
+        }
+        return null;
+    }
+
+    // Funcion que busca un trabajador
+    private static Trabajador buscaTrabajador(Controlador controlador, Object usuario) {
+        for (Trabajador t : controlador.getTrabajadores()) {
+            if (usuario.equals(t)) return t;
+        }
+        return null;
+    }
+
     // Funcion que añade un comentario de un pedido
-    private static void aniadeComentarioPedido(Controlador controlador, Trabajador trabajador) {
-        Pedido temp = seleccionaPedido(controlador, trabajador);
+    private static void aniadeComentarioPedido(Controlador controlador, Trabajador trabajador, Admin admin) {
+        Pedido temp = null;
+        if (trabajador != null) temp = seleccionaPedidoTrabajador(controlador, trabajador);
+        if (admin != null) temp = seleccionaPedidoAdmin(controlador, admin);
 
         if (temp == null) System.out.println("No se ha encontrado ningún pedido...");
         else {
             System.out.print("Introduce el comentario para el pedido: ");
             String comentarioTeclado = S.nextLine();
 
-            if (controlador.cambiaComentarioPedido(temp.getId(), comentarioTeclado)) System.out.println("Se ha añido un comentario al pedido correctamente...");
-            else System.out.println("Ha ocurrido un error...");;
+            if (controlador.cambiaComentarioPedido(temp.getId(), comentarioTeclado))
+                System.out.println("Se ha añido un comentario al pedido correctamente...");
+            else System.out.println("Ha ocurrido un error...");
+            ;
         }
 
     }
 
     // Funcion que modifica el estado de un pedido
-    private static void modificaEstadoPedido(Controlador controlador, Trabajador trabajador) {
-        Pedido temp = seleccionaPedido(controlador, trabajador);
+    private static void modificaEstadoPedido(Controlador controlador, Trabajador trabajador, Admin admin) {
+        Pedido temp = null;
+        if (trabajador != null) temp = seleccionaPedidoTrabajador(controlador, trabajador);
+        if (admin != null) temp = seleccionaPedidoAdmin(controlador, admin);
 
         if (temp == null) System.out.println("No se ha encontrado ningún pedido...");
         else {
@@ -941,7 +1015,7 @@ public class main {
                         Introduce el nuevo estado:""");
                 try {
                     estadoTeclado = Integer.parseInt(S.nextLine());
-                     continuar = true;
+                    continuar = true;
                 } catch (NumberFormatException e) {
                     System.out.println("Debes introducir un número...");
                     Utils.pulsaContinuar();
@@ -950,20 +1024,66 @@ public class main {
             } while (!continuar);
 
 
-            if (controlador.cambiaEstadoPedido(temp.getId(), estadoTeclado)) System.out.println("El pedido se ha modificado con éxito...");
+            if (controlador.cambiaEstadoPedido(temp.getId(), estadoTeclado))
+                System.out.println("El pedido se ha modificado con éxito...");
             else System.out.println("Ha ocurrido un error...");
         }
 
     }
 
+    // Funcion que selecciona un pedido desde el administrador
+    private static Pedido seleccionaPedidoAdmin(Controlador controlador, Admin admin) {
+        ArrayList<Pedido> pedidos = controlador.getTodosPedidos();
+        int cont = 1;
+
+        if (pedidos == null) return null;
+        if (pedidos.isEmpty()) return null;
+
+        pintaPedidosSinData(controlador, pedidos);
+
+        System.out.print("Introduce el pedido: ");
+        String pedidoSeleccionado = S.nextLine();
+
+        Pedido pedidoElegido = null;
+        try {
+            pedidoElegido = pedidos.get(Integer.parseInt(pedidoSeleccionado) - 1);
+        } catch (IndexOutOfBoundsException | NumberFormatException e) {
+            System.out.println("Error al elegir pedido...");
+        }
+
+        if (pedidoElegido == null) return null;
+
+        Pedido pedidoTemp = controlador.buscaPedidoById(pedidoElegido.getId());
+
+        if (pedidoTemp == null) return null;
+        return pedidoTemp;
+    }
+
+    // Funcion que pinta un pedido sin data
+    private static void pintaPedidosSinData(Controlador controlador, ArrayList<Pedido> pedidos) {
+        int cont = 1;
+        if (pedidos.isEmpty()) System.out.println("No tienes pedidos...");
+        else {
+            for (Pedido p : pedidos) {
+                System.out.println(cont + ".- " + p);
+                cont++;
+                Utils.pulsaContinuar();
+            }
+        }
+    }
+
+    // Funcion que pinta un unico pedido
     private static void pintaPedidoUnico(Pedido temp) {
         System.out.println(temp);
     }
 
     // Función de menú de selección de un pedido
-    private static Pedido seleccionaPedido(Controlador controlador, Trabajador trabajador) {
+    private static Pedido seleccionaPedidoTrabajador(Controlador controlador, Trabajador trabajador) {
         ArrayList<PedidoClienteDataClass> pedidosData = controlador.getPedidosAsignadosYCompletados(trabajador.getId());
         int cont = 1;
+
+        if (pedidosData == null) return null;
+        if (pedidosData.isEmpty()) return null;
 
         for (PedidoClienteDataClass p : pedidosData) {
             System.out.println(cont + " .- " + p);

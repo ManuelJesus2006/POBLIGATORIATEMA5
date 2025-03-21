@@ -82,7 +82,6 @@ public class Pedido {
                 estado = nuevoEstado;
                 return true;
             default:
-                estado = -1;
                 return false;
         }
     }
@@ -158,6 +157,7 @@ public class Pedido {
         resultado += "Fecha de pedido: " + fechaPedido + "\n";
         resultado += "Fecha de entrega: " + fechaEntregaEstimada + "\n";
         resultado += "Estado: " + devuelveEstado(estado) + "\n";
+        resultado += "Comentario: " + comentario + "\n";
         resultado += "Productos: \n" + pintaProductos(productos) + "\n";
         return resultado;
     }
