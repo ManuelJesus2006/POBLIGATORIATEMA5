@@ -5,7 +5,7 @@ import utils.Utils;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class Pedido {
+public class Pedido implements Comparable<Pedido> {
     //Atributos
     private int id;
     private LocalDate fechaPedido;
@@ -182,5 +182,10 @@ public class Pedido {
             case 4 -> "Cancelado";
             default -> "";
         };
+    }
+
+    @Override
+    public int compareTo(Pedido p) {
+        return (this.fechaPedido).compareTo(p.fechaPedido);
     }
 }

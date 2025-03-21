@@ -584,4 +584,18 @@ public class Controlador {
         pedido.setComentario(comentarioTeclado);
         return true;
     }
+
+    // Metodo que muestra el numero de pedidos pendientes de un cliente
+    public int numPedidosPendientesCliente(int idCliente) {
+        Cliente cliente = buscaClienteById(idCliente);
+
+        if (cliente == null) return -1;
+
+        int cont = 0;
+        for (Pedido p : cliente.getPedidos()) {
+            if (p.getEstado() == 0 || p.getEstado() == 1 || p.getEstado() == 2) cont++;
+        }
+
+        return cont;
+    }
 }

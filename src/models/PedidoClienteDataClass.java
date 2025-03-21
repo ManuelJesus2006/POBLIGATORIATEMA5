@@ -3,7 +3,7 @@ package models;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class PedidoClienteDataClass {
+public class PedidoClienteDataClass implements Comparable<PedidoClienteDataClass>{
     //Atributos Cliente
     private int idCliente;
     private String email;
@@ -180,5 +180,10 @@ public class PedidoClienteDataClass {
             resultado += p.toString() + "\n";
         }
         return resultado;
+    }
+
+    @Override
+    public int compareTo(PedidoClienteDataClass p) {
+        return this.fechaPedido.compareTo(p.fechaPedido);
     }
 }

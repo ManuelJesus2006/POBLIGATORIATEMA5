@@ -7,6 +7,7 @@ import utils.Menus;
 import utils.Utils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
 
 public class main {
@@ -185,7 +186,9 @@ public class main {
         for (Admin admin : controlador.getAdmins()) {
             if (user.equals(admin)) {
                 do {
-                    System.out.println(Menus.menuAdministrador(controlador, admin));
+                    estadisticasApp(controlador);
+                    System.out.println();
+                    Menus.menuAdministrador(controlador, admin);
                     op = S.nextLine();
                     switch (op) {
                         case "1": //Ver to el catálogo
@@ -236,7 +239,7 @@ public class main {
                 compruebaToken(controlador, trabajador);
                 if (trabajador.isValid()) {
                     do {
-                        System.out.println(Menus.menuTrabajador(controlador, trabajador));
+                        Menus.menuTrabajador(controlador, trabajador);
                         op = S.nextLine();
                         switch (op) {
                             case "1": //Consultar los pedidos que tengo asignados
@@ -281,13 +284,14 @@ public class main {
 
                 if (cliente.isValid()) {
                     do {
-                        System.out.println(Menus.menuCliente(controlador, cliente));
+                        Menus.menuCliente(controlador, cliente);
                         op = S.nextLine();
                         switch (op) {
                             case "1"://Consultar el catálogo de productos
                                 consultaCatalogo(controlador);
                                 break;
                             case "2"://Realizar un pedido
+                                Utils.limpiarpantalla();
                                 realizaPedidoMenu(controlador, cliente);
                                 break;
                             case "3"://Ver mis pedidos
@@ -320,13 +324,15 @@ public class main {
     private static void historicoPedidosTerminados(Controlador controlador, Trabajador trabajador) {
         if (controlador.getPedidosCompletadosTrabajador(trabajador.getId()).isEmpty()) System.out.println("No tienes ningún pedido...");
         else {
+            ArrayList<PedidoClienteDataClass> pedidosTerminados = controlador.getPedidosCompletadosTrabajador(trabajador.getId());
             int cont = 1;
 
+            Collections.sort(pedidosTerminados);
             System.out.println("""
                 |--------------------------------------------------|
                 |               PEDIDOS TERMINADOS                 |
                 |--------------------------------------------------|""");
-            for (PedidoClienteDataClass p : controlador.getPedidosCompletadosTrabajador(trabajador.getId())) {
+            for (PedidoClienteDataClass p : pedidosTerminados) {
                 System.out.println(cont + ".- " + p);
             }
         }
