@@ -31,8 +31,8 @@ public class Menus {
     public static void menuCliente(Controlador controlador, Cliente cliente) {
         int pedidosPendientes = controlador.numPedidosPendientesCliente(cliente.getId());
         System.out.println("FERNANSHOP");
-        System.out.println("Bienvenido " + cliente.getNombre());
-        System.out.println("Actualmente tiene " + pedidosPendientes + ((pedidosPendientes == 1) ?
+        System.out.print("Bienvenido " + cliente.getNombre());
+        System.out.println(". Actualmente tiene " + pedidosPendientes + ((pedidosPendientes == 1) ?
                 " pedido pendiente" : " pedidos pendientes") + " de entrega");
         System.out.print("""
                 1.- Consultar el catálogo de productos

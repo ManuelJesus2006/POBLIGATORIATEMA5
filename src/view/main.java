@@ -161,6 +161,7 @@ public class main {
 
     }
 
+    // Funcion en el que ves el catálogo
     private static void verCatalogo(Controlador controlador) {
         int cont = 0;
         for (Producto producto : controlador.getCatalogo()) {
@@ -288,6 +289,7 @@ public class main {
                         op = S.nextLine();
                         switch (op) {
                             case "1"://Consultar el catálogo de productos
+                                Utils.limpiarpantalla();
                                 consultaCatalogo(controlador);
                                 break;
                             case "2"://Realizar un pedido
@@ -295,18 +297,22 @@ public class main {
                                 realizaPedidoMenu(controlador, cliente);
                                 break;
                             case "3"://Ver mis pedidos
+                                Utils.limpiarpantalla();
                                 verMisPedidosCliente(cliente);
                                 break;
                             case "4"://Ver mis datos personales
+                                Utils.limpiarpantalla();
                                 pintaPerfilCliente(cliente);
                                 break;
                             case "5"://Modificar mis datos personales
+                                Utils.limpiarpantalla();
                                 modificaDatosPersonalesCliente(controlador, cliente);
                                 break;
                             case "6":// Salir
                                 Utils.animacionFinSesion();
                                 break;
                             default://Opción no existente
+                                Utils.limpiarpantalla();
                                 System.out.println("Opción incorrecta...");
                                 break;
                         }
@@ -314,7 +320,6 @@ public class main {
                         Utils.limpiarpantalla();
                     } while (cliente.isValid() && !op.equals("6"));
                 }
-
             }
         } // Bucle de clientes
 
@@ -322,16 +327,17 @@ public class main {
 
     // Funcion que muestra el historial de pedidos terminados
     private static void historicoPedidosTerminados(Controlador controlador, Trabajador trabajador) {
-        if (controlador.getPedidosCompletadosTrabajador(trabajador.getId()).isEmpty()) System.out.println("No tienes ningún pedido...");
+        if (controlador.getPedidosCompletadosTrabajador(trabajador.getId()).isEmpty())
+            System.out.println("No tienes ningún pedido...");
         else {
             ArrayList<PedidoClienteDataClass> pedidosTerminados = controlador.getPedidosCompletadosTrabajador(trabajador.getId());
             int cont = 1;
 
             Collections.sort(pedidosTerminados);
             System.out.println("""
-                |--------------------------------------------------|
-                |               PEDIDOS TERMINADOS                 |
-                |--------------------------------------------------|""");
+                    |--------------------------------------------------|
+                    |               PEDIDOS TERMINADOS                 |
+                    |--------------------------------------------------|""");
             for (PedidoClienteDataClass p : pedidosTerminados) {
                 System.out.println(cont + ".- " + p);
             }
@@ -499,7 +505,8 @@ public class main {
         else {
             Pedido temp = seleccionaPedidoCliente(controlador, cliente);
 
-            if (temp != null) {
+            if (temp == null) System.out.println("No hay pedidos para cancelar...");
+            else  {
                 System.out.println("¿Deseas cancelar el pedido? (S/N)");
                 String cancelaPedido = S.nextLine();
 
@@ -517,11 +524,25 @@ public class main {
         if (pedidos == null) return null;
         if (pedidos.isEmpty()) return null;
 
-        System.out.println("""
-                |--------------------------------------------------|
-                |               PEDIDOS REALIZADOS                 |
-                |--------------------------------------------------|""");
-        pintaPedidosSinData(controlador, pedidos);
+        ArrayList<Pedido> pedidosSinCancelado = new ArrayList<>();
+
+        for (Pedido p : pedidos) {
+            if (p.getEstado() != 4) pedidosSinCancelado.add(p);
+        }
+
+        if (pedidosSinCancelado.isEmpty()) return null;
+
+        int cont = 1;
+
+        System.out.print("""
+                ╔════════════════════════════════════════════════════╗
+                ║                  CANCELA PEDIDOS                   ║
+                ╚════════════════════════════════════════════════════╝
+                """);
+        for (Pedido p : pedidos) {
+            System.out.println(cont + ".- " + p);
+            cont++;
+        }
 
         System.out.print("Introduce el pedido: ");
         String pedidoSeleccionado = S.nextLine();
@@ -914,15 +935,16 @@ public class main {
     private static void estadisticasApp(Controlador controlador) {
         System.out.printf("""
                         Bienvenido Administrador. Tenemos %d pedidos sin asignar. Debe asignarlos a un trabajador
-                        ===================================================
-                                    Estadisticas de la APP
-                        Número de clientes: %d
-                        Número de trabajadores: %d
-                        Número de pedidos: %d
-                        Número de pedidos pendientes: %d
-                        Número de pedidos completados o cancelados: %d
-                        Número de pedidos sin asignar: %d
-                        ===================================================
+                        ╔════════════════════════════════════════════════════╗
+                        ║               Estadísticas de la APP               ║
+                        ╠════════════════════════════════════════════════════╣
+                        ║   Número de clientes: %d                            ║
+                        ║   Número de trabajadores: %d                        ║
+                        ║   Número de pedidos: %d                             ║
+                        ║   Número de pedidos pendientes: %d                  ║
+                        ║   Número de pedidos completados o cancelados: %d    ║
+                        ║   Número de pedidos sin asignar: %d                 ║
+                        ╚════════════════════════════════════════════════════╝
                         """, controlador.pedidosSinTrabajador().size(), controlador.getClientes().size(), controlador.getTrabajadores().size(),
                 controlador.numPedidosTotales(), controlador.numPedidosPendientes(), controlador.numPedidosCompletadosCancelados(),
                 controlador.pedidosSinTrabajador().size());
@@ -948,9 +970,7 @@ public class main {
                     Comunicaciones.enviaCorreoToken(t.getEmail(), "¡Hola! Bienvenido a FERNANSHOP " + t.getNombre()
                             + ", " + "tu token de verificación de la cuenta es", "TU CÓDIGO DE VERIFICACIÓN DE CUENTA", token, t.getNombre());
                 }
-
             }
-
         } else System.out.println("Ha ocurrido un error...");
     }
 
