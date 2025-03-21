@@ -83,11 +83,12 @@ public class Controlador {
         return null;
     }
 
-    // Metodo que añade un producto al carrito
+    // Metodo que añade un producto al carrito le pasamos una copia
     public boolean addProductoCarrito(Cliente cliente, int idProducto) {
         Producto temp = buscaProductoById(idProducto);
         if (temp == null) return false;
-        cliente.addProductoCarro(temp);
+        Producto copia = new Producto(temp.getId(), temp.getMarca(), temp.getModelo(), temp.getDescripcion(), temp.getPrecio(), temp.getRelevancia());
+        cliente.addProductoCarro(copia);
         return true;
     }
 
@@ -105,8 +106,12 @@ public class Controlador {
 
         if (temp.getCarro().isEmpty()) return false;
 
+        ArrayList<Producto> copiaCarro = new ArrayList<>();
+        copiaCarro.addAll(temp.getCarro());
+
         Pedido pedidoTemp = new Pedido(generaIdPedido(), LocalDate.now(), LocalDate.now().plusDays(5),
-                "Pedido creado", temp.getCarro());
+                "Pedido creado", copiaCarro);
+
         temp.addPedido(pedidoTemp);
         temp.vaciaCarro();
 
@@ -135,7 +140,7 @@ public class Controlador {
     // Metodo que mira si hay empate en los pedidos pendientes de los trabajadores
     public boolean hayEmpateTrabajadoresCandidatos(Trabajador candidato) {
         for (Trabajador t : trabajadores) {
-            if (t.getPedidosPendientes().size() == candidato.getPedidosPendientes().size()) return true;
+            if (t.getId() != candidato.getId()) if (t.getPedidosPendientes().size() == candidato.getPedidosPendientes().size()) return true;
         }
         return false;
     }
@@ -235,7 +240,7 @@ public class Controlador {
         int cont = 0;
 
         for (Cliente c : clientes) {
-            if (c.getPedidos() != null) cont++;
+            if (c.getPedidos() != null) cont += c.getPedidos().size();
         }
         return cont;
     }
@@ -283,7 +288,7 @@ public class Controlador {
 
         for (Pedido p : getTodosPedidos()) {
             Trabajador trabajador = buscaTrabajadorAsignadoAPedido(p.getId());
-            if (trabajador != null && trabajador.getPedidosAsignados().contains(p)) pedidos.add(p);
+            if (trabajador != null && !trabajador.getPedidosAsignados().contains(p)) pedidos.add(p);
         }
         return pedidos;
     }
@@ -305,6 +310,7 @@ public class Controlador {
         return trabajadorTemp.asignaPedido(pedidoTemp);
     }
 
+    // Metodo que devuelve los pedidos asignados del trabajador
     public ArrayList<PedidoClienteDataClass> getPedidosAsignadosTrabajador(int idTrabajador) {
         ArrayList<PedidoClienteDataClass> pedidosAsignadosT = new ArrayList<>();
 
@@ -393,7 +399,7 @@ public class Controlador {
         int id;
         do {
             // Generamos la id
-            id = (int) (Math.random() * 2);
+            id = (int) (Math.random() * 100000);
             // Hacemos un bucle de clientes para comprobar sus id
             for (Cliente c : clientes) {
                 if (c.getId() == id) {
@@ -537,6 +543,34 @@ public class Controlador {
         if (temp.numProductosCarro() == 0) return false;
 
         temp.vaciaCarro();
+        return true;
+    }
+
+    // Metodo que devuelve el numero de pedidos pendientes (estado: en preparacion, enviado o creado)
+    public int numPedidosPendientes() {
+        int cont = 0;
+        for (Trabajador t : trabajadores) {
+            if (!t.getPedidosPendientes().isEmpty()) cont += t.getPedidosPendientes().size();
+        }
+        return cont;
+    }
+
+    // Metodo que devuelve el numero de pedidos pendientes (estado: entregado o cancelado)
+    public int numPedidosCompletadosCancelados() {
+        int cont = 0;
+        for (Trabajador t : trabajadores) {
+            if (!t.getPedidosCompletados().isEmpty()) cont += t.getPedidosCompletados().size();
+        }
+        return cont;
+    }
+
+    // Metodo que cambia el comentario de un pedido
+    public boolean cambiaComentarioPedido(int idPedido, String comentarioTeclado) {
+        Pedido pedido = buscaPedidoById(idPedido);
+
+        if (pedido == null) return false;
+
+        pedido.setComentario(comentarioTeclado);
         return true;
     }
 }

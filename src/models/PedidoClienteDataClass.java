@@ -141,4 +141,44 @@ public class PedidoClienteDataClass {
     public void setProductos(ArrayList<Producto> productos) {
         this.productos = productos;
     }
+
+    // Otros metodos
+    @Override
+    public String toString() {
+        return " =============== " + idPedido + " =============== \n" +
+                "Estado: " + devuelveEstado(estado) + "\n" +
+                "Nombre: " + nombre + "\n" +
+                "Dirección: " + direccion + "\n" +
+                "Localidad: " + localidad + "\n" +
+                "Provincia: " + provincia + "\n" +
+                "Teléfono: " + movil + "\n" +
+                "Fecha del pedido: " + fechaPedido + "\n" +
+                "Fecha de entrega estimada: " + fechaEntregaEstimada + "\n" +
+                "Comentarios del pedido: " + comentario + "\n" +
+                "Detalles del pedido: \n" +
+                pintaProductos(productos);
+    }
+
+    // Funcion que devuelve el estado de un Pedido
+    private String devuelveEstado(int estado) {
+        return switch (estado) {
+            case 0 -> "Creado";
+            case 1 -> "En preparación";
+            case 2 -> "Enviado";
+            case 3 -> "Entregado";
+            case 4 -> "Cancelado";
+            default -> "";
+        };
+
+    }
+
+    // Funcion que pinta productos
+    private String pintaProductos(ArrayList<Producto> productos) {
+        String resultado = "";
+
+        for (Producto p : productos) {
+            resultado += p.toString() + "\n";
+        }
+        return resultado;
+    }
 }

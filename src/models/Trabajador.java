@@ -20,6 +20,7 @@ public class Trabajador {
         this.pass = pass;
         this.email = email;
         this.movil = movil;
+        pedidosAsignados = new ArrayList<>();
     }
 
     // Getters y Setters
@@ -122,8 +123,11 @@ public class Trabajador {
     // Metodo que comprueba que el pedido este En preparacion o Enviado
     public ArrayList<Pedido> getPedidosPendientes() {
         ArrayList<Pedido> pedidosPendientes = new ArrayList<>();
+
+        if (pedidosAsignados == null) return pedidosPendientes;
+
         for (Pedido p : pedidosAsignados) {
-            if (p.getEstado() == 1 || p.getEstado() == 2) pedidosPendientes.add(p);
+             if (p.getEstado() == 0 || p.getEstado() == 1 || p.getEstado() == 2) pedidosPendientes.add(p);
         }
         return pedidosPendientes;
     }
@@ -131,6 +135,9 @@ public class Trabajador {
     // Metodo que comprueba que el pedido este Entregado o Cancelado
     public ArrayList<Pedido> getPedidosCompletados() {
         ArrayList<Pedido> pedidosCompletados = new ArrayList<>();
+
+        if (pedidosAsignados == null) return pedidosCompletados;
+
         for (Pedido p : pedidosAsignados) {
             if (p.getEstado() == 3 || p.getEstado() == 4) pedidosCompletados.add(p);
         }

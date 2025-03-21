@@ -198,7 +198,7 @@ public class main {
                             resumenClientes(controlador);
                             break;
                         case "4": //Ver un resumen de todos los Pedidos
-
+                            resumenPedidosAdmin(controlador);
                             break;
                         case "5": // Ver un resumen de todos los Trabajadores
                             resumenTrabajadores(controlador);
@@ -240,9 +240,10 @@ public class main {
                         op = S.nextLine();
                         switch (op) {
                             case "1": //Consultar los pedidos que tengo asignados
+                                consultaPedidoAsignados(controlador, trabajador);
                                 break;
                             case "2": //Modificar el estado de un pedido
-                                modificaPedido(controlador);
+                                modificaPedido(controlador, trabajador);
                                 break;
                             case "3": //Consultar el catálogo de productos
                                 verCatalogo(controlador);
@@ -289,7 +290,7 @@ public class main {
                                 realizaPedidoMenu(controlador, cliente);
                                 break;
                             case "3"://Ver mis pedidos
-                                verMisPedidos(cliente);
+                                verMisPedidosCliente(cliente);
                                 break;
                             case "4"://Ver mis datos personales
                                 pintaPerfilCliente(cliente);
@@ -306,12 +307,42 @@ public class main {
                         }
                         Utils.pulsaContinuar();
                         Utils.limpiarpantalla();
-                    } while (cliente.isValid() &&!op.equals("6"));
+                    } while (cliente.isValid() && !op.equals("6"));
                 }
 
             }
         } // Bucle de clientes
 
+    }
+
+    // Funcion que consulta los pedidos asignados del trabajador
+    private static void consultaPedidoAsignados(Controlador controlador, Trabajador trabajador) {
+        if (trabajador.numPedidosPendientes() == 0) System.out.println("No tienes pedidos pendientes...");
+        else {
+            int cont = 1;
+            for (PedidoClienteDataClass p : controlador.getPedidosAsignadosTrabajador(trabajador.getId())) {
+                System.out.println(cont + ".- " + p);
+                cont++;
+            }
+        }
+    }
+
+    // Funcion que muestra los pedidos que se han realizado
+    private static void resumenPedidosAdmin(Controlador controlador) {
+        if (controlador.getTodosPedidos().isEmpty()) System.out.println("No se han realizado pedidos...");
+        else pintaPedidos(controlador);
+    }
+
+    // Funcion que pinta los pedidos que hay
+    private static void pintaPedidos(Controlador controlador) {
+        int cont = 1;
+        for (Trabajador t : controlador.getTrabajadores())  {
+            for (PedidoClienteDataClass p : controlador.getPedidosAsignadosYCompletados(t.getId())) {
+                System.out.println(cont + ".- " + p);
+                cont++;
+                Utils.pulsaContinuar();
+            }
+        }
     }
 
     // Submenu para realizar un pedido
@@ -320,43 +351,52 @@ public class main {
 
         do {
             System.out.printf("""
-                Actualmente tiene %d productos en su carro.
-                1. Inserta un producto en el carro
-                2. Ver el carro
-                3. Eliminar un producto del carro
-                4. Confirmar el pedido
-                5. Cancelar el pedido
-                6. Salir
-                Introduce una opción:""", cliente.numProductosCarro());
+                    Actualmente tiene %d productos en su carro.
+                    1. Inserta un producto en el carro
+                    2. Ver el carro
+                    3. Eliminar un producto del carro
+                    4. Confirmar el pedido
+                    5. Cancelar el pedido
+                    6. Salir
+                    Introduce una opción:""", cliente.numProductosCarro());
             op = S.nextLine();
 
             switch (op) {
                 case "1": //Inserta un producto en el carro
                     insertaProducto(controlador, cliente);
+                    Utils.pulsaContinuar();
+                    Utils.limpiarpantalla();
                     break;
                 case "2": //Ver el carro
                     verCarroCliente(cliente);
+                    Utils.pulsaContinuar();
+                    Utils.limpiarpantalla();
                     break;
                 case "3": //Eliminar un producto del carro
                     eliminaProducto(controlador, cliente);
+                    Utils.pulsaContinuar();
+                    Utils.limpiarpantalla();
                     break;
                 case "4": //Confirmar el pedido
                     confirmaPedido(controlador, cliente);
+                    Utils.pulsaContinuar();
+                    Utils.limpiarpantalla();
                     break;
                 case "5": //Cancelar el pedido
                     cancelaPedido(controlador, cliente);
+                    Utils.pulsaContinuar();
+                    Utils.limpiarpantalla();
                     break;
                 case "6": //Salir
                     System.out.println("Saliendo...");
                     break;
                 default:
                     System.out.println("Opción incorrecta...");
+                    Utils.pulsaContinuar();
+                    Utils.limpiarpantalla();
                     break;
             }
-            Utils.pulsaContinuar();
-            Utils.limpiarpantalla();
         } while (!op.equals("6"));
-
     }
 
     // Funcion que cancela un pedido del cliente
@@ -365,16 +405,19 @@ public class main {
         String cancelaPedido = S.nextLine();
 
         if (cancelaPedido.equalsIgnoreCase("s"))
-            if (controlador.cancelaPedidoCliente(cliente.getId())) System.out.println("El pedido se ha realizado con éxito...");
+            if (controlador.cancelaPedidoCliente(cliente.getId()))
+                System.out.println("El pedido se ha realizado con éxito...");
     }
 
     // Funcion que confirma un pedido del cliente
     private static void confirmaPedido(Controlador controlador, Cliente cliente) {
+        if (cliente.numProductosCarro() == 0) System.out.println("No tienes productos en el carro...");
         System.out.println("¿Deseas confirmar el pedido? (S/N)");
         String confirmaPedido = S.nextLine();
 
         if (confirmaPedido.equalsIgnoreCase("s")) {
-            if (controlador.confirmaPedidoCliente(cliente.getId())) System.out.println("El pedido se ha realizado con éxito...");
+            if (controlador.confirmaPedidoCliente(cliente.getId()))
+                System.out.println("El pedido se ha realizado con éxito...");
         } else System.out.println("La confirmación del pedido se ha cancelado...");
     }
 
@@ -393,14 +436,15 @@ public class main {
         } while (!continuar);
 
         Producto temp = controlador.buscaProductoById(id);
-        
+
         if (cliente.quitaProducto(temp.getId())) System.out.println("El producto se ha eliminado del carrito...");
         else System.out.println("Ha ocurrido un error al añadir el producto al carrito...");
     }
 
     // Funcion que ve el carro de un cliente
     private static void verCarroCliente(Cliente cliente) {
-        pintaProductos(cliente.getCarro());
+        if (cliente.numProductosCarro() == 0) System.out.println("El carro está vacío...");
+        else pintaProductos(cliente.getCarro());
     }
 
     // Funcion que inserta un producto en el carro
@@ -420,7 +464,8 @@ public class main {
         Producto temp = controlador.buscaProductoById(id);
 
         if (temp == null) System.out.println("No se ha encontrado ningún producto...");
-        else if (controlador.addProductoCarrito(cliente, id)) System.out.println("El producto se ha añadido al carrito correctamente...");
+        else if (controlador.addProductoCarrito(cliente, id))
+            System.out.println("El producto se ha añadido al carrito correctamente...");
     }
 
     // Funcion que simula un submenu para buscar productos en el catalogo
@@ -428,14 +473,14 @@ public class main {
         String op;
         do {
             System.out.print("""
-                1. Ver todo el catálogo
-                2. Búsqueda por marca
-                3. Búsqueda por modelo
-                4. Búsqueda por descripción
-                5. Búsqueda por término
-                6. Búsqueda por precio
-                7. Salir
-                Introduce la opción que deseas:""");
+                    1. Ver todo el catálogo
+                    2. Búsqueda por marca
+                    3. Búsqueda por modelo
+                    4. Búsqueda por descripción
+                    5. Búsqueda por término
+                    6. Búsqueda por precio
+                    7. Salir
+                    Introduce la opción que deseas:""");
             op = S.nextLine();
 
             switch (op) {
@@ -557,7 +602,8 @@ public class main {
     }
 
     //Función que pinta todos los pedidos realizados por un cliente concreto
-    private static void verMisPedidos(Cliente cliente) {
+    private static void verMisPedidosCliente(Cliente cliente) {
+        if (cliente.getPedidos().isEmpty()) System.out.println("No has realizado ningún pedido...");
         for (Pedido p : cliente.getPedidos()) {
             System.out.println(p);
         }
@@ -681,8 +727,8 @@ public class main {
         }
         if (eligeTrabajador > 0 && eligeTrabajador <= controlador.getTrabajadores().size()) {
             Trabajador trabajador = controlador.getTrabajadores().get(eligeTrabajador - 1);
-            // Todo si el trabajador tiene pedidos pendientes no se puede eliminar
-            //if (trabajador.getPedidosAsignados() != null && trabajador.getPedidosAsignados().isEmpty())
+            // Si el trabajador tiene pedidos pendientes no se puede eliminar
+            if (trabajador.numPedidosPendientes() == 0) return null;
             return trabajador;
         }
 
@@ -728,18 +774,18 @@ public class main {
     // Funcion que muestra el numero de clientes, trabajadores, pedidos, pedidos pendientes, pedidos completados o cancelados
     // y pedidos sin asignar
     private static void estadisticasApp(Controlador controlador) {
-        // TODO cuando haya pedidos cambiarlo a printf
-        System.out.println("""
-                Bienvenido Administrador. Tenemos %d pedidos sin asignar. Debe asignarlos a un trabajador
-                ===================================================
-                            Estadisticas de la APP
-                Número de clientes: %d
-                Número de pedidos: %d
-                Número de pedidos pendientes: %d
-                Número de pedidos completados o cancelados: %d
-                Número de pedidos sin asignar: %d
-                ===================================================
-                """);//, controlador.pedidosSinTrabajador(), controlador.getClientes());
+        System.out.printf("""
+                        Bienvenido Administrador. Tenemos %d pedidos sin asignar. Debe asignarlos a un trabajador
+                        ===================================================
+                                    Estadisticas de la APP
+                        Número de clientes: %d
+                        Número de pedidos: %d
+                        Número de pedidos pendientes: %d
+                        Número de pedidos completados o cancelados: %d
+                        Número de pedidos sin asignar: %d
+                        ===================================================
+                        """, controlador.pedidosSinTrabajador().size(), controlador.getClientes().size(), controlador.numPedidosTotales(),
+                controlador.numPedidosPendientes(), controlador.numPedidosCompletadosCancelados(), controlador.pedidosSinTrabajador().size());
     }
 
     // Funcion que pide los datos para crear un nuevo trabajador
@@ -839,17 +885,53 @@ public class main {
     }
 
     // Funcion que modifica el estado de un pedido o añade un comentario al pedido
-    private static void modificaPedido(Controlador controlador) {
+    private static void modificaPedido(Controlador controlador, Trabajador trabajador) {
         String op;
 
-        System.out.println("""
-                Marque una opción:
+        System.out.print("""
                 1. Modifica el estado
-                2. Añade un comentario""");
+                2. Añade un comentario
+                Marque una opción:""");
         op = S.nextLine();
 
         switch (op) {
             case "1": // Modifica el estado
+                modificaEstadoPedido(controlador, trabajador);
+                break;
+            case "2": //Añade un comentario
+                aniadeComentarioPedido(controlador, trabajador);
+                break;
+            default:
+                System.out.println("Opción incorrecta...");
+                break;
+        }
+    }
+
+    // Funcion que añade un comentario de un pedido
+    private static void aniadeComentarioPedido(Controlador controlador, Trabajador trabajador) {
+        Pedido temp = seleccionaPedido(controlador, trabajador);
+
+        if (temp == null) System.out.println("No se ha encontrado ningún pedido...");
+        else {
+            System.out.print("Introduce el comentario para el pedido: ");
+            String comentarioTeclado = S.nextLine();
+
+            if (controlador.cambiaComentarioPedido(temp.getId(), comentarioTeclado)) System.out.println("Se ha añido un comentario al pedido correctamente...");
+            else System.out.println("Ha ocurrido un error...");;
+        }
+
+    }
+
+    // Funcion que modifica el estado de un pedido
+    private static void modificaEstadoPedido(Controlador controlador, Trabajador trabajador) {
+        Pedido temp = seleccionaPedido(controlador, trabajador);
+
+        if (temp == null) System.out.println("No se ha encontrado ningún pedido...");
+        else {
+            int estadoTeclado = -1;
+            boolean continuar = false;
+            pintaPedidoUnico(temp);
+            do {
                 System.out.println("""
                         Selecciona el nuevo estado:
                         1. En preparación
@@ -857,17 +939,53 @@ public class main {
                         3. Entregado
                         4. Cancelado
                         Introduce el nuevo estado:""");
-                int estadoTeclado = Integer.parseInt(S.nextLine());
+                try {
+                    estadoTeclado = Integer.parseInt(S.nextLine());
+                     continuar = true;
+                } catch (NumberFormatException e) {
+                    System.out.println("Debes introducir un número...");
+                    Utils.pulsaContinuar();
+                    Utils.limpiarpantalla();
+                }
+            } while (!continuar);
 
-                break;
-            case "2": //Añade un comentario
-                System.out.print("Introduce el comentario para el pedido: ");
-                String comentarioTeclado = S.nextLine();
-                break;
-            default:
-                System.out.println("Opción incorrecta...");
-                break;
+
+            if (controlador.cambiaEstadoPedido(temp.getId(), estadoTeclado)) System.out.println("El pedido se ha modificado con éxito...");
+            else System.out.println("Ha ocurrido un error...");
         }
+
+    }
+
+    private static void pintaPedidoUnico(Pedido temp) {
+        System.out.println(temp);
+    }
+
+    // Función de menú de selección de un pedido
+    private static Pedido seleccionaPedido(Controlador controlador, Trabajador trabajador) {
+        ArrayList<PedidoClienteDataClass> pedidosData = controlador.getPedidosAsignadosYCompletados(trabajador.getId());
+        int cont = 1;
+
+        for (PedidoClienteDataClass p : pedidosData) {
+            System.out.println(cont + " .- " + p);
+            cont++;
+            Utils.pulsaContinuar();
+        }
+
+        System.out.print("Introduce el pedido: ");
+        String pedidoSeleccionado = S.nextLine();
+
+        PedidoClienteDataClass pedidoData = null;
+        try {
+            pedidoData = pedidosData.get(Integer.parseInt(pedidoSeleccionado) - 1);
+        } catch (IndexOutOfBoundsException | NumberFormatException e) {
+            System.out.println("Error al elegir pedido...");
+        }
+
+        if (pedidoData == null) return null;
+        Pedido pedidoTemp = controlador.buscaPedidoById(pedidoData.getIdPedido());
+
+        if (pedidoTemp == null) return null;
+        return pedidoTemp;
     }
 
     // Funcion que modifica un producto del catalogo
@@ -916,8 +1034,10 @@ public class main {
             if (precioTeclado != -1) producto.setPrecio(precioTeclado);
             else precioTeclado = producto.getPrecio();
 
-            if (controlador.editarProducto(new Producto(producto.getId(), marcaTeclado, modeloTeclado, descripcionTeclado,
-                    precioTeclado, producto.getRelevancia())))System.out.println("Producto modificado con éxito...");
+            Producto modificado = new Producto(producto.getId(), marcaTeclado, modeloTeclado, descripcionTeclado,
+                    precioTeclado, producto.getRelevancia());
+
+            if (controlador.editarProducto(modificado)) System.out.println("Producto modificado con éxito...");
             else System.out.println("Ha ocurrido un error...");
         }
     }

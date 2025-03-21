@@ -71,7 +71,7 @@ public class Producto {
     // Otros metodos
     @Override
     public String toString() {
-        return marca + modelo + "(" + precio + ")";
+        return "\t- " + marca + " - " + modelo + " (" + precio + ")";
     }
 }
 

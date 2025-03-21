@@ -77,10 +77,14 @@ public class Pedido {
 
     // Funcion que cambia el estado de un pedido
     public boolean cambiaEstado(int nuevoEstado) {
-        return switch (nuevoEstado) {
-            case 1, 2, 3, 4 -> true;
-            default -> false;
-        };
+        switch (nuevoEstado) {
+            case 1, 2, 3, 4:
+                estado = nuevoEstado;
+                return true;
+            default:
+                estado = -1;
+                return false;
+        }
     }
 
     // Funcion que comprueba si se puede realizar el cambio de una fecha
@@ -93,7 +97,7 @@ public class Pedido {
     //Deveuelve el precio sin IVA de un pedido concreto
     public float calculaTotalPedidoSinIVA() {
         float sumatorio = 0;
-        for (Producto p : productos){
+        for (Producto p : productos) {
             sumatorio += p.getPrecio();
         }
         return sumatorio;
@@ -128,7 +132,7 @@ public class Pedido {
     }
 
     //Metodo que pinta los datos del pedido
-   public String pintaPedidoCorreo() {
+    public String pintaPedidoCorreo() {
         String salida = "";
        /*  salida += "\n\n";
         salida += "==========\tPedido " + id + "\t===========<br>";
@@ -149,25 +153,34 @@ public class Pedido {
 
     @Override
     public String toString() {
-       String resultado = "";
-        resultado += "====== PEDIDO " + id + "======\n";
+        String resultado = "";
+        resultado += "======== PEDIDO " + id + " ========\n";
         resultado += "Fecha de pedido: " + fechaPedido + "\n";
         resultado += "Fecha de entrega: " + fechaEntregaEstimada + "\n";
-        resultado += "Estado " + devuelveEstado(estado) + "\n";
-        resultado += "Productos " + productos + "\n";
+        resultado += "Estado: " + devuelveEstado(estado) + "\n";
+        resultado += "Productos: \n" + pintaProductos(productos) + "\n";
+        return resultado;
+    }
+
+    // Funcion que pinta los productos de un pedido
+    private String pintaProductos(ArrayList<Producto> productos) {
+        String resultado = "";
+        for (Producto p : productos) {
+            resultado += p.toString() + "\n";
+        }
+
         return resultado;
     }
 
     // Funcion que devuelve el estado de un Pedido
     private String devuelveEstado(int estado) {
-        if (cambiaEstado(estado)) {
-            return switch (estado) {
-                case 1 -> "En preparación";
-                case 2 -> "Enviado";
-                case 3 -> "Entregado";
-                default -> "Cancelado";
-            };
-        }
-        return "";
+        return switch (estado) {
+            case 0 -> "Creado";
+            case 1 -> "En preparación";
+            case 2 -> "Enviado";
+            case 3 -> "Entregado";
+            case 4 -> "Cancelado";
+            default -> "";
+        };
     }
 }

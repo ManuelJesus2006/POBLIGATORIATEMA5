@@ -14,9 +14,8 @@ public class Menus {
     public static String menuAdministrador(Controlador controlador, Admin admin) {
         String salida = "";
         salida += "FERNANSHOP\n";
-        salida += "Bienvenido " + admin.getNombre() + ". Tenemos " + 0 + " pedidos sin asignar. Debe asignarlos a un " +
-                "trabajador\n";
-                //(tienda.contadorPedidos() == 1 ? " pedido" : " pedidos") + " por asignar." + "\n";
+        salida += "Bienvenido " + admin.getNombre() + ". Tenemos " + controlador.numPedidosSinTrabajador() + " pedidos " +
+                "sin asignar. Debe asignarlos a un trabajador\n";
         salida += "1.- Ver todo el catálogo\n";
         salida += "2.- Editar un producto\n";
         salida += "3.- Ver un resumen de todos los Clientes\n";
