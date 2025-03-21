@@ -273,6 +273,8 @@ public class Controlador {
 
     // Metodo que busca un trabajador en un pedido asignado
     public Trabajador buscaTrabajadorAsignadoAPedido(int idPedido) {
+        if (trabajadores.isEmpty()) return null;
+
         for (Trabajador t : trabajadores) {
             for (Pedido p : t.getPedidosAsignados()) {
                 if (p.getId() == idPedido) return t;
@@ -286,13 +288,21 @@ public class Controlador {
     public ArrayList<Pedido> pedidosSinTrabajador() {
         ArrayList<Pedido> pedidos = new ArrayList<>();
 
-        for (Pedido p : getTodosPedidos()) {
-            Trabajador trabajador = buscaTrabajadorAsignadoAPedido(p.getId());
-            if (trabajador != null && !trabajador.getPedidosAsignados().contains(p)) pedidos.add(p);
+        if (!trabajadores.isEmpty()) {
+            for (Cliente c : clientes) {
+                for (Pedido p : c.getPedidos()) {
+                    if (buscaTrabajadorAsignadoAPedido(p.getId()) == null) pedidos.add(p);
+                }
+            }
+        } else {
+            for (Cliente c : clientes) {
+                pedidos.addAll(c.getPedidos());
+            }
         }
+
+
         return pedidos;
     }
-
 
     // Metodo que muestra el numero de pedidos sin el trabajador
     public int numPedidosSinTrabajador(){

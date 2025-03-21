@@ -2,7 +2,7 @@ package view;
 
 import controlador.Controlador;
 import models.*;
-import utils.Comunicaciones;
+import comunicaciones.Comunicaciones;
 import utils.Menus;
 import utils.Utils;
 
@@ -216,7 +216,7 @@ public class main {
                             bajaTrabajador(controlador);
                             break;
                         case "10": //Asignar un pedido a un trabajador
-
+                            asisgnaPedido(controlador, admin);
                             break;
                         case "11": //Salir
                             Utils.animacionFinSesion();
@@ -252,6 +252,7 @@ public class main {
                                 modificaProducto(controlador);
                                 break;
                             case "5": //Ver el histórico de pedidos terminados
+                                historicoPedidosTerminados(controlador, trabajador);
                                 break;
                             case "6": //Ver mi perfil
                                 pintaPerfilTrabajador(trabajador);
@@ -315,6 +316,82 @@ public class main {
 
     }
 
+    // Funcion que muestra el historial de pedidos terminados
+    private static void historicoPedidosTerminados(Controlador controlador, Trabajador trabajador) {
+        if (controlador.getPedidosCompletadosTrabajador(trabajador.getId()).isEmpty()) System.out.println("No tienes ningún pedido...");
+        else {
+            int cont = 1;
+
+            System.out.println("""
+                |--------------------------------------------------|
+                |               PEDIDOS TERMINADOS                 |
+                |--------------------------------------------------|""");
+            for (PedidoClienteDataClass p : controlador.getPedidosCompletadosTrabajador(trabajador.getId())) {
+                System.out.println(cont + ".- " + p);
+            }
+        }
+    }
+
+    // Funcion que hace que el administrador elija un pedido para asignar a un trabajador
+    private static void asisgnaPedido(Controlador controlador, Admin admin) {
+        ArrayList<Pedido> pedidosSinAsignar = controlador.pedidosSinTrabajador();
+
+        if (pedidosSinAsignar.isEmpty()) System.out.println("No se ha realizado ningún pedido...");
+        else if (controlador.getTrabajadores().isEmpty()) System.out.println("No hay trabajadores...");
+        else {
+            int idPedidoTeclado = -1, cont = 1, idTrabajadorTeclado = -1;
+            boolean continuar = false;
+            pintaPedidosSinAsignar(controlador, pedidosSinAsignar);
+
+            do {
+                System.out.print("Introduce la ID del pedido que deseas asignar: ");
+                try {
+                    idPedidoTeclado = Integer.parseInt(S.nextLine());
+                    continuar = true;
+                } catch (NumberFormatException e) {
+                    System.out.println("Debes introducir un número...");
+                    Utils.pulsaContinuar();
+                    Utils.limpiarpantalla();
+                }
+            } while (!continuar);
+
+            Pedido pedidoTemp = controlador.buscaPedidoById(idPedidoTeclado);
+
+            for (Trabajador t : controlador.getTrabajadores()) {
+                pintaResumenTrabajador(cont, t);
+                cont++;
+            }
+
+            continuar = false;
+            do {
+                System.out.print("Introduce la ID del trabajador: ");
+                try {
+                    idTrabajadorTeclado = Integer.parseInt(S.nextLine());
+                    continuar = true;
+                } catch (NumberFormatException e) {
+                    System.out.println("Debes introducir un número...");
+                    Utils.pulsaContinuar();
+                    Utils.limpiarpantalla();
+                }
+            } while (!continuar);
+
+            Trabajador trabajadorTemp = controlador.buscaTrabajadorById(idTrabajadorTeclado);
+
+            if (pedidoTemp == null || trabajadorTemp == null) System.out.println("No se han encontrado los datos...");
+            else {
+                if (controlador.asignaPedido(pedidoTemp.getId(), trabajadorTemp.getId()))
+                    System.out.println("Pedido asignado a " + trabajadorTemp.getNombre() + " con éxito...");
+                else System.out.println("Ha ocurrido un error...");
+            }
+
+        }
+    }
+
+    // Funcion que pinta los pedidos sin asignar
+    private static void pintaPedidosSinAsignar(Controlador controlador, ArrayList<Pedido> pedidosSinAsignar) {
+        pintaPedidosSinData(controlador, pedidosSinAsignar);
+    }
+
     // Funcion que consulta los pedidos asignados del trabajador
     private static void consultaPedidoAsignados(Controlador controlador, Trabajador trabajador) {
         if (trabajador.numPedidosPendientes() == 0) System.out.println("No tienes pedidos pendientes...");
@@ -336,13 +413,22 @@ public class main {
     // Funcion que pinta los pedidos de la DataClass que hay
     private static void pintaPedidosData(Controlador controlador) {
         int cont = 1;
-        for (Trabajador t : controlador.getTrabajadores()) {
-            for (PedidoClienteDataClass p : controlador.getPedidosAsignadosYCompletados(t.getId())) {
+        if (!controlador.getTrabajadores().isEmpty()) {
+            for (Trabajador t : controlador.getTrabajadores()) {
+                for (PedidoClienteDataClass p : controlador.getPedidosAsignadosYCompletados(t.getId())) {
+                    System.out.println(cont + ".- " + p);
+                    cont++;
+                    Utils.pulsaContinuar();
+                }
+            }
+        } else {
+            for (Pedido p : controlador.getTodosPedidos()) {
                 System.out.println(cont + ".- " + p);
                 cont++;
                 Utils.pulsaContinuar();
             }
         }
+
     }
 
     // Submenu para realizar un pedido
@@ -412,7 +498,8 @@ public class main {
                 String cancelaPedido = S.nextLine();
 
                 if (cancelaPedido.equalsIgnoreCase("s"))
-                    if (controlador.cancelaPedidoCliente(cliente.getId(), temp.getId())) System.out.println("El pedido se ha cancelado con éxito...");
+                    if (controlador.cancelaPedidoCliente(cliente.getId(), temp.getId()))
+                        System.out.println("El pedido se ha cancelado con éxito...");
             }
         }
     }
@@ -425,9 +512,9 @@ public class main {
         if (pedidos.isEmpty()) return null;
 
         System.out.println("""
-                    |--------------------------------------------------|
-                    |               PEDIDOS REALIZADOS                 |
-                    |--------------------------------------------------|""");
+                |--------------------------------------------------|
+                |               PEDIDOS REALIZADOS                 |
+                |--------------------------------------------------|""");
         pintaPedidosSinData(controlador, pedidos);
 
         System.out.print("Introduce el pedido: ");
@@ -442,10 +529,7 @@ public class main {
 
         if (pedidoElegido == null) return null;
 
-        Pedido pedidoTemp = controlador.buscaPedidoById(pedidoElegido.getId());
-
-        if (pedidoTemp == null) return null;
-        return pedidoTemp;
+        return controlador.buscaPedidoById(pedidoElegido.getId());
     }
 
     // Funcion que confirma un pedido del cliente
@@ -798,7 +882,7 @@ public class main {
 
     // Funcion que pinta el resumen de un solo trabajador
     private static void pintaResumenTrabajador(int cont, Trabajador t) {
-        System.out.println(cont + ".- ID: " + t.getId() + " .- " + t.getNombre() + "; Móvil: " + t.getMovil() + " - Correo: " + t.getEmail());
+        System.out.println(cont + ".- ID: " + t.getId() + " .- " + t.getNombre() + "; Móvil: " + t.getMovil() + " - Correo: " + t.getEmail() + "\n");
     }
 
     // Funcion que muestra el resumen de los clientes al admin
