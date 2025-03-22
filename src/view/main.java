@@ -17,6 +17,8 @@ public class main {
     public static void main(String[] args) {
         Controlador controlador = new Controlador();
 
+        iniciaDatosPrueba(controlador);
+
         do {
             System.out.println("            Bienvenidos a nuestra tienda online");
             System.out.println("============================================================");
@@ -30,7 +32,7 @@ public class main {
     private static Object menuInicio(Controlador controlador) {
         Object usuarioLogueado = null;
         int op = 0;
-        boolean excepcion;
+        boolean excepcion = false;
         do {
             do {
                 excepcion = false;
@@ -68,6 +70,33 @@ public class main {
             Utils.limpiarpantalla();
         } while (usuarioLogueado == null);
         return usuarioLogueado;
+    }
+
+    //
+    private static void iniciaDatosPrueba(Controlador controlador) {
+        boolean datosIniciados = false;
+
+        System.out.println("¿Quieres iniciar el programa con datos de prueba? (S/N)");
+        String iniciaMockTeclado = S.nextLine();
+
+        if (iniciaMockTeclado.equalsIgnoreCase("s")) {
+            datosIniciados = true;
+            controlador.mock(datosIniciados);
+            System.out.println("""
+                    Iniciando usuarios de prueba...
+                    Cliente:
+                        Email: usuario@usuario
+                        Nombre: usuario
+                        Clave: usuario
+                    
+                    Trabajador:
+                        Email: trabajador@trabajador
+                        Nombre: trabajador
+                        Clave: trabajador
+                    """);
+            Utils.pulsaContinuar();
+            Utils.limpiarpantalla();
+        }
     }
 
     private static Object iniciaSesion(Controlador controlador) {
@@ -389,7 +418,8 @@ public class main {
 
             Trabajador trabajadorTemp = controlador.buscaTrabajadorById(idTrabajadorTeclado);
 
-            if (pedidoTemp == null || trabajadorTemp == null) System.out.println("No se han encontrado los datos...");
+            if (pedidoTemp == null || trabajadorTemp == null)
+                System.out.println("No se han encontrado los datos...");
             else {
                 if (controlador.asignaPedido(pedidoTemp.getId(), trabajadorTemp.getId())) {
                     System.out.println("Pedido asignado a " + trabajadorTemp.getNombre() + " con éxito...");
@@ -508,7 +538,7 @@ public class main {
             Pedido temp = seleccionaPedidoCliente(controlador, cliente);
 
             if (temp == null) System.out.println("No hay pedidos para cancelar...");
-            else  {
+            else {
                 System.out.println("¿Deseas cancelar el pedido? (S/N)");
                 String cancelaPedido = S.nextLine();
 
@@ -595,7 +625,8 @@ public class main {
 
         if (temp == null) System.out.println("No se ha encontrado ningún producto...");
         else {
-            if (cliente.quitaProducto(temp.getId())) System.out.println("El producto se ha eliminado del carrito...");
+            if (cliente.quitaProducto(temp.getId()))
+                System.out.println("El producto se ha eliminado del carrito...");
             else System.out.println("Ha ocurrido un error al añadir el producto al carrito...");
         }
     }
@@ -782,8 +813,49 @@ public class main {
     //Función que pinta todos los pedidos realizados por un cliente concreto
     private static void verMisPedidosCliente(Cliente cliente) {
         if (cliente.getPedidos().isEmpty()) System.out.println("No has realizado ningún pedido...");
-        for (Pedido p : cliente.getPedidos()) {
-            System.out.println(p);
+        else {
+            ArrayList<Pedido> pedidosEntregados = new ArrayList<>();
+            ArrayList<Pedido> pedidosCancelados = new ArrayList<>();
+            ArrayList<Pedido> pedidosPendientes = new ArrayList<>();
+
+            for (Pedido p : cliente.getPedidos()) {
+                if (p.getEstado() == 3) pedidosEntregados.add(p);
+            }
+
+            for (Pedido p : cliente.getPedidos()) {
+                if (p.getEstado() == 4) pedidosCancelados.add(p);
+            }
+
+            for (Pedido p : cliente.getPedidos()) {
+                if (p.getEstado() == 0 || p.getEstado() == 1 || p.getEstado() == 2) pedidosPendientes.add(p);
+            }
+            if (!pedidosEntregados.isEmpty()) {
+                System.out.println("""
+                        ╔════════════════════════════════════════════════════╗
+                        ║                PEDIDOS ENTREGADOS                  ║
+                        ╚════════════════════════════════════════════════════╝""");
+                for (Pedido p : pedidosEntregados) {
+                    System.out.println(p);
+                }
+            }
+            if (!pedidosCancelados.isEmpty()) {
+                System.out.println("""
+                        ╔════════════════════════════════════════════════════╗ 
+                        ║                PEDIDOS CANCELADOS                  ║
+                        ╚════════════════════════════════════════════════════╝""");
+                for (Pedido p : pedidosCancelados) {
+                    System.out.println(p);
+                }
+            }
+            if (!pedidosPendientes.isEmpty()) {
+                System.out.println("""
+                        ╔════════════════════════════════════════════════════╗ 
+                        ║                PEDIDOS PENDIENTES                  ║
+                        ╚════════════════════════════════════════════════════╝""");
+                for (Pedido p : pedidosPendientes) {
+                    System.out.println(p);
+                }
+            }
         }
     }
 
@@ -895,8 +967,9 @@ public class main {
 
                 if (respuesta.equalsIgnoreCase("N")) System.out.println("Cancelando baja...");
                 else if (respuesta.equalsIgnoreCase("S")) {
-                    if (controlador.getTrabajadores().remove(temp)) System.out.println("Dado de baja correctamente...");
-                    else System.out.println("Ha ocurrido un error...");
+                    if (temp.numPedidosPendientes() == 0 && controlador.getTrabajadores().remove(temp))
+                        System.out.println("Dado de baja correctamente...");
+                    else System.out.println("No se ha podido borrar el trabajador...");
                 } else System.out.println("Respuesta incorrecta...");
             }
 
@@ -1144,7 +1217,8 @@ public class main {
                         if (p.getId() == temp.getId()) cliente = c;
                     }
                 }
-                if (cliente != null) Comunicaciones.enviaCorreoPedidoEstado(cliente.getEmail(), "PEDIDO MODIFICADO", temp);
+                if (cliente != null)
+                    Comunicaciones.enviaCorreoPedidoEstado(cliente.getEmail(), "PEDIDO MODIFICADO", temp);
             } else System.out.println("Ha ocurrido un error...");
         }
 
@@ -1189,7 +1263,8 @@ public class main {
                         if (p.getId() == temp.getId()) cliente = c;
                     }
                 }
-                if (cliente != null) Comunicaciones.enviaCorreoPedidoEstado(cliente.getEmail(), "PEDIDO MODIFICADO", temp);
+                if (cliente != null)
+                    Comunicaciones.enviaCorreoPedidoEstado(cliente.getEmail(), "PEDIDO MODIFICADO", temp);
             } else System.out.println("Ha ocurrido un error...");
         }
 

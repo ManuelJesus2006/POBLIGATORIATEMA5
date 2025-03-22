@@ -21,15 +21,29 @@ public class Controlador {
         admins = new ArrayList<>();
         catalogo = new ArrayList<>();
         mock();
+        mock();
     }
 
+    // Mock que va a tener un admin y el catalogo
     private void mock() {
-        //Clientes
-        //clientes.add(new Cliente(generaIdCliente(), "hola@hola", "3421", "Manolo", "Martos", "Jaén", "avda moris n32", 653423428));
-        //clientes.add(new Cliente(generaIdCliente(), "jl@jl", "1234", "Jl", "Madrid", "Madrid", "avda gran vía", 456234244));
-        //trabajadores.add(new Trabajador(generaIdTrabajador(), "Carlos", "1111", "adios@adios", 555443322));
         admins.add(new Admin(generaIdAdmin(), "root", "root", "root@root"));
         catalogo = DataProductos.getProductosMock();
+    }
+
+    // Mock que va a decidir el usuario si iniciarlo o no
+    public void mock(boolean iniciaMockTeclado) {
+        if (iniciaMockTeclado) {
+            Cliente c1 = new Cliente(generaIdCliente(), "usuario@usuario", "usuario", "usuario",
+                    "Pueblo Paleta", "Madrid", "Avd Perdido", 11223344);
+            c1.setToken(generaToken(c1));
+            c1.setValid(true);
+            clientes.add(c1);
+
+            Trabajador t1 = new Trabajador(generaIdTrabajador(), "trabajador", "trabajador", "trabajador@trabajador", 55443322);
+            t1.setToken(generaToken(t1));
+            t1.setValid(true);
+            trabajadores.add(t1);
+        }
     }
 
     // Getters y Setters
@@ -604,4 +618,6 @@ public class Controlador {
 
         return cont;
     }
+
+
 }
