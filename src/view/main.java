@@ -391,9 +391,11 @@ public class main {
 
             if (pedidoTemp == null || trabajadorTemp == null) System.out.println("No se han encontrado los datos...");
             else {
-                if (controlador.asignaPedido(pedidoTemp.getId(), trabajadorTemp.getId()))
+                if (controlador.asignaPedido(pedidoTemp.getId(), trabajadorTemp.getId())) {
                     System.out.println("Pedido asignado a " + trabajadorTemp.getNombre() + " con éxito...");
-                else System.out.println("Ha ocurrido un error...");
+                    Comunicaciones.enviaMensajeTelegram(trabajadorTemp.getNombre() + " se te ha asignado el pedido: " + pedidoTemp.getId());
+                    Comunicaciones.enviaCorreoPedido(trabajadorTemp.getEmail(), "ASIGNACIÓN DE PEDIDOS", pedidoTemp);
+                } else System.out.println("Ha ocurrido un error...");
             }
 
         }
@@ -644,32 +646,49 @@ public class main {
 
             switch (op) {
                 case "1": //Ver to el catálogo
+                    Utils.limpiarpantalla();
                     verCatalogo(controlador);
+                    Utils.pulsaContinuar();
+                    Utils.limpiarpantalla();
                     break;
                 case "2": //Búsqueda por marca
+                    Utils.limpiarpantalla();
                     buscaProductosByMarca(controlador);
+                    Utils.pulsaContinuar();
+                    Utils.limpiarpantalla();
                     break;
                 case "3": //Búsqueda por modelo
+                    Utils.limpiarpantalla();
                     buscaProductosByModelo(controlador);
+                    Utils.pulsaContinuar();
+                    Utils.limpiarpantalla();
                     break;
                 case "4": //Búsqueda por descripción
+                    Utils.limpiarpantalla();
                     buscaProductosByDescripcion(controlador);
+                    Utils.pulsaContinuar();
+                    Utils.limpiarpantalla();
                     break;
                 case "5": //Búsqueda por término
+                    Utils.limpiarpantalla();
                     buscaProductosByTermino(controlador);
+                    Utils.pulsaContinuar();
+                    Utils.limpiarpantalla();
                     break;
                 case "6": //Búsqueda por precio
+                    Utils.limpiarpantalla();
                     buscaProductosByPrecio(controlador);
+                    Utils.pulsaContinuar();
+                    Utils.limpiarpantalla();
                     break;
                 case "7": //Salir
-                    System.out.println("Saliendo...");
                     break;
                 default:
                     System.out.println("Opción incorrecta...");
+                    Utils.pulsaContinuar();
+                    Utils.limpiarpantalla();
                     break;
             }
-            Utils.pulsaContinuar();
-            Utils.limpiarpantalla();
         } while (!op.equals("7"));
 
     }
@@ -817,9 +836,19 @@ public class main {
         compruebaToken(controlador, cliente);
     }
 
-    private static void pintaPerfilCliente(Cliente cliente) {
-        System.out.println("************** VER PERFIL **************");
-        System.out.println(cliente);
+    private static void pintaPerfilCliente(Cliente c) {
+        System.out.printf("""
+                ╔═════════════════════════════════════════════════════════════════════╗
+                ║                           PERFIL CLIENTE                            ║
+                ╠═════════════════════════════════════════════════════════════════════╣
+                ║ Nombre: %s
+                ║ Email: %s
+                ║ Localidad: %s
+                ║ Provincia: %s
+                ║ Dirección: %s
+                ║ Número de Teléfono: %d
+                ╚═════════════════════════════════════════════════════════════════════╝
+                """, c.getNombre(), c.getEmail(), c.getLocalidad(), c.getProvincia(), c.getDireccion(), c.getMovil());
     }
 
     //Metodo de que comprueba el token de un usuario
@@ -938,12 +967,12 @@ public class main {
                         ╔════════════════════════════════════════════════════╗
                         ║               Estadísticas de la APP               ║
                         ╠════════════════════════════════════════════════════╣
-                        ║   Número de clientes: %d                            ║
-                        ║   Número de trabajadores: %d                        ║
-                        ║   Número de pedidos: %d                             ║
-                        ║   Número de pedidos pendientes: %d                  ║
-                        ║   Número de pedidos completados o cancelados: %d    ║
-                        ║   Número de pedidos sin asignar: %d                 ║
+                        ║ Número de clientes:%4d                            ║
+                        ║ Número de trabajadores:%4d                        ║
+                        ║ Número de pedidos:%4d                             ║
+                        ║ Número de pedidos pendientes:%4d                  ║
+                        ║ Número de pedidos completados o cancelados:%4d    ║
+                        ║ Número de pedidos sin asignar:%4d                 ║
                         ╚════════════════════════════════════════════════════╝
                         """, controlador.pedidosSinTrabajador().size(), controlador.getClientes().size(), controlador.getTrabajadores().size(),
                 controlador.numPedidosTotales(), controlador.numPedidosPendientes(), controlador.numPedidosCompletadosCancelados(),
@@ -1039,9 +1068,17 @@ public class main {
     }
 
     // Funcion que pinta el perfil de un trabajador
-    private static void pintaPerfilTrabajador(Trabajador trabajador) {
-        System.out.println("************** VER PERFIL **************");
-        System.out.println(trabajador);
+    private static void pintaPerfilTrabajador(Trabajador t) {
+        System.out.printf("""
+                ╔═════════════════════════════════════════════════════════════════════╗
+                ║                           PERFIL TRABAJADOR                         ║
+                ╠═════════════════════════════════════════════════════════════════════╣
+                ║ Nombre: %s
+                ║ Email: %s
+                ║ Número de Teléfono: %d
+                ║ Número de Pedidos Asignados: %d
+                ╚═════════════════════════════════════════════════════════════════════╝
+                """, t.getNombre(), t.getEmail(), t.getMovil(), t.numPedidosPendientes());
     }
 
     // Funcion que modifica el estado de un pedido o añade un comentario al pedido
@@ -1135,9 +1172,10 @@ public class main {
             } while (!continuar);
 
 
-            if (controlador.cambiaEstadoPedido(temp.getId(), estadoTeclado))
+            if (controlador.cambiaEstadoPedido(temp.getId(), estadoTeclado)) {
                 System.out.println("El pedido se ha modificado con éxito...");
-            else System.out.println("Ha ocurrido un error...");
+
+            } else System.out.println("Ha ocurrido un error...");
         }
 
     }

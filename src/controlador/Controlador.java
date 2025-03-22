@@ -1,5 +1,6 @@
 package controlador;
 
+import comunicaciones.Comunicaciones;
 import data.DataProductos;
 import models.*;
 
@@ -117,7 +118,12 @@ public class Controlador {
 
         Trabajador trabajadorTemp = buscaTrabajadorCandidatoParaAsignar();
 
-        if (trabajadorTemp != null) return asignaPedido(pedidoTemp.getId(), trabajadorTemp.getId());
+        if (trabajadorTemp != null) {
+            if (asignaPedido(pedidoTemp.getId(), trabajadorTemp.getId())) {
+                Comunicaciones.enviaCorreoPedido(trabajadorTemp.getEmail(), "ASIGNACIÓN DE PEDIDOS", pedidoTemp);
+                Comunicaciones.enviaMensajeTelegram(trabajadorTemp.getNombre() + " se te ha asignado el pedido: " + pedidoTemp.getId());
+            }
+        }
         return true;
     }
 
