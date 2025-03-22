@@ -211,9 +211,143 @@ public class main {
         }
     }
 
+    // Funcion que nos llevara a un menu específico (Admin, Trabajador o Cliente)
     private static void menuUsuario(Controlador controlador, Object user) {
-        String op;
+        menuAdmin(controlador, user);
+        menuTrabajadores(controlador, user);
+        menuClientes(controlador, user);
+    }
 
+    // Menu del cliente
+    private static void menuClientes(Controlador controlador, Object user) {
+        String op;
+        for (Cliente cliente : controlador.getClientes()) {
+            if (user.equals(cliente)) {
+
+                compruebaToken(controlador, cliente);
+
+                if (cliente.isValid()) {
+                    do {
+                        Menus.menuCliente(controlador, cliente);
+                        op = S.nextLine();
+                        switch (op) {
+                            case "1"://Consultar el catálogo de productos
+                                Utils.limpiarpantalla();
+                                consultaCatalogo(controlador);
+                                Utils.limpiarpantalla();
+                                break;
+                            case "2"://Realizar un pedido
+                                Utils.limpiarpantalla();
+                                realizaPedidoMenu(controlador, cliente);
+                                Utils.pulsaContinuar();
+                                Utils.limpiarpantalla();
+                                break;
+                            case "3"://Ver mis pedidos
+                                Utils.limpiarpantalla();
+                                verMisPedidosCliente(cliente);
+                                Utils.pulsaContinuar();
+                                Utils.limpiarpantalla();
+                                break;
+                            case "4"://Ver mis datos personales
+                                Utils.limpiarpantalla();
+                                pintaPerfilCliente(cliente);
+                                Utils.pulsaContinuar();
+                                Utils.limpiarpantalla();
+                                break;
+                            case "5"://Modificar mis datos personales
+                                Utils.limpiarpantalla();
+                                modificaDatosPersonalesCliente(controlador, cliente);
+                                Utils.pulsaContinuar();
+                                Utils.limpiarpantalla();
+                                break;
+                            case "6":// Salir
+                                Utils.animacionFinSesion();
+                                Utils.limpiarpantalla();
+                                break;
+                            default://Opción no existente
+                                Utils.limpiarpantalla();
+                                System.out.println("Opción incorrecta...");
+                                Utils.pulsaContinuar();
+                                Utils.limpiarpantalla();
+                                break;
+                        }
+                    } while (cliente.isValid() && !op.equals("6"));
+                }
+            }
+        } // Bucle de clientes
+    }
+
+    // Menu del trabajador
+    private static void menuTrabajadores(Controlador controlador, Object user) {
+        String op;
+        for (Trabajador trabajador : controlador.getTrabajadores()) {
+            if (user.equals(trabajador)) {
+                compruebaToken(controlador, trabajador);
+                if (trabajador.isValid()) {
+                    do {
+                        Menus.menuTrabajador(controlador, trabajador);
+                        op = S.nextLine();
+                        switch (op) {
+                            case "1": //Consultar los pedidos que tengo asignados
+                                Utils.limpiarpantalla();
+                                consultaPedidoAsignados(controlador, trabajador);
+                                Utils.pulsaContinuar();
+                                Utils.limpiarpantalla();
+                                break;
+                            case "2": //Modificar el estado de un pedido
+                                Utils.limpiarpantalla();
+                                modificaPedido(controlador, trabajador);
+                                Utils.pulsaContinuar();
+                                Utils.limpiarpantalla();
+                                break;
+                            case "3": //Consultar el catálogo de productos
+                                Utils.limpiarpantalla();
+                                verCatalogo(controlador);
+                                Utils.limpiarpantalla();
+                                break;
+                            case "4": //Modificar un producto
+                                Utils.limpiarpantalla();
+                                modificaProducto(controlador);
+                                Utils.pulsaContinuar();
+                                Utils.limpiarpantalla();
+                                break;
+                            case "5": //Ver el histórico de pedidos terminados
+                                Utils.limpiarpantalla();
+                                historicoPedidosTerminados(controlador, trabajador);
+                                Utils.pulsaContinuar();
+                                Utils.limpiarpantalla();
+                                break;
+                            case "6": //Ver mi perfil
+                                Utils.limpiarpantalla();
+                                pintaPerfilTrabajador(trabajador);
+                                Utils.pulsaContinuar();
+                                Utils.limpiarpantalla();
+                                break;
+                            case "7": //Modificar mis datos personales
+                                Utils.limpiarpantalla();
+                                modificaDatosPersonalesTrabajador(controlador, trabajador);
+                                Utils.pulsaContinuar();
+                                Utils.limpiarpantalla();
+                                break;
+                            case "8": //Salir
+                                Utils.animacionFinSesion();
+                                Utils.limpiarpantalla();
+                                break;
+                            default://Opción no existente
+                                System.out.println("Opción incorrecta...");
+                                Utils.pulsaContinuar();
+                                Utils.limpiarpantalla();
+                                break;
+                        }
+                    } while (trabajador.isValid() && !op.equals("8"));
+                }
+            }
+        } // Bucle de trabajadores
+    }
+
+    // Menu del admin
+    private static void menuAdmin(Controlador controlador, Object user) {
+        String op;
         for (Admin admin : controlador.getAdmins()) {
             if (user.equals(admin)) {
                 do {
@@ -294,125 +428,6 @@ public class main {
                 } while (!op.equals("11"));
             }
         } // Bucle de admin
-
-        for (Trabajador trabajador : controlador.getTrabajadores()) {
-            if (user.equals(trabajador)) {
-                compruebaToken(controlador, trabajador);
-                if (trabajador.isValid()) {
-                    do {
-                        Menus.menuTrabajador(controlador, trabajador);
-                        op = S.nextLine();
-                        switch (op) {
-                            case "1": //Consultar los pedidos que tengo asignados
-                                Utils.limpiarpantalla();
-                                consultaPedidoAsignados(controlador, trabajador);
-                                Utils.pulsaContinuar();
-                                Utils.limpiarpantalla();
-                                break;
-                            case "2": //Modificar el estado de un pedido
-                                Utils.limpiarpantalla();
-                                modificaPedido(controlador, trabajador);
-                                Utils.pulsaContinuar();
-                                Utils.limpiarpantalla();
-                                break;
-                            case "3": //Consultar el catálogo de productos
-                                Utils.limpiarpantalla();
-                                verCatalogo(controlador);
-                                Utils.limpiarpantalla();
-                                break;
-                            case "4": //Modificar un producto
-                                Utils.limpiarpantalla();
-                                modificaProducto(controlador);
-                                Utils.pulsaContinuar();
-                                Utils.limpiarpantalla();
-                                break;
-                            case "5": //Ver el histórico de pedidos terminados
-                                Utils.limpiarpantalla();
-                                historicoPedidosTerminados(controlador, trabajador);
-                                Utils.pulsaContinuar();
-                                Utils.limpiarpantalla();
-                                break;
-                            case "6": //Ver mi perfil
-                                Utils.limpiarpantalla();
-                                pintaPerfilTrabajador(trabajador);
-                                Utils.pulsaContinuar();
-                                Utils.limpiarpantalla();
-                                break;
-                            case "7": //Modificar mis datos personales
-                                Utils.limpiarpantalla();
-                                modificaDatosPersonalesTrabajador(controlador, trabajador);
-                                Utils.pulsaContinuar();
-                                Utils.limpiarpantalla();
-                                break;
-                            case "8": //Salir
-                                Utils.animacionFinSesion();
-                                break;
-                            default://Opción no existente
-                                System.out.println("Opción incorrecta...");
-                                Utils.pulsaContinuar();
-                                Utils.limpiarpantalla();
-                                break;
-                        }
-                    } while (trabajador.isValid() && !op.equals("8"));
-                }
-            }
-        } // Bucle de trabajadores
-
-        for (Cliente cliente : controlador.getClientes()) {
-            if (user.equals(cliente)) {
-
-                compruebaToken(controlador, cliente);
-
-                if (cliente.isValid()) {
-                    do {
-                        Menus.menuCliente(controlador, cliente);
-                        op = S.nextLine();
-                        switch (op) {
-                            case "1"://Consultar el catálogo de productos
-                                Utils.limpiarpantalla();
-                                consultaCatalogo(controlador);
-                                Utils.limpiarpantalla();
-                                break;
-                            case "2"://Realizar un pedido
-                                Utils.limpiarpantalla();
-                                realizaPedidoMenu(controlador, cliente);
-                                Utils.pulsaContinuar();
-                                Utils.limpiarpantalla();
-                                break;
-                            case "3"://Ver mis pedidos
-                                Utils.limpiarpantalla();
-                                verMisPedidosCliente(cliente);
-                                Utils.pulsaContinuar();
-                                Utils.limpiarpantalla();
-                                break;
-                            case "4"://Ver mis datos personales
-                                Utils.limpiarpantalla();
-                                pintaPerfilCliente(cliente);
-                                Utils.pulsaContinuar();
-                                Utils.limpiarpantalla();
-                                break;
-                            case "5"://Modificar mis datos personales
-                                Utils.limpiarpantalla();
-                                modificaDatosPersonalesCliente(controlador, cliente);
-                                Utils.pulsaContinuar();
-                                Utils.limpiarpantalla();
-                                break;
-                            case "6":// Salir
-                                Utils.animacionFinSesion();
-                                Utils.limpiarpantalla();
-                                break;
-                            default://Opción no existente
-                                Utils.limpiarpantalla();
-                                System.out.println("Opción incorrecta...");
-                                Utils.pulsaContinuar();
-                                Utils.limpiarpantalla();
-                                break;
-                        }
-                    } while (cliente.isValid() && !op.equals("6"));
-                }
-            }
-        } // Bucle de clientes
-
     }
 
     // Funcion que muestra el historial de pedidos terminados
@@ -425,9 +440,9 @@ public class main {
 
             Collections.sort(pedidosTerminados);
             System.out.println("""
-                    |--------------------------------------------------|
-                    |               PEDIDOS TERMINADOS                 |
-                    |--------------------------------------------------|""");
+                     ╔════════════════════════════════════════════════════╗
+                     ║                 PEDIDOS TERMINADOS                 ║
+                     ╚════════════════════════════════════════════════════╝""");
             for (PedidoClienteDataClass p : pedidosTerminados) {
                 System.out.println(cont + ".- " + p);
             }
@@ -553,27 +568,6 @@ public class main {
                 }
             }
         }
-    }
-
-    // Funcion que pinta los pedidos de la DataClass que hay
-    private static void pintaPedidosData(Controlador controlador) {
-        int cont = 1;
-        if (!controlador.getTrabajadores().isEmpty()) {
-            for (Trabajador t : controlador.getTrabajadores()) {
-                for (PedidoClienteDataClass p : controlador.getPedidosAsignadosYCompletados(t.getId())) {
-                    System.out.println(cont + ".- " + p);
-                    cont++;
-                    Utils.pulsaContinuar();
-                }
-            }
-        } else {
-            for (Pedido p : controlador.getTodosPedidos()) {
-                System.out.println(cont + ".- " + p);
-                cont++;
-                Utils.pulsaContinuar();
-            }
-        }
-
     }
 
     // Submenu para realizar un pedido
@@ -1272,8 +1266,6 @@ public class main {
     private static void modificaPedido(Controlador controlador, Object usuario) {
         Trabajador trabajador = buscaTrabajador(controlador, usuario);
         Admin admin = buscaAdmin(controlador, usuario);
-
-
         String op;
 
         System.out.print("""
@@ -1321,7 +1313,6 @@ public class main {
         else {
             System.out.print("Introduce el comentario para el pedido: ");
             String comentarioTeclado = S.nextLine();
-            // TODO el color cambia del comentario
             // Le enviamos al cliente que su correo ha sido modificado
             if (controlador.cambiaComentarioPedido(temp.getId(), comentarioTeclado)) {
                 System.out.println("Se ha añido un comentario al pedido correctamente...");

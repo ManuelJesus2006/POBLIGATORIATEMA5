@@ -1,5 +1,7 @@
 package models;
 
+import utils.Utils;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -157,6 +159,50 @@ public class PedidoClienteDataClass implements Comparable<PedidoClienteDataClass
                 "Comentarios del pedido: " + comentario + "\n" +
                 "Detalles del pedido: \n" +
                 pintaProductos(productos);
+    }
+
+    //Metodo que pinta los datos del pedido
+    public String pintaPedidoCorreo() {
+        String salida = "";
+        salida += "\n\n";
+        salida += "==========\tPedido " + idPedido + "\t===========<br>";
+        salida += "Estado: " + devuelveEstado(estado) + "<br>";
+        salida += "Nombre: " + nombre + "<br>";
+        salida += "Dirección: " + direccion + "<br>";
+        salida += "Localidad: " + localidad + "<br>";
+        salida += "Provincia: " + provincia + "<br>";
+        salida += "Teléfono: " + movil + "<br>";
+        salida += "Fecha del pedido: " + fechaPedido + "<br>";
+        salida += "Fecha de entrega estimada: " + fechaEntregaEstimada + "<br>";
+        salida += "Comentario del pedido: " + comentario + "<br>";
+        salida += "Detalles del pedido:<br>";
+        for (Producto p : productos) {
+            if (p != null) salida += p + "<br>";
+        }
+        salida += "<hr>";
+        salida += "Total pedido: " + calculaTotalPedidoConIVA(Utils.IVA) + "€<br>";
+        salida += "<br>";
+
+        return salida;
+    }
+
+    //Deveuelve el precio sin IVA de un pedido concreto
+    public float calculaTotalPedidoSinIVA() {
+        float sumatorio = 0;
+        for (Producto p : productos) {
+            sumatorio += p.getPrecio();
+        }
+        return sumatorio;
+    }
+
+    //Devuelve el IVA del pedido concreto
+    public float calculaIVAPedido(int IVA) {
+        return calculaTotalPedidoSinIVA() * (float) (IVA / 100);
+    }
+
+    //Devuelve el precio con el IVA añadido
+    public float calculaTotalPedidoConIVA(int IVA) {
+        return calculaTotalPedidoSinIVA() + calculaIVAPedido(IVA);
     }
 
     // Funcion que devuelve el estado de un Pedido
