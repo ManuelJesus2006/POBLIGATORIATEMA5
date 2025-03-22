@@ -33,7 +33,7 @@ public class Controlador {
     // Mock que va a decidir el usuario si iniciarlo o no
     public void mock(boolean iniciaMockTeclado) {
         if (iniciaMockTeclado) {
-            Cliente c1 = new Cliente(generaIdCliente(), "usuario@usuario", "usuario", "usuario",
+            Cliente c1 = new Cliente(generaIdCliente(), "cliente@cliente", "cliente", "cliente",
                     "Pueblo Paleta", "Madrid", "Avd Perdido", 11223344);
             c1.setToken(generaToken(c1));
             c1.setValid(true);

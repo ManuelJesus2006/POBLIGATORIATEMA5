@@ -72,7 +72,7 @@ public class main {
         return usuarioLogueado;
     }
 
-    //
+    // Funcion que simula un mock
     private static void iniciaDatosPrueba(Controlador controlador) {
         boolean datosIniciados = false;
 
@@ -85,9 +85,9 @@ public class main {
             System.out.println("""
                     Iniciando usuarios de prueba...
                     Cliente:
-                        Email: usuario@usuario
-                        Nombre: usuario
-                        Clave: usuario
+                        Email: cliente@cliente
+                        Nombre: cliente
+                        Clave: cliente
                     
                     Trabajador:
                         Email: trabajador@trabajador
@@ -96,7 +96,8 @@ public class main {
                     """);
             Utils.pulsaContinuar();
             Utils.limpiarpantalla();
-        }
+        } else Utils.limpiarpantalla();
+
     }
 
     private static Object iniciaSesion(Controlador controlador) {
@@ -222,44 +223,74 @@ public class main {
                     op = S.nextLine();
                     switch (op) {
                         case "1": //Ver to el catálogo
+                            Utils.limpiarpantalla();
                             verCatalogo(controlador);
+                            Utils.limpiarpantalla();
                             break;
                         case "2": //Editar un producto
+                            Utils.limpiarpantalla();
                             modificaProducto(controlador);
+                            Utils.pulsaContinuar();
+                            Utils.limpiarpantalla();
                             break;
                         case "3": //Ver un resumen de todos los Clientes
+                            Utils.limpiarpantalla();
                             resumenClientes(controlador);
+                            Utils.pulsaContinuar();
+                            Utils.limpiarpantalla();
                             break;
                         case "4": //Ver un resumen de todos los Pedidos
+                            Utils.limpiarpantalla();
                             resumenPedidosAdmin(controlador);
+                            Utils.pulsaContinuar();
+                            Utils.limpiarpantalla();
                             break;
                         case "5": // Ver un resumen de todos los Trabajadores
+                            Utils.limpiarpantalla();
                             resumenTrabajadores(controlador);
+                            Utils.pulsaContinuar();
+                            Utils.limpiarpantalla();
                             break;
                         case "6": //Ver las estadísticas de la aplicación
+                            Utils.limpiarpantalla();
                             estadisticasApp(controlador);
+                            Utils.pulsaContinuar();
+                            Utils.limpiarpantalla();
                             break;
                         case "7": //Cambiar el estado de un pedido
+                            Utils.limpiarpantalla();
                             modificaPedido(controlador, admin);
+                            Utils.pulsaContinuar();
+                            Utils.limpiarpantalla();
                             break;
                         case "8": //Dar de alta un trabajador
+                            Utils.limpiarpantalla();
                             altaTrabajador(controlador);
+                            Utils.pulsaContinuar();
+                            Utils.limpiarpantalla();
                             break;
                         case "9": //Dar de baja un trabajador
+                            Utils.limpiarpantalla();
                             bajaTrabajador(controlador);
+                            Utils.pulsaContinuar();
+                            Utils.limpiarpantalla();
                             break;
                         case "10": //Asignar un pedido a un trabajador
+                            Utils.limpiarpantalla();
                             asisgnaPedido(controlador, admin);
+                            Utils.pulsaContinuar();
+                            Utils.limpiarpantalla();
                             break;
                         case "11": //Salir
                             Utils.animacionFinSesion();
+                            Utils.limpiarpantalla();
                             break;
                         default://Opción no existente
                             System.out.println("Opción incorrecta...");
+                            Utils.pulsaContinuar();
+                            Utils.limpiarpantalla();
                             break;
                     }
-                    Utils.pulsaContinuar();
-                    Utils.limpiarpantalla();
                 } while (!op.equals("11"));
             }
         } // Bucle de admin
@@ -273,35 +304,55 @@ public class main {
                         op = S.nextLine();
                         switch (op) {
                             case "1": //Consultar los pedidos que tengo asignados
+                                Utils.limpiarpantalla();
                                 consultaPedidoAsignados(controlador, trabajador);
+                                Utils.pulsaContinuar();
+                                Utils.limpiarpantalla();
                                 break;
                             case "2": //Modificar el estado de un pedido
+                                Utils.limpiarpantalla();
                                 modificaPedido(controlador, trabajador);
+                                Utils.pulsaContinuar();
+                                Utils.limpiarpantalla();
                                 break;
                             case "3": //Consultar el catálogo de productos
+                                Utils.limpiarpantalla();
                                 verCatalogo(controlador);
+                                Utils.limpiarpantalla();
                                 break;
                             case "4": //Modificar un producto
+                                Utils.limpiarpantalla();
                                 modificaProducto(controlador);
+                                Utils.pulsaContinuar();
+                                Utils.limpiarpantalla();
                                 break;
                             case "5": //Ver el histórico de pedidos terminados
+                                Utils.limpiarpantalla();
                                 historicoPedidosTerminados(controlador, trabajador);
+                                Utils.pulsaContinuar();
+                                Utils.limpiarpantalla();
                                 break;
                             case "6": //Ver mi perfil
+                                Utils.limpiarpantalla();
                                 pintaPerfilTrabajador(trabajador);
+                                Utils.pulsaContinuar();
+                                Utils.limpiarpantalla();
                                 break;
                             case "7": //Modificar mis datos personales
+                                Utils.limpiarpantalla();
                                 modificaDatosPersonalesTrabajador(controlador, trabajador);
+                                Utils.pulsaContinuar();
+                                Utils.limpiarpantalla();
                                 break;
                             case "8": //Salir
                                 Utils.animacionFinSesion();
                                 break;
                             default://Opción no existente
                                 System.out.println("Opción incorrecta...");
+                                Utils.pulsaContinuar();
+                                Utils.limpiarpantalla();
                                 break;
                         }
-                        Utils.pulsaContinuar();
-                        Utils.limpiarpantalla();
                     } while (trabajador.isValid() && !op.equals("8"));
                 }
             }
@@ -320,33 +371,43 @@ public class main {
                             case "1"://Consultar el catálogo de productos
                                 Utils.limpiarpantalla();
                                 consultaCatalogo(controlador);
+                                Utils.limpiarpantalla();
                                 break;
                             case "2"://Realizar un pedido
                                 Utils.limpiarpantalla();
                                 realizaPedidoMenu(controlador, cliente);
+                                Utils.pulsaContinuar();
+                                Utils.limpiarpantalla();
                                 break;
                             case "3"://Ver mis pedidos
                                 Utils.limpiarpantalla();
                                 verMisPedidosCliente(cliente);
+                                Utils.pulsaContinuar();
+                                Utils.limpiarpantalla();
                                 break;
                             case "4"://Ver mis datos personales
                                 Utils.limpiarpantalla();
                                 pintaPerfilCliente(cliente);
+                                Utils.pulsaContinuar();
+                                Utils.limpiarpantalla();
                                 break;
                             case "5"://Modificar mis datos personales
                                 Utils.limpiarpantalla();
                                 modificaDatosPersonalesCliente(controlador, cliente);
+                                Utils.pulsaContinuar();
+                                Utils.limpiarpantalla();
                                 break;
                             case "6":// Salir
                                 Utils.animacionFinSesion();
+                                Utils.limpiarpantalla();
                                 break;
                             default://Opción no existente
                                 Utils.limpiarpantalla();
                                 System.out.println("Opción incorrecta...");
+                                Utils.pulsaContinuar();
+                                Utils.limpiarpantalla();
                                 break;
                         }
-                        Utils.pulsaContinuar();
-                        Utils.limpiarpantalla();
                     } while (cliente.isValid() && !op.equals("6"));
                 }
             }
@@ -377,49 +438,39 @@ public class main {
     private static void asisgnaPedido(Controlador controlador, Admin admin) {
         ArrayList<Pedido> pedidosSinAsignar = controlador.pedidosSinTrabajador();
 
-        if (pedidosSinAsignar.isEmpty()) System.out.println("No se ha realizado ningún pedido...");
+        if (pedidosSinAsignar.isEmpty()) System.out.println("No se ha realizado ningún pedido o no hay pedidos para asignar...");
         else if (controlador.getTrabajadores().isEmpty()) System.out.println("No hay trabajadores...");
         else {
-            int idPedidoTeclado = -1, cont = 1, idTrabajadorTeclado = -1;
-            boolean continuar = false;
+            Pedido pedidoTemp = null;
+            Trabajador trabajadorTemp = null;
+            int cont = 1;
+
             pintaPedidosSinAsignar(controlador, pedidosSinAsignar);
 
-            do {
-                System.out.print("Introduce la ID del pedido que deseas asignar: ");
-                try {
-                    idPedidoTeclado = Integer.parseInt(S.nextLine());
-                    continuar = true;
-                } catch (NumberFormatException e) {
-                    System.out.println("Debes introducir un número...");
-                    Utils.pulsaContinuar();
-                    Utils.limpiarpantalla();
-                }
-            } while (!continuar);
+            System.out.print("Introduce el pedido que deseas asignar: ");
+            String pedidoSeleccionado = S.nextLine();
 
-            Pedido pedidoTemp = controlador.buscaPedidoById(idPedidoTeclado);
+            try {
+                pedidoTemp = pedidosSinAsignar.get(Integer.parseInt(pedidoSeleccionado) - 1);
+            } catch (IndexOutOfBoundsException | NumberFormatException e) {
+                System.out.println("Error al elegir pedido...");
+            }
 
             for (Trabajador t : controlador.getTrabajadores()) {
                 pintaResumenTrabajador(cont, t);
                 cont++;
             }
 
-            continuar = false;
-            do {
-                System.out.print("Introduce la ID del trabajador: ");
-                try {
-                    idTrabajadorTeclado = Integer.parseInt(S.nextLine());
-                    continuar = true;
-                } catch (NumberFormatException e) {
-                    System.out.println("Debes introducir un número...");
-                    Utils.pulsaContinuar();
-                    Utils.limpiarpantalla();
-                }
-            } while (!continuar);
+            System.out.print("Introduce el trabajador para asignar un pedido: ");
+            String trabajadorSeleccionado = S.nextLine();
+            try {
+                trabajadorTemp = controlador.getTrabajadores().get(Integer.parseInt(trabajadorSeleccionado) - 1);
+            } catch (IndexOutOfBoundsException | NumberFormatException e) {
+                System.out.println("Error al elegir trabajador...");
+            }
 
-            Trabajador trabajadorTemp = controlador.buscaTrabajadorById(idTrabajadorTeclado);
 
-            if (pedidoTemp == null || trabajadorTemp == null)
-                System.out.println("No se han encontrado los datos...");
+            if (pedidoTemp == null || trabajadorTemp == null) System.out.println("No se han encontrado los datos...");
             else {
                 if (controlador.asignaPedido(pedidoTemp.getId(), trabajadorTemp.getId())) {
                     System.out.println("Pedido asignado a " + trabajadorTemp.getNombre() + " con éxito...");
@@ -451,7 +502,57 @@ public class main {
     // Funcion que muestra los pedidos que se han realizado
     private static void resumenPedidosAdmin(Controlador controlador) {
         if (controlador.getTodosPedidos().isEmpty()) System.out.println("No se han realizado pedidos...");
-        else pintaPedidosData(controlador);
+        else {
+            ArrayList<Pedido> pedidosEntregados = new ArrayList<>();
+            ArrayList<Pedido> pedidosCancelados = new ArrayList<>();
+            ArrayList<Pedido> pedidosPendientes = new ArrayList<>();
+
+            for (Cliente c : controlador.getClientes()) {
+                for (Pedido p : c.getPedidos()) {
+                    if (p.getEstado() == 3) pedidosEntregados.add(p);
+                }
+            }
+
+            for (Cliente c : controlador.getClientes()) {
+                for (Pedido p : c.getPedidos()) {
+                    if (p.getEstado() == 4) pedidosCancelados.add(p);
+                }
+            }
+
+            for (Cliente c : controlador.getClientes()) {
+                for (Pedido p : c.getPedidos()) {
+                    if (p.getEstado() == 0 || p.getEstado() == 1 || p.getEstado() == 2) pedidosPendientes.add(p);
+                }
+            }
+
+            if (!pedidosEntregados.isEmpty()) {
+                System.out.println("""
+                        ╔════════════════════════════════════════════════════╗
+                        ║                PEDIDOS ENTREGADOS                  ║
+                        ╚════════════════════════════════════════════════════╝""");
+                for (Pedido p : pedidosEntregados) {
+                    System.out.println(p);
+                }
+            }
+            if (!pedidosCancelados.isEmpty()) {
+                System.out.println("""
+                        ╔════════════════════════════════════════════════════╗ 
+                        ║                PEDIDOS CANCELADOS                  ║
+                        ╚════════════════════════════════════════════════════╝""");
+                for (Pedido p : pedidosCancelados) {
+                    System.out.println(p);
+                }
+            }
+            if (!pedidosPendientes.isEmpty()) {
+                System.out.println("""
+                        ╔════════════════════════════════════════════════════╗ 
+                        ║                PEDIDOS PENDIENTES                  ║
+                        ╚════════════════════════════════════════════════════╝""");
+                for (Pedido p : pedidosPendientes) {
+                    System.out.println(p);
+                }
+            }
+        }
     }
 
     // Funcion que pinta los pedidos de la DataClass que hay
@@ -493,16 +594,19 @@ public class main {
 
             switch (op) {
                 case "1": //Inserta un producto en el carro
+                    Utils.limpiarpantalla();
                     insertaProducto(controlador, cliente);
                     Utils.pulsaContinuar();
                     Utils.limpiarpantalla();
                     break;
                 case "2": //Ver el carro
+                    Utils.limpiarpantalla();
                     verCarroCliente(cliente);
                     Utils.pulsaContinuar();
                     Utils.limpiarpantalla();
                     break;
                 case "3": //Eliminar un producto del carro
+                    Utils.limpiarpantalla();
                     eliminaProducto(controlador, cliente);
                     Utils.pulsaContinuar();
                     Utils.limpiarpantalla();
@@ -513,6 +617,7 @@ public class main {
                     Utils.limpiarpantalla();
                     break;
                 case "5": //Cancelar el pedido
+                    Utils.limpiarpantalla();
                     cancelaPedido(controlador, cliente);
                     Utils.pulsaContinuar();
                     Utils.limpiarpantalla();
@@ -639,25 +744,28 @@ public class main {
 
     // Funcion que inserta un producto en el carro
     private static void insertaProducto(Controlador controlador, Cliente cliente) {
-        int id = -1;
-        boolean continuar = false;
-        do {
-            System.out.print("Introduce la ID del producto: ");
-            try {
-                id = Integer.parseInt(S.nextLine());
-                continuar = true;
-            } catch (NumberFormatException e) {
-                System.out.println("Debes introducir un número...");
-                Utils.pulsaContinuar();
-                Utils.limpiarpantalla();
-            }
-        } while (!continuar);
+        Producto temp = null;
+        String productoSeleccionado;
+        int cont = 1;
 
-        Producto temp = controlador.buscaProductoById(id);
+        for (Producto p : controlador.getCatalogo()) {
+            System.out.println(cont + ".- " + p.getMarca() + " - " + p.getModelo() + " (" + p.getPrecio() + ")");
+            cont++;
+        }
 
-        if (temp == null) System.out.println("No se ha encontrado ningún producto...");
-        else if (controlador.addProductoCarrito(cliente, id))
+        System.out.print("Introduce el número del producto: ");
+        productoSeleccionado = S.nextLine();
+
+        try {
+            temp = controlador.getCatalogo().get(Integer.parseInt(productoSeleccionado) - 1);
+            temp = controlador.buscaProductoById(temp.getId());
+        } catch (IndexOutOfBoundsException | NumberFormatException e) {
+            System.out.println("Error al elegir pedido...");
+        }
+
+        if (temp != null && controlador.addProductoCarrito(cliente, temp.getId()))
             System.out.println("El producto se ha añadido al carrito correctamente...");
+        else System.out.println("No se ha encontrado ningún producto...");
     }
 
     // Funcion que simula un submenu para buscar productos en el catálogo
@@ -1035,8 +1143,14 @@ public class main {
     // Funcion que muestra el número de clientes, trabajadores, pedidos, pedidos pendientes, pedidos completados o cancelados
     // y pedidos sin asignar
     private static void estadisticasApp(Controlador controlador) {
-        System.out.printf("""
-                        Bienvenido Administrador. Tenemos %d pedidos sin asignar. Debe asignarlos a un trabajador
+        String mensaje;
+        if (controlador.numPedidosSinTrabajador() == 0) mensaje = "No hay pedidos para asignar.";
+        else if (controlador.numPedidosSinTrabajador() == 1) {
+            mensaje = "Tenemos " + controlador.numPedidosSinTrabajador() + " pedido sin asignar. Debe asignarlos a un trabajador.";
+        } else mensaje = "Tenemos " + controlador.numPedidosSinTrabajador() + " pedidos sin asignar. Debe asignarlos a un trabajador.";
+
+        System.out.println("Bienvenido Administrador. " + mensaje);
+        System.out.printf(""" 
                         ╔════════════════════════════════════════════════════╗
                         ║               Estadísticas de la APP               ║
                         ╠════════════════════════════════════════════════════╣
@@ -1047,7 +1161,7 @@ public class main {
                         ║ Número de pedidos completados o cancelados:%4d    ║
                         ║ Número de pedidos sin asignar:%4d                 ║
                         ╚════════════════════════════════════════════════════╝
-                        """, controlador.pedidosSinTrabajador().size(), controlador.getClientes().size(), controlador.getTrabajadores().size(),
+                        """, controlador.getClientes().size(), controlador.getTrabajadores().size(),
                 controlador.numPedidosTotales(), controlador.numPedidosPendientes(), controlador.numPedidosCompletadosCancelados(),
                 controlador.pedidosSinTrabajador().size());
     }
