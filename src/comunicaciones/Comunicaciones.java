@@ -42,7 +42,7 @@ public class Comunicaciones {
         //Guardamos la dirección que va a remitir el mensaje
         String emisor = "fernanshopjlmanule@gmail.com";
         String usuario = "fernanshopjlmanule@gmail.com";//Usuario para el logueo en el server de correo
-        String clave = "ceoeptmyuekuvbge";//Clave del usuario de correo
+        String clave = "sfkm qvpu pcjj ahcg";//Clave del usuario de correo
         //Host del servidor de correo
         String host = "smtp.gmail.com";
         //Creamos nuestra variable de propiedades con los datos de nuestro servidor de correo
@@ -151,7 +151,7 @@ public class Comunicaciones {
             //Intentamos mandar el mensaje
             Transport.send(message);
         } catch (Exception e) {
-            System.out.println("El correo introducido no es válido");
+            System.out.println("Error...");
         }
     }
 
@@ -160,7 +160,7 @@ public class Comunicaciones {
         //Guardamos la dirección que va a remitir el mensaje
         String emisor = "fernanshopjlmanule@gmail.com";
         String usuario = "fernanshopjlmanule@gmail.com";//Usuario para el logueo en el server de correo
-        String clave = "ceoeptmyuekuvbge";//Clave del usuario de correo
+        String clave = "sfkm qvpu pcjj ahcg";//Clave del usuario de correo
         //Host del servidor de correo
         String host = "smtp.gmail.com";
         //Creamos nuestra variable de propiedades con los datos de nuestro servidor de correo
@@ -280,7 +280,7 @@ public class Comunicaciones {
         //Guardamos la dirección que va a remitir el mensaje
         String emisor = "fernanshopjlmanule@gmail.com";
         String usuario = "fernanshopjlmanule@gmail.com";//Usuario para el logueo en el server de correo
-        String clave = "ceoeptmyuekuvbge";//Clave del usuario de correo
+        String clave = "sfkm qvpu pcjj ahcg";//Clave del usuario de correo
         //Host del servidor de correo
         String host = "smtp.gmail.com";
         //Creamos nuestra variable de propiedades con los datos de nuestro servidor de correo
