@@ -1134,7 +1134,7 @@ public class main {
         else {
             System.out.print("Introduce el comentario para el pedido: ");
             String comentarioTeclado = S.nextLine();
-            // TODO probar si funciona
+            // TODO el color cambia del comentario
             // Le enviamos al cliente que su correo ha sido modificado
             if (controlador.cambiaComentarioPedido(temp.getId(), comentarioTeclado)) {
                 System.out.println("Se ha añido un comentario al pedido correctamente...");
@@ -1182,7 +1182,6 @@ public class main {
 
             if (controlador.cambiaEstadoPedido(temp.getId(), estadoTeclado)) {
                 System.out.println("El pedido se ha modificado con éxito...");
-                // TODO probar si funciona
                 // Le enviamos al cliente que su correo ha sido modificado
                 Cliente cliente = null;
                 for (Cliente c : controlador.getClientes()) {
