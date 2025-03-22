@@ -134,7 +134,13 @@ public class Controlador {
 
         if (trabajadorTemp != null) {
             if (asignaPedido(pedidoTemp.getId(), trabajadorTemp.getId())) {
-                Comunicaciones.enviaCorreoPedido(trabajadorTemp.getEmail(), "ASIGNACIÓN DE PEDIDOS", pedidoTemp);
+                PedidoClienteDataClass dataTemp = null;
+
+                for (PedidoClienteDataClass p : getPedidosAsignadosTrabajador(trabajadorTemp.getId())) {
+                    if (p.getIdPedido() == pedidoTemp.getId()) dataTemp = p;
+                }
+
+                Comunicaciones.enviaCorreoPedido(trabajadorTemp.getEmail(), "ASIGNACIÓN DE PEDIDOS", dataTemp);
                 Comunicaciones.enviaMensajeTelegram(trabajadorTemp.getNombre() + " se te ha asignado el pedido: " + pedidoTemp.getId());
             }
         }
@@ -160,7 +166,8 @@ public class Controlador {
     // Metodo que mira si hay empate en los pedidos pendientes de los trabajadores
     public boolean hayEmpateTrabajadoresCandidatos(Trabajador candidato) {
         for (Trabajador t : trabajadores) {
-            if (t.getId() != candidato.getId()) if (t.getPedidosPendientes().size() == candidato.getPedidosPendientes().size()) return true;
+            if (t.getId() != candidato.getId())
+                if (t.getPedidosPendientes().size() == candidato.getPedidosPendientes().size()) return true;
         }
         return false;
     }
@@ -325,7 +332,7 @@ public class Controlador {
     }
 
     // Metodo que muestra el numero de pedidos sin el trabajador
-    public int numPedidosSinTrabajador(){
+    public int numPedidosSinTrabajador() {
         return pedidosSinTrabajador().size();
     }
 
@@ -418,8 +425,8 @@ public class Controlador {
 
         Trabajador temp = buscaTrabajadorById(idTrabajador);
 
-       pedidos.addAll(getPedidosAsignadosTrabajador(temp.getId()));
-       pedidos.addAll(getPedidosCompletadosTrabajador(temp.getId()));
+        pedidos.addAll(getPedidosAsignadosTrabajador(temp.getId()));
+        pedidos.addAll(getPedidosCompletadosTrabajador(temp.getId()));
         return pedidos;
     }
 

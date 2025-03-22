@@ -1,6 +1,7 @@
 package comunicaciones;
 
 import models.Pedido;
+import models.PedidoClienteDataClass;
 
 import javax.mail.Message;
 import javax.mail.PasswordAuthentication;
@@ -156,7 +157,7 @@ public class Comunicaciones {
     }
 
     // Metodo que envia una asignacion de un pedido al trabajador
-    public static void enviaCorreoPedido(String receptor, String asunto, Pedido pedido) {
+    public static void enviaCorreoPedido(String receptor, String asunto, PedidoClienteDataClass pedido) {
         //Guardamos la dirección que va a remitir el mensaje
         String emisor = "fernanshopjlmanule@gmail.com";
         String usuario = "fernanshopjlmanule@gmail.com";//Usuario para el logueo en el server de correo

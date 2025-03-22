@@ -11,7 +11,7 @@ import java.util.Collections;
 import java.util.Scanner;
 
 public class main {
-
+    // todo diseño admin trabajadores clientes (pinta)
     public static final Scanner S = new Scanner(System.in);
 
     public static void main(String[] args) {
@@ -440,9 +440,9 @@ public class main {
 
             Collections.sort(pedidosTerminados);
             System.out.println("""
-                     ╔════════════════════════════════════════════════════╗
-                     ║                 PEDIDOS TERMINADOS                 ║
-                     ╚════════════════════════════════════════════════════╝""");
+                    ╔════════════════════════════════════════════════════╗
+                    ║                 PEDIDOS TERMINADOS                 ║
+                    ╚════════════════════════════════════════════════════╝""");
             for (PedidoClienteDataClass p : pedidosTerminados) {
                 System.out.println(cont + ".- " + p);
             }
@@ -453,7 +453,8 @@ public class main {
     private static void asisgnaPedido(Controlador controlador, Admin admin) {
         ArrayList<Pedido> pedidosSinAsignar = controlador.pedidosSinTrabajador();
 
-        if (pedidosSinAsignar.isEmpty()) System.out.println("No se ha realizado ningún pedido o no hay pedidos para asignar...");
+        if (pedidosSinAsignar.isEmpty())
+            System.out.println("No se ha realizado ningún pedido o no hay pedidos para asignar...");
         else if (controlador.getTrabajadores().isEmpty()) System.out.println("No hay trabajadores...");
         else {
             Pedido pedidoTemp = null;
@@ -490,7 +491,14 @@ public class main {
                 if (controlador.asignaPedido(pedidoTemp.getId(), trabajadorTemp.getId())) {
                     System.out.println("Pedido asignado a " + trabajadorTemp.getNombre() + " con éxito...");
                     Comunicaciones.enviaMensajeTelegram(trabajadorTemp.getNombre() + " se te ha asignado el pedido: " + pedidoTemp.getId());
-                    Comunicaciones.enviaCorreoPedido(trabajadorTemp.getEmail(), "ASIGNACIÓN DE PEDIDOS", pedidoTemp);
+
+                    PedidoClienteDataClass dataTemp = null;
+                    for (Trabajador t : controlador.getTrabajadores()) {
+                        for (PedidoClienteDataClass p : controlador.getPedidosAsignadosTrabajador(t.getId())) {
+                            if (p.getIdPedido() == pedidoTemp.getId()) dataTemp = p;
+                        }
+                    }
+                    Comunicaciones.enviaCorreoPedido(trabajadorTemp.getEmail(), "ASIGNACIÓN DE PEDIDOS", dataTemp);
                 } else System.out.println("Ha ocurrido un error...");
             }
 
@@ -506,13 +514,21 @@ public class main {
     private static void consultaPedidoAsignados(Controlador controlador, Trabajador trabajador) {
         if (trabajador.numPedidosPendientes() == 0) System.out.println("No tienes pedidos pendientes...");
         else {
+            ArrayList<PedidoClienteDataClass> pedidosAsignados = controlador.getPedidosAsignadosTrabajador(trabajador.getId());
             int cont = 1;
-            for (PedidoClienteDataClass p : controlador.getPedidosAsignadosTrabajador(trabajador.getId())) {
+
+            Collections.sort(pedidosAsignados);
+            System.out.println("""
+                    ╔════════════════════════════════════════════════════╗
+                    ║                 PEDIDOS ASIGNADOS                  ║
+                    ╚════════════════════════════════════════════════════╝""");
+            for (PedidoClienteDataClass p : pedidosAsignados) {
                 System.out.println(cont + ".- " + p);
                 cont++;
             }
         }
     }
+
 
     // Funcion que muestra los pedidos que se han realizado
     private static void resumenPedidosAdmin(Controlador controlador) {
@@ -708,32 +724,45 @@ public class main {
     private static void eliminaProducto(Controlador controlador, Cliente cliente) {
         int id = -1;
         boolean continuar = false;
-        do {
-            System.out.print("Introduce la ID del producto: ");
-            try {
-                id = Integer.parseInt(S.nextLine());
-                continuar = true;
-            } catch (NumberFormatException e) {
-                System.out.println("Debes introducir un número...");
-                Utils.pulsaContinuar();
-                Utils.limpiarpantalla();
-            }
-        } while (!continuar);
-
-        Producto temp = controlador.buscaProductoById(id);
-
-        if (temp == null) System.out.println("No se ha encontrado ningún producto...");
+        if (cliente.getCarro().isEmpty()) System.out.println("No hay productos en el carrito...");
         else {
-            if (cliente.quitaProducto(temp.getId()))
-                System.out.println("El producto se ha eliminado del carrito...");
-            else System.out.println("Ha ocurrido un error al añadir el producto al carrito...");
+            do {
+                System.out.print("Introduce la ID del producto: ");
+                try {
+                    id = Integer.parseInt(S.nextLine());
+                    continuar = true;
+                } catch (NumberFormatException e) {
+                    System.out.println("Debes introducir un número...");
+                    Utils.pulsaContinuar();
+                    Utils.limpiarpantalla();
+                }
+            } while (!continuar);
+
+            Producto temp = controlador.buscaProductoById(id);
+
+            if (temp == null) System.out.println("No se ha encontrado ningún producto...");
+            else {
+                if (cliente.quitaProducto(temp.getId()))
+                    System.out.println("El producto se ha eliminado del carrito...");
+                else System.out.println("Ha ocurrido un error al añadir el producto al carrito...");
+            }
         }
     }
 
     // Funcion que ve el carro de un cliente
     private static void verCarroCliente(Cliente cliente) {
         if (cliente.numProductosCarro() == 0) System.out.println("El carro está vacío...");
-        else pintaProductos(cliente.getCarro());
+        else {
+            System.out.println("""
+                    ╔════════════════════════════════════════════════════╗
+                    ║                      CARRITO                       ║
+                    ╚════════════════════════════════════════════════════╝""");
+            for (Producto p : cliente.getCarro()) {
+                System.out.println("\t- " + p.getMarca() + " - " + p.getModelo() + " (" + p.getPrecio() + ")");
+            }
+
+            System.out.printf("Total con IVA: %.2f\n", cliente.precioCarroSinIva(Utils.IVA));
+        }
     }
 
     // Funcion que inserta un producto en el carro
@@ -781,7 +810,6 @@ public class main {
                 case "1": //Ver to el catálogo
                     Utils.limpiarpantalla();
                     verCatalogo(controlador);
-                    Utils.pulsaContinuar();
                     Utils.limpiarpantalla();
                     break;
                 case "2": //Búsqueda por marca
@@ -1080,8 +1108,12 @@ public class main {
 
     // Funcion que elimina un trabajador mediante un menú de selección
     private static Trabajador eligeTrabajadorByMenu(Controlador controlador) {
-        int eligeTrabajador = -1;
-        resumenTrabajadores(controlador);
+        int eligeTrabajador = -1, cont = 1;
+
+        for (Trabajador t : controlador.getTrabajadores()) {
+            System.out.println(cont + ".- ID: " + t.getId() + " ; Nombre: " + t.getNombre() + " ; Correo: " + t.getEmail() + " ; Móvil: " + t.getMovil());
+        }
+
         System.out.print("Selecciona al trabajador: ");
         try {
             eligeTrabajador = Integer.parseInt(S.nextLine());
@@ -1103,11 +1135,19 @@ public class main {
     private static void resumenTrabajadores(Controlador controlador) {
         if (controlador.getTrabajadores().isEmpty()) System.out.println("No hay trabajadores dados de alta...");
         else {
-            int cont = 1;
+            System.out.println("""
+                    ╔═════════════════════════════════════════════════════════════════════════════════════════════╗
+                    ║                                  RESUMEN TRABAJADORES                                       ║
+                    ╠═════════════════════════════════════════════════════════════════════════════════════════════╣""");
+
             for (Trabajador t : controlador.getTrabajadores()) {
-                pintaResumenTrabajador(cont, t);
-                cont++;
+                System.out.println("║ ID: " + t.getId());
+                System.out.println("║ Nombre: " + t.getNombre());
+                System.out.println("║ Correo: " + t.getEmail());
+                System.out.println("║ Móvil: " + t.getMovil());
+                System.out.println("╠═════════════════════════════════════════════════════════════════════════════════════════════╣");
             }
+            System.out.println("╚═════════════════════════════════════════════════════════════════════════════════════════════╝");
         }
     }
 
@@ -1120,18 +1160,21 @@ public class main {
     private static void resumenClientes(Controlador controlador) {
         if (controlador.getClientes().isEmpty()) System.out.println("No hay clientes registrados...");
         else {
-            int cont = 1;
-            for (Cliente c : controlador.getClientes()) {
-                pintaResumenCliente(cont, c);
-                cont++;
-            }
-        }
-    }
+            System.out.println("""
+                    ╔═════════════════════════════════════════════════════════════════════════════════════════════╗
+                    ║                                     RESUMEN CLIENTES                                        ║
+                    ╠═════════════════════════════════════════════════════════════════════════════════════════════╣""");
 
-    // Funcion que pinta el resumen de un solo cliente
-    private static void pintaResumenCliente(int cont, Cliente c) {
-        System.out.println(cont + ".- ID: " + c.getId() + " - " + c.getNombre() + " - " + c.getLocalidad() + "(" +
-                c.getProvincia() + "); Correo: " + c.getEmail() + " - Móvil: " + c.getMovil());
+            for (Cliente c : controlador.getClientes()) {
+                System.out.println("║ ID: " + c.getId());
+                System.out.println("║ Nombre: " + c.getNombre());
+                System.out.println("║ Localidad: " + c.getLocalidad()  + "(" + c.getProvincia() + ")");
+                System.out.println("║ Correo: " + c.getEmail());
+                System.out.println("║ Móvil: " + c.getMovil());
+                System.out.println("╠═════════════════════════════════════════════════════════════════════════════════════════════╣");
+            }
+            System.out.println("╚═════════════════════════════════════════════════════════════════════════════════════════════╝");
+        }
     }
 
     // Funcion que muestra el número de clientes, trabajadores, pedidos, pedidos pendientes, pedidos completados o cancelados
@@ -1141,7 +1184,8 @@ public class main {
         if (controlador.numPedidosSinTrabajador() == 0) mensaje = "No hay pedidos para asignar.";
         else if (controlador.numPedidosSinTrabajador() == 1) {
             mensaje = "Tenemos " + controlador.numPedidosSinTrabajador() + " pedido sin asignar. Debe asignarlos a un trabajador.";
-        } else mensaje = "Tenemos " + controlador.numPedidosSinTrabajador() + " pedidos sin asignar. Debe asignarlos a un trabajador.";
+        } else
+            mensaje = "Tenemos " + controlador.numPedidosSinTrabajador() + " pedidos sin asignar. Debe asignarlos a un trabajador.";
 
         System.out.println("Bienvenido Administrador. " + mensaje);
         System.out.printf(""" 
