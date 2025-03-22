@@ -17,6 +17,7 @@ import java.util.Properties;
 
 
 public class Comunicaciones {
+    // Metodo que envia un mensaje al telegram del trabajador diciendole que se le ha asignado un pedido, recibira la ID del pedido
     public static boolean enviaMensajeTelegram(String mensaje) {
         String direccion; // URL de la API de mi bot en mi conversación
         String fijo = "https://api.telegram.org/bot7933251856:AAGX2oHNIFDQKXDq4PmQbst5v1zBQfddpZY/sendMessage?chat_id=1187949150&text=";
@@ -36,6 +37,7 @@ public class Comunicaciones {
         return dev;  // Devuelvo si ha tenido éxito o no
     }
 
+    // Metodo que envia el token al trabajador o al cliente
     public static void enviaCorreoToken(String destino, String mensaje, String asunto, String token, String nombreUsuario) {
         //Guardamos la dirección que va a remitir el mensaje
         String emisor = "fernanshopjlmanule@gmail.com";
@@ -153,7 +155,7 @@ public class Comunicaciones {
         }
     }
 
-
+    // Metodo que envia una asignacion de un pedido al trabajador
     public static void enviaCorreoPedido(String receptor, String asunto, Pedido pedido) {
         //Guardamos la dirección que va a remitir el mensaje
         String emisor = "fernanshopjlmanule@gmail.com";
@@ -273,6 +275,7 @@ public class Comunicaciones {
 
     }
 
+    // Metodo que avisa al cliente que se ha modificado un correo
     public static void enviaCorreoPedidoEstado(String receptor, String asunto, Pedido pedido) {
         //Guardamos la dirección que va a remitir el mensaje
         String emisor = "fernanshopjlmanule@gmail.com";
