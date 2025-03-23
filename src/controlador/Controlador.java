@@ -140,8 +140,8 @@ public class Controlador {
                     if (p.getIdPedido() == pedidoTemp.getId()) dataTemp = p;
                 }
 
-                Comunicaciones.enviaCorreoPedido(trabajadorTemp.getEmail(), "ASIGNACIÓN DE PEDIDOS", dataTemp);
-                Comunicaciones.enviaMensajeTelegram(trabajadorTemp.getNombre() + " se te ha asignado el pedido: " + pedidoTemp.getId());
+                Comunicaciones.enviaCorreoPedidoAsignacion(trabajadorTemp.getEmail(), "ASIGNACIÓN DE PEDIDOS", dataTemp);
+                Comunicaciones.enviaMensajeTelegramTrabajador(trabajadorTemp.getNombre() + " se te ha asignado el pedido: " + pedidoTemp.getId());
             }
         }
         return true;

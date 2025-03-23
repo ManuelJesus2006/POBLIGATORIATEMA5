@@ -490,7 +490,7 @@ public class main {
             else {
                 if (controlador.asignaPedido(pedidoTemp.getId(), trabajadorTemp.getId())) {
                     System.out.println("Pedido asignado a " + trabajadorTemp.getNombre() + " con éxito...");
-                    Comunicaciones.enviaMensajeTelegram(trabajadorTemp.getNombre() + " se te ha asignado el pedido: " + pedidoTemp.getId());
+                    Comunicaciones.enviaMensajeTelegramTrabajador(trabajadorTemp.getNombre() + " se te ha asignado el pedido: " + pedidoTemp.getId());
 
                     PedidoClienteDataClass dataTemp = null;
                     for (Trabajador t : controlador.getTrabajadores()) {
@@ -498,7 +498,7 @@ public class main {
                             if (p.getIdPedido() == pedidoTemp.getId()) dataTemp = p;
                         }
                     }
-                    Comunicaciones.enviaCorreoPedido(trabajadorTemp.getEmail(), "ASIGNACIÓN DE PEDIDOS", dataTemp);
+                    Comunicaciones.enviaCorreoPedidoAsignacion(trabajadorTemp.getEmail(), "ASIGNACIÓN DE PEDIDOS", dataTemp);
                 } else System.out.println("Ha ocurrido un error...");
             }
 
@@ -716,6 +716,7 @@ public class main {
             if (confirmaPedido.equalsIgnoreCase("s")) {
                 if (controlador.confirmaPedidoCliente(cliente.getId()))
                     System.out.println("El pedido se ha realizado con éxito...");
+                Comunicaciones.enviaCorreoPedidoCliente(cliente.getEmail(), "PEDIDO REALIZADO CON ÉXITO", cliente.getPedidos().getLast());
             } else System.out.println("La confirmación del pedido se ha cancelado...");
         }
     }
