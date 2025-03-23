@@ -38,7 +38,30 @@ Se nos abrirá la siguiente pestaña y le daremos a **"Variables de entorno..."*
 -Para ver que todo es correcto escribimos el comando **"javac -version"**, si todo sale bien nos saldrá la versión 24
 ![image](https://github.com/user-attachments/assets/bf22037e-f064-4747-96fa-6eca49319485)
 
--Para ejecutar nuestro programa nos iremos al enlace de GitHub [aquí](https://github.com/ManuelJesus2006/POBLIGATORIATEMA5)
+-Para ejecutar nuestro programa nos iremos al enlace de GitHub [aquí](https://github.com/ManuelJesus2006/POBLIGATORIATEMA5). Después le daremos a **"<> Code"** donde se desplegará varias opciones, y le daremos a **"Download ZIP"**
+
+![image](https://github.com/user-attachments/assets/aaf2a7ae-ae88-4890-b386-fd5d2aedbae3)
+
+-Al descargarlo, extraemos la carpeta en la ubicación donde más te convenga, al tenerla extraida nos meteros en la carpeta extraida y nos saldrá lo siguiente, donde ejecutaremos el **"PracticaObl5.bat"** haciendo doble click o dandole click derecho
+al ratón y dandole a la opción **"Abrir"**:
+
+![image](https://github.com/user-attachments/assets/c390e04f-0e66-486a-8ad3-9b40e2ff4f33)
+
+![image](https://github.com/user-attachments/assets/59e5ebd9-7f6b-4176-9920-508b8ca97bff)
+
+
+(En caso de que nos salga un pantallazo azul de Windows le daremos a donde ponga más información y le daremos a ejecutar de todas maneras)
+
+![image](https://github.com/user-attachments/assets/7add125c-68b6-417e-899a-45b60eb6a69c)
+
+### **MENÚ PRINCIPAL**
+
+-Finalmente tendremos nuestro programa en funcionamiento:
+
+![image](https://github.com/user-attachments/assets/b305e37c-0cec-4d8e-b70e-a38edcade4d2)
+
+
+
 
 
 
