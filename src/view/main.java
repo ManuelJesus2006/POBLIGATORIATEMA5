@@ -1125,6 +1125,7 @@ public class main {
 
         for (Trabajador t : controlador.getTrabajadores()) {
             System.out.println(cont + ".- ID: " + t.getId() + " ; Nombre: " + t.getNombre() + " ; Correo: " + t.getEmail() + " ; Móvil: " + t.getMovil());
+            cont++;
         }
 
         System.out.print("Selecciona al trabajador: ");
@@ -1136,7 +1137,7 @@ public class main {
         if (eligeTrabajador > 0 && eligeTrabajador <= controlador.getTrabajadores().size()) {
             Trabajador trabajador = controlador.getTrabajadores().get(eligeTrabajador - 1);
             // Si el trabajador tiene pedidos pendientes no se puede eliminar
-            if (trabajador.numPedidosPendientes() == 0) return null;
+            if (trabajador.numPedidosPendientes() > 0) return null;
             return trabajador;
         }
 

@@ -255,7 +255,7 @@ public class Comunicaciones {
                                                      }
                     
                                                      #info {
-                                                         height: 150px;
+                                                         height: fit-content;
                                                          width: 300px;
                                                          margin: auto;
                                                          background-color: rgb(16, 124, 187);
