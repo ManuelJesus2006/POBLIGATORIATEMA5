@@ -103,7 +103,7 @@ Se nos abrirá la siguiente pestaña y le daremos a **"Variables de entorno..."*
 -Al descargarlo, extraemos la carpeta en la ubicación donde más te convenga, al tenerla extraida nos meteros en la carpeta extraida y nos saldrá lo siguiente, donde ejecutaremos el **"PracticaObl5.bat"** haciendo doble click o dandole click derecho
 al ratón y dandole a la opción **"Abrir"**:
 
-![image](https://github.com/user-attachments/assets/c390e04f-0e66-486a-8ad3-9b40e2ff4f33)
+![image](https://github.com/user-attachments/assets/96054296-1fe3-4c23-9387-eb1e6023300a)
 
 ![image](https://github.com/user-attachments/assets/4d9c717a-18a3-4f91-bf5e-dd361495ac87)
 
