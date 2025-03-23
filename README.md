@@ -50,15 +50,18 @@ al ratón y dandole a la opción **"Abrir"**:
 ![image](https://github.com/user-attachments/assets/59e5ebd9-7f6b-4176-9920-508b8ca97bff)
 
 
-(En caso de que nos salga un pantallazo azul de Windows le daremos a donde ponga más información y le daremos a ejecutar de todas maneras)
+(En caso de que nos salga un pantallazo azul de Windows le daremos a donde ponga más información y le daremos a ejectucar de todas maneras)
 
 ![image](https://github.com/user-attachments/assets/7add125c-68b6-417e-899a-45b60eb6a69c)
+
+![image](https://github.com/user-attachments/assets/b305e37c-0cec-4d8e-b70e-a38edcade4d2)
 
 ### **MENÚ PRINCIPAL**
 
 -Finalmente tendremos nuestro programa en funcionamiento:
 
-![image](https://github.com/user-attachments/assets/b305e37c-0cec-4d8e-b70e-a38edcade4d2)
+![image](https://github.com/user-attachments/assets/59e5ebd9-7f6b-4176-9920-508b8ca97bff)
+
 
 
 
