@@ -110,9 +110,9 @@ al ratón y dandole a la opción **"Abrir"**:
 
 (En caso de que nos salga un pantallazo azul de Windows le daremos a donde ponga más información y le daremos a ejectucar de todas maneras)
 
-![image](https://github.com/user-attachments/assets/7add125c-68b6-417e-899a-45b60eb6a69c)
+![image](https://github.com/user-attachments/assets/e5041398-febe-4ff8-b529-a297c14bfd9a)
 
-![image](https://github.com/user-attachments/assets/b305e37c-0cec-4d8e-b70e-a38edcade4d2)
+![image](https://github.com/user-attachments/assets/0a34a122-8d37-4995-a710-2157179d41e3)
 
 ### **MENÚ PRINCIPAL**
 
