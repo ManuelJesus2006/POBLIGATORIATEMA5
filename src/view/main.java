@@ -20,6 +20,8 @@ public class main {
         iniciaDatosPrueba(controlador);
 
         do {
+            Menus.portada();
+
             System.out.println("            Bienvenidos a nuestra tienda online");
             System.out.println("============================================================");
             Object user = menuInicio(controlador);
@@ -622,6 +624,7 @@ public class main {
                     Utils.limpiarpantalla();
                     break;
                 case "4": //Confirmar el pedido
+                    Utils.limpiarpantalla();
                     confirmaPedido(controlador, cliente);
                     Utils.pulsaContinuar();
                     Utils.limpiarpantalla();
@@ -687,7 +690,7 @@ public class main {
                 ╚════════════════════════════════════════════════════╝
                 """);
         for (Pedido p : pedidos) {
-            System.out.println(cont + ".- " + p);
+            System.out.println("\t" + cont + ".- " + p);
             cont++;
         }
 
@@ -710,6 +713,7 @@ public class main {
     private static void confirmaPedido(Controlador controlador, Cliente cliente) {
         if (cliente.numProductosCarro() == 0) System.out.println("No tienes productos en el carro...");
         else {
+            System.out.printf("El total a pagar con IVA es: %.2f\n", cliente.precioCarroSinIva(Utils.IVA));
             System.out.println("¿Deseas confirmar el pedido? (S/N)");
             String confirmaPedido = S.nextLine();
 
@@ -723,23 +727,31 @@ public class main {
 
     // Funcion que elimina un producto del carrito
     private static void eliminaProducto(Controlador controlador, Cliente cliente) {
-        int id = -1;
-        boolean continuar = false;
         if (cliente.getCarro().isEmpty()) System.out.println("No hay productos en el carrito...");
         else {
-            do {
-                System.out.print("Introduce la ID del producto: ");
-                try {
-                    id = Integer.parseInt(S.nextLine());
-                    continuar = true;
-                } catch (NumberFormatException e) {
-                    System.out.println("Debes introducir un número...");
-                    Utils.pulsaContinuar();
-                    Utils.limpiarpantalla();
-                }
-            } while (!continuar);
+            Producto temp = null;
+            int cont = 1;
 
-            Producto temp = controlador.buscaProductoById(id);
+            System.out.println("""
+                    ╔════════════════════════════════════════════════════╗
+                    ║                      CARRITO                       ║
+                    ╚════════════════════════════════════════════════════╝""");
+            for (Producto p : cliente.getCarro()) {
+                System.out.println("\t" + cont + ".- " + p.getMarca() + " - " + p.getModelo() + " (" + p.getPrecio() + ")");
+                cont++;
+            }
+            System.out.printf("Total con IVA: %.2f\n\n", cliente.precioCarroSinIva(Utils.IVA));
+
+
+            System.out.print("Introduce el producto que quieres quitar: ");
+            String productoSeleccionado = S.nextLine();
+
+            try {
+                temp = cliente.getCarro().get(Integer.parseInt(productoSeleccionado) - 1);
+                temp = controlador.buscaProductoById(temp.getId());
+            } catch (IndexOutOfBoundsException | NumberFormatException e) {
+                System.out.println("Error al elegir pedido...");
+            }
 
             if (temp == null) System.out.println("No se ha encontrado ningún producto...");
             else {
