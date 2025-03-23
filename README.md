@@ -211,15 +211,17 @@ Mostrar los productos totales disponibles en el carro y el precio total de todo 
 
 **Eliminar un producto del carro**
 
-**!!CAMBIAR TODO!!**
+Nos saldrán los productos del carrito de forma enumerada
 
-El programa nos pedirá por seguridad el código del artículo donde se puede revisar en el primer apartado del menu del cliente, introducidos el código y el producto será eliminado de nuestor carro
+![image](https://github.com/user-attachments/assets/9d80f323-4d61-487b-821a-d4c6a865f143)
 
-![image](https://github.com/user-attachments/assets/7430dc8f-5926-4d52-8a25-024adde151a1)
+Elegiremos el producto a eliminar mediante el número de enumeración, y se eliminará con éxito
+
+![image](https://github.com/user-attachments/assets/113927d0-f92d-4955-9ad3-44d2c7ca5ac2)
 
 Podemos ver que ha funcionado: 
 
-![image](https://github.com/user-attachments/assets/693bdc30-7b81-466c-beb3-e653838772b8)
+![image](https://github.com/user-attachments/assets/442c0a0e-9b2c-481f-88b4-aec4c24e7aec)
 
 **Confirmar pedido**
 
@@ -271,7 +273,7 @@ Con esta opción volveremos al menú principal del cliente
 
 (En caso de que no hayamos pedido nada)
 
-**!!PONER IMAGEN!!**
+![image](https://github.com/user-attachments/assets/0d1d3bc2-8a4a-4e8d-b828-06f9735d5e89)
 
 ## **VER MIS DATOS PERSONALES**
 
@@ -309,9 +311,9 @@ El trabajador deberá ser creado por el administrador previamente, pero lo verem
 
 ## **CONSULTAR LOS PEDIDOS QUE TENGO ASIGNADOS**
 
-- Aquí el trabajador mira los pedidos que le han asignado desde administración, aunque a veces los pedidos se asignen automáticamente debido a la mucha disponibilidad de trabajadores. Para demostrar su funcionamiento, haremos que nuestro cliente de prueba haga un pedido y haremos que se asigne automáticamente o en su defecto el administrador se lo asigne a nuestro trabajador (en el apartado de administrador se verá como se asigna)
+- Aquí el trabajador mira los pedidos que le han asignado automáticamente o mediante la administración. Para demostrar su funcionamiento, haremos que nuestro cliente de prueba haga un pedido y haremos que se asigne automáticamente o mediante el administrador (se explicará después en el aparto de administrador)
 
-Una vez asignado volveremos a iniciar sesión en el trabajador cuyo pedido ha sido asignado y le daremos a la opción 1, nos saldrán todos los pedidos asignados, aunque en este caso solo haya uno:
+Una vez el pedido realizado y asignado automáticamente o mediante el administrador, volveremos a iniciar sesión en el trabajador cuyo pedido ha sido asignado y le daremos a la opción 1, nos saldrán todos los pedidos asignados, aunque en este caso solo haya uno:
 
 ![image](https://github.com/user-attachments/assets/d3696619-fa93-41ae-a766-ee18343b2d13)
 (En el caso de que hayan pedidos)
@@ -400,16 +402,178 @@ Si pulsamos esta opción, saldrá todo el catálogo tal y como en la primera opc
 
 ![image](https://github.com/user-attachments/assets/6b39aeaf-6311-41cc-8474-3a3da6b12342)
 
-## 5. **MENÚ TRABAJADOR.**
+## 5. **MENÚ ADMINISTRADOR.**
 
+El administrador es el gestor de nivel más alto de todo el programa, podemos verlo solo con el menú del mismo:
+
+![image](https://github.com/user-attachments/assets/27049010-4991-46d0-8f1f-2c21413e9ac9)
+
+- Podemos ver las estadísticas de la APP de forma general y global
+
+## **VER TODO EL CATALOGO**
+
+- En esta opción podemos ver todos los productos tal y como en la primera opción del menu principal:
+
+![image](https://github.com/user-attachments/assets/8796b5d1-0ea7-45e5-9835-751e51113ff9)
+
+## **EDITAR UN PRODUCTO**
+
+- Se editarán todos los datos de un producto
+
+- Por seguridad, se pedirá la ID del producto para poder modificarlo:
+
+![image](https://github.com/user-attachments/assets/484f1041-601c-46dd-a831-e0df4c97d0be)
+
+- Vamos a probar con este producto, como demostración:
+
+![image](https://github.com/user-attachments/assets/b4634044-7b9e-462e-b429-40b422537687)
+
+- Introducimos los datos nuevos:
+
+![image](https://github.com/user-attachments/assets/5a0802ba-f9bb-40fc-ad53-fac86cec9995)
+
+- Vemos que ha funcionado:
+
+![image](https://github.com/user-attachments/assets/8832dde9-6367-43e2-9cd8-3e9237204343)
+
+## **VER UN RESUMEN DE TODOS LOS CLIENTES**
+
+- Nos muestran los datos de todos los clientes:
+
+![image](https://github.com/user-attachments/assets/24dece0b-3afd-4bd9-b999-aa25d3d0faca)
+
+- En el caso de que no haya:
+
+**!!PONER FOTO!!**
+
+## **VER UN RESUMEN DE TODOS LOS PEDIDOS**
+
+- Nos muestran los datos de todos los pedidos:
+
+**!!PONER FOTO!!**
+
+- En el caso de que no haya:
+
+![image](https://github.com/user-attachments/assets/ef2e9a60-197d-4017-808a-085761b6fc19)
+
+## **VER UN RESUMEN DE TODOS LOS TRABAJADORES**
+
+- Nos muestran los datos de todos los trabajadores:
+
+![image](https://github.com/user-attachments/assets/0e92c080-c4d3-4212-b776-eeda17bb5418)
+
+- En el caso de que no haya:
+
+**!!PONER FOTO!!**
+
+## **VER LAS ESTADÍSTICAS DE LA APP**
+
+- Simplemente nos muestra las estadísticas de la aplicación que nos aparece al principio del menú de administrador:
+
+![image](https://github.com/user-attachments/assets/e62b8f47-dbb3-41fb-8cd6-2d9a65cece14)
+
+## **CAMBIAR EL ESTADO DE UN PEDIDO**
+
+- Mediante esta opción cambiaremos el estado de un pedido realizado por un cliente
+
+En el caso de que no haya ninguno saldrá este mensaje:
+
+![image](https://github.com/user-attachments/assets/36084e24-6c66-45d3-b40e-79d9d76dd57d)
+
+Vamos a crear un pedido rápido a traves de un cliente para demostrar su funcionalidad:
+
+![image](https://github.com/user-attachments/assets/cf80369a-44fc-470a-b7fa-5479af2778f8)
+
+**Modifica el estado**
+
+- Saldrán los pedidos de forma enumerada y tendremos que poner el número de enumeración que nos aparece:
+
+![image](https://github.com/user-attachments/assets/ce0a3168-e4cc-43a7-aabe-06d7f2347b82)
+
+- Saldrá un menú para elegir el nuevo estado y elegimos un nuevo estado para el pedido:
+
+![image](https://github.com/user-attachments/assets/d9bb1ede-7131-4f18-a83a-0c67cc6663c2)
+
+**Añade comentario**
+
+- Añadir un comentario de forma opcional al pedido asignado
+
+![image](https://github.com/user-attachments/assets/de6d39f4-2516-4073-848f-7b802864a61b)
+
+- Podemos ver con esta captura que ha funcionado:
+
+![image](https://github.com/user-attachments/assets/32010f59-3313-45f2-98d1-8f72553c8ca2)
+
+## **DAR DE ALTA UN TRABAJADOR**
+
+- Aquí crearemos los trabajadores para que gestión los diversos productos de los clientes
+
+Vamos a crear uno con estos datos:
+
+![image](https://github.com/user-attachments/assets/7c275815-9b5f-42b9-bce5-296f0c5287dc)
+
+- Vemos que se ha creado si vemos todos los trabajadores:
+
+![image](https://github.com/user-attachments/assets/7f8c21ac-a4ae-4895-8e96-17fd4c604383)
+
+- Iniciamos sesión y vemos que funciona:
+
+![image](https://github.com/user-attachments/assets/02c7fb2a-9375-406a-a50c-f57cd695ab13)
+
+![image](https://github.com/user-attachments/assets/53cc1679-b27d-4077-a0b9-ee72df9614d2)
+
+## **DAR DE BAJA UN TRABAJADOR**
+
+- Aquí daremos de baja a los trabajadores
+
+- En el caso de que algún trabajador tenga pedidos pendientes, nos dará un error debido a que no se pueden eliminar trabajadores con pedidos asignados:
+
+![image](https://github.com/user-attachments/assets/bfadb655-c2b1-40f8-b3d0-d1737578fd4f)
+
+- Si no tiene pedidos asignados:
+
+![image](https://github.com/user-attachments/assets/02034dde-37f2-428e-9fb3-8fd8206ad66c)
+
+- Vemos que ha funcionado:
+
+![image](https://github.com/user-attachments/assets/938610e6-4767-4f78-8a20-59d110f750be)
+
+## **ASIGNAR UN PEDIDO A UN TRABAJADOR**
+
+- Asignar un pedido realizado por un cliente a un trabajador:
+
+Para probar, vamos ha hacer que uno de nuestros clientes haga varios pedidos
+
+- Con los pedidos realizados, vamos a asignar uno de los pedidos:
+
+![image](https://github.com/user-attachments/assets/3dfb7f0a-64f6-4cda-a860-03f228f448fa)
+
+- Nos saldrá un menú de selección de los trabajadores creados por el administrador:
+
+![image](https://github.com/user-attachments/assets/55e3b001-366f-418b-bf87-15c494c08f5e)
+
+- Elegimos a uno de ellos como gestionador del producto seleccionado anteriormente:
+
+![image](https://github.com/user-attachments/assets/ca53a560-50d4-44f6-9239-2fafd53994e7)
+
+- Vemos que ha funcionado:
+
+![image](https://github.com/user-attachments/assets/e557049e-f3ec-4b19-98a4-3758e54d4a78)
+
+![image](https://github.com/user-attachments/assets/414094d4-d795-449e-adf7-635ace46626b)
+
+## **SALIR**
+
+- Cerramos sesión y volvemos al menu principal:
+
+![image](https://github.com/user-attachments/assets/605937d2-ac26-41e0-aa75-ee75135db758)
 
 ## 6. **CAMBIOS Y FUNCIONALIDADES NUEVAS**
-
 
 ## **IMPLANTACIÓN DE CORREOS ELECTRÓNICOS Y MENSAJES DE TELEGRAM**
 
 Una de las funcionalidades más importantes es la implantación de correos electrónicos en el software, ocurrira en diferentes casos:
-- **Durante el registro para generar un token para activar la cuenta registrada**
+- **Durante el registro para generar un token para activar la cuenta registrada ya sea de un cliente o un trabajador**
 - **Cuando un trabajador o administrador modifique un pedido realizado**
 - **Cuando el administrador asigna un pedido a un trabajador, este lo recibirán solo los trabajadores**
 - **Cuando se realice un pedido nuevo por un cliente**
@@ -421,22 +585,111 @@ Y para el telegram ocurrirá cuando:
 
 Nos hemos fijado que cualquier cosa que metieras en el correo funcionaba, así que hemos mejorado la implementación de correos:
 
+![image](https://github.com/user-attachments/assets/c1168e46-937b-4a4c-b54c-797cba3fe36a)
+
+Lo mismo hemos aplicado con los números de teléfono, etc...
+
+![image](https://github.com/user-attachments/assets/0bbec500-5662-4629-9414-96f32a8e7ce5)
+
+## **CORREO DE REGISTRO (TOKEN) Y SEGURIDAD**
+
+Una vez nos hayamos registrado, miraremos nuestra bandeja del correo y veremos que nos ha llegado un correo con una combinación de numeros y dos caracteres:
+
+![image](https://github.com/user-attachments/assets/68843b59-f7f5-4002-b213-05f7a8cf267b)
+
+Se necesitará una validación de dicho código que nos ha llegado a nuestro correo electrónico para poder iniciar sesión:
+
+![image](https://github.com/user-attachments/assets/5b4c4605-c311-471a-8519-708455910024)
+
+Si introducimos un token incorrecto, nos lo hará saber y nos llevará de vuelta al inicio de nuestro software:
+
+![image](https://github.com/user-attachments/assets/2d0ecabd-03be-45fc-b923-c2bc0fcc11da)
+
+Sin embargo si ponemos el token que nos aparece en el correo ya nos dejará acceder:
+
+![image](https://github.com/user-attachments/assets/01eddb00-aea5-41b9-9b77-6813d50f06a5)
+
+**MODIFICACIÓN DE DATOS**
+
+Por seguridad cuando modifiquemos nuestros datos, se nos enviará un nuevo token al correo:
+
+![image](https://github.com/user-attachments/assets/e8b595d6-f448-462e-a1cb-e2cca87ba11b)
+![image](https://github.com/user-attachments/assets/edd03910-4a82-4691-af16-ac00d28f16a3)
+![image](https://github.com/user-attachments/assets/e2085025-20d2-4f78-b4dc-44b59e0cf668)
+
+Y volveremos a tener la petición del token, en caso de introducirlo mal, se nos cerrará la sesión y volveremos al programa principal
+
+Si lo introducimos bien volveremos a entrar:
+
+![image](https://github.com/user-attachments/assets/cfc58bdc-9c96-41ed-b5b2-1a3dedc28758)
+![image](https://github.com/user-attachments/assets/ddef2f44-c819-4059-bc2c-88df302c6e73)
+
+Además con los datos modificados:
+
+![image](https://github.com/user-attachments/assets/e6ad30f4-8414-41ea-90e5-6489cbd77aa9)
+
+**REALIZACIÓN DE PEDIDO**
+
+Ahora, cuando un cliente realice un pedido, se le enviará un correo con los datos del pedido, además del precio con IVA final:
+
+![image](https://github.com/user-attachments/assets/e04eab69-166d-418e-bf46-c4fb6bf15acd)
+
+![image](https://github.com/user-attachments/assets/7c30cb94-fdc3-4fdf-9c76-ce35198a1eec)
+![image](https://github.com/user-attachments/assets/6af8a697-8408-4ef3-9ec6-4e7686abf3fe)
+
+Lo mismo con el perfil de Trabajadores: 
+
+![image](https://github.com/user-attachments/assets/c8322dfa-1797-4316-a884-b6122353853b)
+
+Miraremos el correo:
+
+![image](https://github.com/user-attachments/assets/050e53f6-8549-4f68-bde0-88d96d3b105a)
+
+![image](https://github.com/user-attachments/assets/c5428cdb-91ab-4bca-a28b-4537e9b5751e)
 
 
+Y una vez introducido el token válido entraremos al menú con nuestro perfil actualizado:
+
+![image](https://github.com/user-attachments/assets/0c9892cf-b6e6-4107-84f8-3464e74ac87b)
+
+**CORREOS CON PEDIDOS ASIGNADOS AL TRABAJADOR**
+
+Para comprobar este cambio vamos a realizar un pedido con uno de nuestros clientes:
+
+![image](https://github.com/user-attachments/assets/f4d9c394-9e11-4b3e-84a6-7ea6b6a09a8f)
+
+Mediante la asignación automática o por el trabajador se lo asignamos al trabajador. Ahora a nuestro trabajador llamado carlos le habrá llegado una notificación al correo y en el telegram de que se le ha asignado un pedido con sus detalles:
+
+**-Correo:**
+
+![image](https://github.com/user-attachments/assets/e0f2e23a-b496-4706-ac7e-647017414e57)
+
+**Telegram:**
+
+![image](https://github.com/user-attachments/assets/13778ac1-f89d-4f31-b11c-b47d031623d3)
+
+- Podemos ver que es el mismo código:
+
+![image](https://github.com/user-attachments/assets/2b3e423e-2cfd-48f3-8d3b-6631175ee1d1)
 
 
+**MODIFICACIÓN DE UN PEDIDO**
 
+-Cuando hagamos un cambio de un pedido se lo haremos saber al cliente, les llegará un correo con los detalles del cambio de pedido. 
 
+-Vamos a modificar un pedido, hemos mejorado la selección de modificar un pedido:
 
+![image](https://github.com/user-attachments/assets/999b00e7-abc3-4eac-9fb0-c1fd73ee061d)
 
+Ahora vamos hacer modificaciones en el pedido, hemos mejorado muchos aspectos de la modificación de un pedido:
 
+![image](https://github.com/user-attachments/assets/55669f2f-ea7e-4001-bc8d-3e791cfe69b0)
 
+El cliente recibirá un correo con la modificación realizada:
 
+![image](https://github.com/user-attachments/assets/cff8f2e9-71f9-4024-b127-345b8480a02d)
 
-
-
-
-
+El correo ha sido actualizado correctamente con todos los detalles de los datos modificados del pedido.
 
 
 
