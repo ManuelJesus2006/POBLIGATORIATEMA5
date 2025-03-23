@@ -21,7 +21,7 @@
 
 - **MODIFICAR MIS DATOS PERSONALES**
 
-- **CERRAR SESIÓN**
+- **SALIR**
 
 4. **MENÚ TRABAJADOR.**
 
@@ -31,7 +31,9 @@
 
 - **CONSULTAR EL CATÁLOGO DE PRODUCTOS**
 
-- **MODIFICAR UN PRODUCTO DEL CATÁLOGO**
+- **MODIFICAR UN PRODUCTO**
+
+- **VER EL HISTÓRICO DE PRODUCTOS TERMINADOS**
 
 - **VER MI PERFIL**
 
@@ -41,17 +43,27 @@
 
 5. **MENÚ DE ADMINISTRADOR.**
 
-- **ASIGNAR UN PEDIDO A UN TRABAJADOR**
+- **VER TODO EL CATALOGO**
 
-- **MODIFICAR EL ESTADO DE UN PEDIDO**
+- **EDITAR UN PRODUCTO DEL CATALOGO**
+
+- **VER EL RESUMEN DE TODOS LOS CLIENTES**
+
+- **VER EL RESUMEN DE TODOS LOS PEDIDOS**
+
+- **VER EL RESUMEN DE TODOS LOS TRABAJADORES**
+
+- **VER ESTADÍSTICAS DE LA APP**
+
+- **CAMBIAR EL ESTADO DE UN PEDIDO**
 
 - **DAR DE ALTA UN TRABAJADOR**
 
-- **VER TODOS LOS PEDIDOS**
+- **DAR DE BAJA UN TRABAJADOR**
+
+- **ASIGNAR UN PEDIDO A UN TRABAJADOR**
   
-- **VER TODOS LOS TRABAJADORES**
-  
-- **APAGAR EL SOFTWARE**
+- **SALIR**
 
 6. **CAMBIOS Y FUNCIONALIDADES NUEVAS**
    
@@ -444,13 +456,13 @@ El administrador es el gestor de nivel más alto de todo el programa, podemos ve
 
 - En el caso de que no haya:
 
-**!!PONER FOTO!!**
+![image](https://github.com/user-attachments/assets/315563d2-c635-403e-a940-921932aea035)
 
 ## **VER UN RESUMEN DE TODOS LOS PEDIDOS**
 
 - Nos muestran los datos de todos los pedidos:
 
-**!!PONER FOTO!!**
+![image](https://github.com/user-attachments/assets/2f514172-e338-4e32-af5b-83468f184cb1)
 
 - En el caso de que no haya:
 
@@ -464,7 +476,7 @@ El administrador es el gestor de nivel más alto de todo el programa, podemos ve
 
 - En el caso de que no haya:
 
-**!!PONER FOTO!!**
+![image](https://github.com/user-attachments/assets/bac4c1e4-290a-4a9e-8d71-9f9b12764409)
 
 ## **VER LAS ESTADÍSTICAS DE LA APP**
 
